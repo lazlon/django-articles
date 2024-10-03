@@ -1,0 +1,24 @@
+div.Icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        width: 1em;
+        height: 1em;
+    }
+}
+
+div.Icon.loader {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

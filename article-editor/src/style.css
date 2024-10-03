@@ -1,0 +1,21 @@
+/* TODO: suppoert dark colorscheme */
+:root {
+    --ae-radii: 6px;
+    --ae-fg: #111;
+    --ae-bg: #ffffff;
+
+    --ae-darkened-bg: color-mix(in srgb, var(--ae-fg), transparent 92%);
+    --ae-selected-bg: color-mix(in srgb, var(--ae-fg), transparent 84%);
+    --ae-activated-bg: color-mix(in srgb, var(--ae-fg), transparent 80%);
+
+    --ae-quiet-fg: color-mix(in srgb, var(--ae-fg), transparent 38%);
+
+    --ae-primary: #417690;
+
+    /* callout card */
+    --ae-slate-card: #f1f5f9;
+    --ae-green-card: #dcfce7;
+    --ae-red-card: #fee2e2;
+}
+
+/* TODO: override editorjs styles */

@@ -1,0 +1,19 @@
+article-editor div.cdx-block.embed-card {
+    background-color: var(--ae-darkened-bg);
+    border-radius: var(--ae-radii);
+
+    & iframe {
+        border: none;
+        padding: 0 .6rem;
+    }
+
+    & .body {
+        display: flex;
+        flex-direction: column;
+        padding: .4rem .6rem;
+    }
+
+    & .cdx-input {
+        padding: .2rem;
+    }
+}

@@ -1,0 +1,19 @@
+article-editor div.Block.ProductCard {
+    & div.body {
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--ae-radii);
+        background-color: var(--ae-darkened-bg);
+        padding: .8em;
+        gap: .3em;
+    }
+
+    & div.Input {
+        padding: .3em;
+    }
+
+    & img {
+        border-radius: var(--ae-radii);
+        width: 100%;
+    }
+}

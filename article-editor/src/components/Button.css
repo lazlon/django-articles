@@ -1,0 +1,34 @@
+button.Button {
+    transition: 200ms;
+    border-radius: var(--ae-radii);
+    border: none;
+    padding: .3rem;
+
+    &:not(.flat) {
+        background-color: var(--ae-darkened-bg);
+    }
+
+    &.flat {
+        background-color: transparent;
+    }
+
+    &:hover {
+        background-color: var(--ae-selected-bg);
+    }
+
+    &:active {
+        background-color: var(--ae-activated-bg);
+    }
+
+    &.primary {
+        background-color: var(--ae-primary);
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--ae-primary), transparent 10%);
+        }
+
+        &:active {
+            background-color: color-mix(in srgb, var(--ae-primary), transparent 20%);
+        }
+    }
+}

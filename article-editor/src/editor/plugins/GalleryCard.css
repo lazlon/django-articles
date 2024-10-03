@@ -1,0 +1,57 @@
+article-editor div.Block.gallery-card {
+    gap: .3rem;
+
+    & div.row {
+        display: flex;
+        gap: .3rem;
+    }
+
+    & div.image {
+        position: relative;
+        display: flex;
+        width: 100%;
+
+        & img {
+            width: 100%;
+            border-radius: var(--ae-radii);
+        }
+
+        & .buttons {
+            transition: 200ms;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: start;
+            justify-content: end;
+
+            & button {
+                &:not(:hover):not(:active) {
+                    background-color: transparent;
+                }
+
+                & svg {
+                    transition: 200ms;
+                    color: white;
+                    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.8));
+                }
+            }
+        }
+
+        &:not(:hover) .buttons * {
+            background-color: transparent;
+            color: transparent;
+            filter: none;
+            border: none;
+            box-shadow: none;
+            outline: none;
+        }
+    }
+
+    & button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

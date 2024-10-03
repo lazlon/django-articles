@@ -1,0 +1,12 @@
+article-editor div.Block.ImageCard {
+    gap: .3em;
+
+    & button {
+        width: 100%;
+    }
+
+    & img {
+        border-radius: var(--ae-radii);
+        width: 100%;
+    }
+}

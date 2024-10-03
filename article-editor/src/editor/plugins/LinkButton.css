@@ -1,0 +1,29 @@
+article-editor div.LinkButton {
+    & div.body {
+        display: flex;
+    }
+
+    & div.main {
+        flex: 1;
+        color: var(--ae-fg);
+    }
+
+    & div.row {
+        display: flex;
+        align-items: center;
+    }
+
+    & div.Icon {
+        font-size: 2.4em;
+    }
+
+
+    & div.Input {
+        padding: .3rem;
+        flex: 1;
+    }
+
+    & label {
+        color: var(--ae-quiet-fg);
+    }
+}

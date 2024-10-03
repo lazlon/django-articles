@@ -1,0 +1,14 @@
+article-editor div.Input {
+    overflow-x: scroll;
+    color: var(--ae-fg);
+
+    &::before {
+        content: var(--input-placeholder);
+        color: var(--ae-quiet-fg) !important;
+        font-weight: normal;
+    }
+
+    &:not(:empty)::before {
+        display: none;
+    }
+}

@@ -1,0 +1,47 @@
+article-editor div.cdx-block.callout-card #body {
+
+    &[data-color="slate"] {
+        background-color: var(--ae-slate-card);
+    }
+
+    &[data-color="green"] {
+        background-color: var(--ae-green-card);
+    }
+
+    &[data-color="red"] {
+        background-color: var(--ae-red-card);
+    }
+
+    display: flex;
+    flex: 1;
+    border-radius: var(--ae-radii);
+
+    & #text,
+    & #emoji {
+        padding: .6rem !important;
+
+        &:first-child {
+            border-top-left-radius: var(--ae-radii);
+            border-bottom-left-radius: var(--ae-radii);
+        }
+
+        &:last-child {
+            border-top-right-radius: var(--ae-radii);
+            border-bottom-right-radius: var(--ae-radii);
+        }
+
+        &:only-child {
+            border-radius: var(--ae-radii);
+        }
+    }
+
+    & #text {
+        flex: 1
+    }
+
+    & #emoji {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+}

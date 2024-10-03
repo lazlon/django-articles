@@ -1,0 +1,89 @@
+{% extends "admin/change_form.html" %}
+
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "article-editor/style.css" %}" />
+    <style>
+        div#content-header {
+            align-items: center;
+            gap: 1em;
+            margin-bottom: 1rem;
+
+            & input {
+                font-size: x-large;
+                font-weight: bold;
+            }
+        }
+
+        article-editor {
+            flex: 1;
+
+            & input.cdx-search-field__input {
+                border: none;
+                padding: 0;
+                background-color: transparent;
+            }
+        }
+
+        article-form {
+            display: flex;
+
+            & textarea.vLargeTextField {
+                width: 100% !important;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block object-tools %}
+{% if not is_popup %}
+    <ul class="object-tools">
+        {% block object-tools-items %}
+            {% if original.article.slug %}
+                <li>
+                    {% if original.article.published_at %}
+                        {% now "Y-m-d" as today_date %}
+                        {% if original.article.published_at|date:"Y-m-d" > today_date %}
+                            <a href="/articles/preview/{{ original.article.locale }}/{{ original.article.slug }}">Preview</a>
+                        {% else %}
+                            <a href="/articles/live/{{ original.article.locale }}/{{ original.article.slug }}">View Live</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="/articles/publish/{{ original.article.id }}">Publish</a>
+                    {% endif %}
+                </li>
+            {% endif %}
+            {% if change %}
+                {{ block.super }}
+            {% endif %}
+            <li>
+                <a href="#" id="toggle-sidebar">☰</a>
+            </li>
+        {% endblock %}
+    </ul>
+{% endif %}
+{% endblock %}
+
+{% block field_sets %}
+    <script type="module" src="{% static "article-editor/article-editor.js" %}"></script>
+
+    <article-form attributes="{{ adminform.form.attributes }}">
+        <article-editor name="article_content" photoapi="/articles/photoapi">
+            {% if original.article.excerpt %}
+                {{ original.article.excerpt|safe }}
+            {% endif %}
+            {% for section in original.article.sections.all %}
+                <h2>{{ section.title|safe }}</h2>
+                {{ section.content|safe }}
+            {% endfor %}
+        </article-editor>
+        <article-form-fields
+            photoapi="/articles/photoapi"
+            attributes="{{ adminform.form.attributes }}"
+        >
+            {{ block.super }}
+        </article-form-fields>
+    </article-form>
+{% endblock %}

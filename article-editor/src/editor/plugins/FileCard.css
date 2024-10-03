@@ -1,0 +1,13 @@
+article-editor div.cdx-block.file-card .body {
+    display: flex;
+    flex: 1;
+    background-color: var(--ae-darkened-bg);
+    border-radius: var(--ae-radii);
+    align-items: center;
+    padding: .6rem;
+    gap: 1rem;
+
+    & div.Input {
+        flex: 1;
+    }
+}

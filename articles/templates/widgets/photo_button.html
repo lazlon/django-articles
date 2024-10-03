@@ -1,0 +1,6 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static "article-editor/style.css" %}" />
+<script type="module" src="{% static "article-editor/article-editor.js" %}"></script>
+
+<photo-button photoapi="/articles/photoapi" name="{{ widget.name }}" value="{{ widget.value }}"></photo-button>
