@@ -70,7 +70,7 @@
     <script type="module" src="{% static "article-editor/article-editor.js" %}"></script>
 
     <article-form attributes="{{ adminform.form.attributes }}">
-        <article-editor name="article_content" photoapi="/articles/photoapi">
+        <article-editor name="article_content" photoapi="/articles/photo">
             {% if original.article.excerpt %}
                 {{ original.article.excerpt|safe }}
             {% endif %}
@@ -80,7 +80,7 @@
             {% endfor %}
         </article-editor>
         <article-form-fields
-            photoapi="/articles/photoapi"
+            photoapi="/articles/photo"
             attributes="{{ adminform.form.attributes }}"
         >
             {{ block.super }}

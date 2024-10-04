@@ -30,38 +30,18 @@ urlpatterns = [
 ]
 ```
 
-3. Create the photo API endpoint
+3. Create the photo upload endpoint (optionally use provided one that uses local files)
 
 ```python
 # urls.py
-def photoapi(req: HttpRequest) -> JsonResponse:
-    if q := req.GET.get("q"):
-        photos = get_photos() # should be limited to <= 19
-        return JsonResponse([{"id": p.id, "src": p.url} for p in photos])
+from articles.lib.photo import upload_photo
 
-    if get := req.GET.get("get"):
-        photo = get_photo_by_id(get)
-        return JsonResponse({"url": photo.url}, safe=False)
-
-    if req.GET.get("upload"):
-        photo = upload_image(request.FILES["image"])
-        return JsonResponse({"id": photo.id, "src": photo.url})
-
-    return JsonResponse({"error": "unknown parameters"})
+def photo_upload(request: HttpRequest) -> JsonResponse:
+    p = upload_photo(request.FILES["photo"])
+    return JsonResponse({"id": p.id, "src": p.url})
 
 urlpatterns = [
-    path("articles/photoapi/", photoapi)
-]
-```
-
-Or you can use the default one that uses local files
-
-```python
-# urls.py
-from articles.photoapi import photoapi
-
-urlpatterns = [
-    path("articles/photoapi", photoapi),
+    path("articles/photo/upload/", photo_upload)
 ]
 ```
 
@@ -109,11 +89,11 @@ Define an Article model
 
 ```python
 from articles.api import AbstractArticle
-from articles.models import Photo
+from articles.fields import PhotoField
 
 class Article(AbstractArticle):
     extra_field = m.CharField(max_length=255, blank=True, null=True)
-    extra_photo = m.ForeignKey(Photo, m.CASCADE, blank=True, null=True)
+    extra_photo = PhotoField()
 ```
 
 Register it in the admin

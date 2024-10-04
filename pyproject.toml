@@ -5,16 +5,14 @@ description = "Article Models and Editor"
 authors = ["Kristóf <kristof@lazlon.com>"]
 readme = "README.md"
 
-packages = [
-  { include = "articles" }
-]
+packages = [{ include = "articles" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.1.0"
 django-simple-history = "^3.7.0"
-requests = "^2.32.3"
 django-q2 = "^1.7.2"
+thefuzz = "^0.22.1"
 
 [tool.poetry.group.dev.dependencies]
 django-stubs = "^5.0.4"

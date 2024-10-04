@@ -5,7 +5,7 @@ Built with [Editor.js](https://editorjs.io/)
 ## Usage
 
 ```html
-<article-editor photoapi="http://mysite.com/api/photo/">
+<article-editor photoapi="http://mysite.com/api/photo">
   <h2>Heading</h2>
   <p>initial content</p>
 </article-editor>

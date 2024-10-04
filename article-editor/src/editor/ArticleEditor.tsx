@@ -51,7 +51,7 @@ export class ArticleEditor extends HTMLElement {
     ].map(p => p({
         onChange: this.submit.bind(this),
         selectPhoto: selectPhoto(this),
-        photoUrl: getPhotoUrl(this),
+        getPhotoUrl: getPhotoUrl(this),
     }))
 
     private renderers: Record<string, (data: any) => string> = this.plugins.reduce((acc, p) => ({

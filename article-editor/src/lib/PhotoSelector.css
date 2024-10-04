@@ -8,7 +8,7 @@ dialog.PhotoSelector {
     background-color: var(--ae-bg);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1em;
 
     & nav {
         display: flex;
@@ -30,15 +30,19 @@ dialog.PhotoSelector {
     & div.body {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        gap: .4em;
+        gap: .6rem;
+
+        & img,
+        & button.upload {
+            height: 8rem;
+            width: 8rem;
+        }
 
         & button.upload {
             display: flex;
             color: var(--ae-quiet-fg);
 
             &>div {
-                width: 10em;
-                height: 10em;
                 border: 2px dashed var(--ae-quiet-fg);
                 border-radius: var(--ae-radii);
                 margin: 4px;
@@ -55,19 +59,13 @@ dialog.PhotoSelector {
             }
         }
 
-        &>div,
         & img {
-            width: 10em;
-            height: 10em;
             border-radius: var(--ae-radii);
-        }
-
-        & img {
             object-fit: cover;
-        }
 
-        & div.selected {
-            outline: 3px solid var(--ae-primary);
+            &.selected {
+                outline: 3px solid var(--ae-primary);
+            }
         }
     }
 }

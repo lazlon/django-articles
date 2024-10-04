@@ -11,10 +11,10 @@ type Data = {
 }
 
 export default BlockPlugin({
-    Block: ({ id, caption }: Data, { selectPhoto, photoUrl }) => {
-        const photo = new State({ id, src: "" })
+    Block: ({ id, caption }: Data, { selectPhoto, getPhotoUrl }) => {
+        const photo = new State({ id, url: "" })
 
-        photoUrl(id).then(url => photo.set({ id, src: url }))
+        getPhotoUrl(id).then(url => photo.set({ id, url }))
 
         function onClick() {
             selectPhoto(1).then(p => {
@@ -24,8 +24,8 @@ export default BlockPlugin({
 
         return <Block className="ImageCard">
             <div id="body">
-                {photo(({ id, src }) => (id && src)
-                    ? <img id={id} src={src} onclick={onClick} />
+                {photo(({ id, url }) => (id && url)
+                    ? <img id={id} src={url} onclick={onClick} />
                     : <Button onclick={onClick}>Select Photo</Button>)}
             </div>
             <Input cdx id="caption" placeholder="Caption">{caption}</Input>

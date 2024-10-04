@@ -2,35 +2,15 @@
 import "./PhotoSelector.css"
 import { State } from "@/jsx"
 import { Icon, Button, SearchEntry } from "@/components"
+import { searchPhoto, selectFile, uploadPhoto } from "./photo"
 
-type Photo = { id: string, src: string }
+type Photo = { id: string, url: string }
 
 const PHOTO_LIMIT = 19
 const DEBOUNCE = 500
 
-function selectFile(): Promise<File | null> {
-    return new Promise(resolve => {
-        const input = Object.assign(document.createElement("input"), {
-            type: "file",
-            accept: "image/*",
-            onchange: () => {
-                resolve(input.files?.[0] || null)
-                document.body.removeChild(input)
-            },
-            oncancel: () => {
-                resolve(null)
-                document.body.removeChild(input)
-            },
-        })
-
-        input.style.display = "none"
-        document.body.appendChild(input)
-        input.click()
-    })
-}
-
 export default class PhotoSelector {
-    constructor(private limit: number, private photoApiUrl: URL) { }
+    constructor(private limit: number, private source: HTMLElement) { }
 
     private debounce!: number
     private selectResolve!: (photos: Array<Photo> | null) => void
@@ -47,10 +27,7 @@ export default class PhotoSelector {
         this.loading.set(true)
         clearTimeout(this.debounce)
         this.debounce = setTimeout(async () => {
-            const url = new URL(this.photoApiUrl)
-            url.searchParams.set("q", text)
-            const res = await fetch(url)
-            const arr = await res.json() as Array<Photo> // FIXME: validate
+            const arr = await searchPhoto(this.source)(text)
             this.photos.set(arr.slice(0, PHOTO_LIMIT))
             this.loading.set(false)
         }, DEBOUNCE)
@@ -68,26 +45,14 @@ export default class PhotoSelector {
 
         this.loading.set(true)
         try {
-            const form = new FormData()
-            form.append("image", file)
+            const photo = await uploadPhoto(this.source)(file)
 
-            const url = new URL(this.photoApiUrl)
-            url.searchParams.set("upload", "upload")
-
-            const request = new Request(url, {
-                method: "POST",
-                body: form,
-            })
-
-            const res = await fetch(request)
-            const photo = await res.json()
-
-            if (photo.errors) {
-                return this.error.set(photo.errors)
+            if (photo.error) {
+                return this.error.set(photo.error)
             }
 
             this.photos.set([
-                { id: photo.id, src: photo.url || photo.src },
+                { id: photo.id, url: photo.url },
                 ...this.photos.get().slice(0, PHOTO_LIMIT - 1),
             ])
 
@@ -147,13 +112,13 @@ export default class PhotoSelector {
                     </div>
                 </Button>
                 {this.photos(ps => ps.map(p => (
-                    <div
+                    <img
+                        src={p.url}
                         onclick={() => this.toggleSelection(p)}
                         className={this.selected(s =>
                             s.some(({ id }) => p.id === id) ? "selected" : "")
-                        }>
-                        <img src={p.src} />
-                    </div>
+                        }
+                    />
                 )))}
             </div>)}
     </dialog> as HTMLDialogElement

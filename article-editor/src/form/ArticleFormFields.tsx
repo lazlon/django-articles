@@ -51,6 +51,7 @@ class ArticleFormFields extends HTMLElement {
         } = data.article.fields
 
         const authors: Array<[string, string]> = data.authors.map(a => [a.pk, a.fields.name])
+        const photoapi = this.getAttribute("photoapi")!
 
         return <div>
             <input type="hidden" name="id" id="id_id" value={data.article.pk} />
@@ -61,17 +62,17 @@ class ArticleFormFields extends HTMLElement {
                 <TextField name="subtitle" value={subtitle} />
                 <DateField name="published_at" label="Schedule" value={published_at} />
                 <BooleanField name="featured" value={featured} />
-                <PhotoField name="feature_image" value={feature_image} parent={this} />
+                <PhotoField name="feature_image" value={feature_image} photoapi={photoapi} />
                 <TagsField name="tags" tags={data.tags} value={data.article.tags} />
             </FieldSet>
             <FieldSet title="Meta Information">
                 <TextField name="meta_title" value={meta_title} />
                 <LargeTextField name="meta_description" value={meta_description} />
                 <TextField name="og_title" value={og_title} />
-                <PhotoField name="og_image" value={og_image} parent={this} />
+                <PhotoField name="og_image" value={og_image} photoapi={photoapi} />
                 <LargeTextField name="og_description" value={og_description} />
                 <TextField name="twitter_title" value={twitter_title} />
-                <PhotoField name="twitter_image" value={twitter_image} parent={this} />
+                <PhotoField name="twitter_image" value={twitter_image} photoapi={photoapi} />
                 <LargeTextField name="twitter_description" value={twitter_description} />
             </FieldSet>
             <FieldSet title="Code Injection">

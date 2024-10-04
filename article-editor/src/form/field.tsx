@@ -1,8 +1,6 @@
-import { State } from "@/jsx"
-import "./PhotoButton"
-import { Button, Icon } from "@/components"
-import { getPhotoUrl, selectPhoto } from "@/lib/photo"
+import { Icon } from "@/components"
 import TagSorter from "./TagSorter"
+import PhotoButton from "./PhotoButton"
 import { Tag } from "./types"
 
 export function FieldSet({ title, children, open = false }: {
@@ -136,28 +134,15 @@ export function DateField({ name, label, required, value }: {
     </Field>
 }
 
-export function PhotoField({ name, label, required, value = "", parent }: {
+export function PhotoField({ name, label, required, value = "", photoapi }: {
     value?: string
     name: string
     label?: string
     required?: boolean
-    parent: HTMLElement
+    photoapi: string
 }) {
-    const photo = new State({ id: value, src: "" })
-
-    getPhotoUrl(parent)(value).then(url => photo.set({ id: value, src: url }))
-
-    function onClick() {
-        selectPhoto(parent)(1).then(p => {
-            if (p && p.length > 0) photo.set(p[0])
-        })
-    }
-
     return <Field {...{ name, label, required }}>
-        <input name={name} type="hidden" value={photo(({ id }) => id)} />
-        {photo(({ id, src }) => (id && src)
-            ? <img id={id} src={src} onclick={onClick} />
-            : <Button onclick={onClick}>Select Photo</Button>)}
+        <PhotoButton attributes={{ name, value, photoapi }} />
     </Field>
 }
 

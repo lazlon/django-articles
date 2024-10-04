@@ -6,8 +6,8 @@ from django.conf import settings
 from django.db import models as m
 
 DEFAULT_ARTICLE_LOCALES = [
-    ("en_US", "English (United States)"),
-    ("de_DE", "German (Germany)"),
+    ("EN", "English"),
+    ("HU", "Hungarian"),
 ]
 
 
@@ -23,7 +23,7 @@ def PhotoField(related_name: str = "%(class)_photos") -> m.ForeignKey:  # noqa: 
     )
 
 
-def LocaleField() -> m.CharField:  # noqa: N802
+def LocaleField(default: str = "EN") -> m.CharField:  # noqa: N802
     return m.CharField(
         max_length=7,
         choices=getattr(
@@ -31,7 +31,7 @@ def LocaleField() -> m.CharField:  # noqa: N802
             "ARTICLE_LOCALES",
             DEFAULT_ARTICLE_LOCALES,
         ),
-        default="en_US",
+        default=default,
     )
 
 

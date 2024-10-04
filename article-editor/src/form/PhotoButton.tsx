@@ -1,22 +1,35 @@
+import "./PhotoButton.css"
 import { Button } from "@/components"
 import { State } from "@/jsx"
 import { getPhotoUrl, selectPhoto } from "@/lib/photo"
 
-export class PhotoButton extends HTMLElement {
+export default class PhotoButton extends HTMLElement {
     static { customElements.define("photo-button", this) }
 
-    #photo = new State({ id: "", src: "" })
+    constructor({ attributes }: { attributes?: Record<string, string> } = {}) {
+        super()
+        if (attributes) {
+            for (const [attr, value] of Object.entries(attributes)) {
+                if (value) this.setAttribute(attr, value)
+            }
+        }
+    }
+
+    #photo = new State({ id: "", url: "" })
     #input = document.createElement("input")
 
     connectedCallback() {
         this.#photo.subscribe(v => this.#input.value = v.id)
 
-        getPhotoUrl(this)(this.id).then(url => this.#photo.set({
-            id: this.id,
-            src: url,
+        this.#input.type = "hidden"
+        this.#input.name = this.getAttribute("name") || ""
+        this.#input.value = this.getAttribute("value") || ""
+
+        getPhotoUrl(this)(this.#input.value).then(url => this.#photo.set({
+            id: this.#input.value,
+            url,
         }))
 
-        this.#input.type = "hidden"
         this.append(this.#input)
         this.append(this.render())
     }
@@ -27,9 +40,9 @@ export class PhotoButton extends HTMLElement {
         })
     }
 
-    private render = () => <div>
-        {this.#photo(({ id, src }) => (id && src)
-            ? <img onclick={this.onClick.bind(this)} id={id} src={src} />
+    private render = () => <div className="PhotoButton">
+        {this.#photo(({ id, url }) => (id && url)
+            ? <img onclick={this.onClick.bind(this)} id={id} src={url} />
             : <Button onclick={this.onClick.bind(this)}>Select Photo</Button>)}
     </div>
 }

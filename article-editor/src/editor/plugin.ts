@@ -13,7 +13,7 @@ import { type selectPhoto } from "@/lib/photo"
 type PluginProps = {
     onChange: () => void
     selectPhoto: ReturnType<typeof selectPhoto>
-    photoUrl: (id: string) => Promise<string>
+    getPhotoUrl: (id: string) => Promise<string>
 }
 
 export const BlockPlugin = <

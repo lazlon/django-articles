@@ -41,10 +41,10 @@ function shiftItem<T>(items: T[], i: number, pos: 1 | -1) {
 }
 
 export default BlockPlugin({
-    Block: ({ caption, photos = [] }: Data, { selectPhoto, photoUrl }) => {
-        const state = new State(photos.map(id => ({ id, src: "" })))
+    Block: ({ caption, photos = [] }: Data, { selectPhoto, getPhotoUrl }) => {
+        const state = new State(photos.map(id => ({ id, url: "" })))
 
-        Promise.all(photos.map(async id => ({ id, src: await photoUrl(id) })))
+        Promise.all(photos.map(async id => ({ id, url: await getPhotoUrl(id) })))
             .then(arr => state.set(arr))
 
         function moveImg(id: string, pos: 1 | -1) {
@@ -66,9 +66,9 @@ export default BlockPlugin({
             setup={self => Object.assign(self, { state })}>
             {state(ps => toRows(ps).map(row => (
                 <div className="row">
-                    {row.map(({ src, id }) => src && (
+                    {row.map(({ id, url }) => url && (
                         <div className="image">
-                            <img src={src} />
+                            <img src={url} />
                             <div className="buttons">
                                 <Button
                                     onclick={() => moveImg(id, -1)}

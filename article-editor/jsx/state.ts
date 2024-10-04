@@ -39,7 +39,7 @@ export class State<T> extends Function {
 
     constructor(init: T) {
         super()
-        this.listeners = new Set
+        this.listeners = new Set()
         this.value = init
         return new Proxy(this, {
             apply: (target, _, args) => target._call(args[0]),

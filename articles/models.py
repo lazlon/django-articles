@@ -6,6 +6,7 @@ from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 import articles.fields as f
+from articles.tasks import schedule_article
 
 
 class Status(m.TextChoices):
@@ -26,7 +27,13 @@ class Photo(m.Model):
     width = m.IntegerField(default=0)
 
     def __str__(self) -> str:
-        return str(self.caption or self.id)
+        return str(self.caption or self.alt or self.id)
+
+    @classmethod
+    def search(cls, keyword: str, limit: int = 20) -> list["Photo"]:
+        from articles.lib.photo import search_photo
+
+        return search_photo(keyword, limit)
 
 
 class Author(m.Model):
@@ -116,10 +123,16 @@ class Article(m.Model):
             self.slug = self.id
 
         self.updated_at = timezone.now()
-        # if self.status == Status.DRAFT and self.published_at is not None:
-        #     schedule_article(self)
+        if self.status == Status.DRAFT and self.published_at is not None:
+            schedule_article(self)
 
         super().save(*args, **kwargs)
+
+    @classmethod
+    def search(cls, keyword: str, locale: str, limit: int = 20) -> list["Article"]:
+        from articles.lib.article import search_article
+
+        return search_article(keyword, locale, limit)
 
 
 class ArticleTag(m.Model):
