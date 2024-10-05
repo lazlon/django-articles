@@ -9,6 +9,11 @@ import articles.fields as f
 from articles.tasks import schedule_article
 
 
+class Visibility(m.TextChoices):
+    INTERNAL = "INTERNAL"
+    PUBLIC = "PUBLIC"
+
+
 class Status(m.TextChoices):
     DRAFT = "DRAFT"
     SCHEDULED = "SCHEDULED"
@@ -54,6 +59,7 @@ class Tag(m.Model):
     slug = m.SlugField(max_length=255)
     locale = f.LocaleField()
     description = m.TextField(blank=True, null=True)
+    visibility = m.CharField(default=Visibility.PUBLIC, choices=Visibility.choices, max_length=255)
 
     feature_image = f.PhotoField(related_name="tag_feature_images")
     feature_image_alt = m.CharField(max_length=255, blank=True, null=True)

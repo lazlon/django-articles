@@ -147,8 +147,8 @@ function tt({ children: n, cdx: t = !1, placeholder: e = "", ...i }) {
       },
       className: `Input ${t ? "cdx-input" : ""}`,
       contentEditable: "true",
-      ...i,
-      children: n
+      innerHTML: n,
+      ...i
     }
   );
 }

@@ -14,7 +14,7 @@ export default function Input({ children, cdx = false, placeholder = "", ...prop
         }}
         className={`Input ${cdx ? "cdx-input" : ""}`}
         contentEditable="true"
-        {...props}>
-        {children}
-    </div>
+        innerHTML={children}
+        {...props}
+    />
 }
