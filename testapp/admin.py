@@ -8,13 +8,15 @@ from testapp.models import Article
 class CustomArticleForm(ArticleForm):
     custom_photo = PhotoField()
 
+    class Meta:
+        model = Article
+        exclude = []
+
 
 @admin.register(Article)
 class ArticleAdmin(AbstractArticleAdmin):
     form = CustomArticleForm
-
-    class Meta:
-        model = Article
+    form.Meta.model = Article
 
     fieldsets = [
         (

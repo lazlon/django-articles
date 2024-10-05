@@ -109,13 +109,14 @@ from myapp.models import Article
 class CustomArticleForm(ArticleForm):
     custom_photo = PhotoField()
 
+    class Meta:
+        model = Article
+        fields = []
+
 
 @admin.register(Article)
 class ArticleAdmin(AbstractArticleAdmin):
     form = CustomArticleForm
-
-    class Meta:
-        model = Article
 
     fieldsets = [
         (

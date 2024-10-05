@@ -7,6 +7,9 @@ export default defineConfig({
         lib: {
             name: "articles",
             entry: "src/index",
+            formats: ["es"],
         },
+        outDir: "../articles/static/articles",
+        emptyOutDir: true,
     },
 })

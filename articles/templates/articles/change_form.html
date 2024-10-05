@@ -4,7 +4,7 @@
 
 {% block extrastyle %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "article-editor/style.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "articles/style.css" %}" />
     <style>
         div#content-header {
             align-items: center;
@@ -67,7 +67,7 @@
 {% endblock %}
 
 {% block field_sets %}
-    <script type="module" src="{% static "article-editor/article-editor.js" %}"></script>
+    <script type="module" src="{% static "articles/article-editor.js" %}"></script>
 
     <article-form attributes="{{ adminform.form.attributes }}">
         <article-editor name="article_content" photoapi="/articles/photo">

@@ -42,7 +42,9 @@ class ArticleForm(ModelForm):
                 "article": article,
                 "tags": json.loads(serialize("json", Tag.objects.all())),
                 "authors": json.loads(serialize("json", Author.objects.all())),
-                "locales": getattr(settings, "ARTICLE_LOCALES", DEFAULT_ARTICLE_LOCALES),
+                "locales": getattr(
+                    settings, "ARTICLE_LOCALES", DEFAULT_ARTICLE_LOCALES
+                ),
             },
         )
 

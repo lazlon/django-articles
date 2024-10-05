@@ -52,7 +52,7 @@ export default BlockPlugin({
     render: ({ img, title, description, button }, { trim }) => (
         <product-card>
             <article-photo attributes={{ id: img }} />
-            <h2>{trim(title)}</h2>
+            <product-card-title>{trim(title)}</product-card-title>
             <p>{trim(description)}</p>
             {button && <a href={trim(button.href)}>{trim(button.text)}</a>}
         </product-card>
@@ -113,5 +113,6 @@ export default BlockPlugin({
 declare global {
     interface HTMLElementTagNameMap {
         "product-card": never
+        "product-card-title": never
     }
 }
