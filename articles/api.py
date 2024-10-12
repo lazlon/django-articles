@@ -2,13 +2,14 @@ import json
 from uuid import uuid4
 
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.serializers import serialize
 from django.db import models as m
 from django.forms import ModelForm
+from django.http.request import HttpRequest
 
 from articles.fields import DEFAULT_ARTICLE_LOCALES
-from articles.models import Article, Author, Tag
+from articles.models import Article, Author, Status, Tag
 from articles.parser import parse
 
 
@@ -71,6 +72,8 @@ class AbstractArticleAdmin(admin.ModelAdmin):
     change_form_template = "articles/change_form.html"
     form = ArticleForm
 
+    actions = ["publish", "unpublish"]
+
     list_display = [
         "article_title",
         "article_status",
@@ -93,24 +96,46 @@ class AbstractArticleAdmin(admin.ModelAdmin):
         "article__tags",
     ]
 
-    def article_title(self, obj: AbstractArticle):
+    def article_title(self, obj: AbstractArticle) -> str:
         return obj.article.title
 
-    def article_status(self, obj: AbstractArticle):
+    def article_status(self, obj: AbstractArticle) -> str:
         return obj.article.status
 
-    def article_updated_at(self, obj: AbstractArticle):
-        return obj.article.updated_at.strftime('%b %d, %Y')
+    def article_updated_at(self, obj: AbstractArticle) -> str:
+        return obj.article.updated_at.strftime("%b %d, %Y")
 
-    def article_published_at(self, obj: AbstractArticle):
+    def article_published_at(self, obj: AbstractArticle) -> str | None:
         if obj.article.published_at:
-            return obj.article.published_at.strftime('%b %d, %Y')
+            return obj.article.published_at.strftime("%b %d, %Y")
+        return None
 
-    def article_locale(self, obj: AbstractArticle):
+    def article_locale(self, obj: AbstractArticle) -> str:
         return obj.article.locale
+
+    def publish(self, request: HttpRequest, queryset: m.QuerySet[AbstractArticle]) -> None:
+        count = 0
+        for a in queryset.all():
+            if a.article.status != Status.PUBLISHED:
+                a.article.status = Status.PUBLISHED
+                count += 1
+
+        self.message_user(request, f"{count} articles(s) published.", messages.SUCCESS)
+
+    def unpublish(self, request: HttpRequest, queryset: m.QuerySet[AbstractArticle]) -> None:
+        count = 0
+        for a in queryset.all():
+            if a.article.status != Status.DRAFT:
+                a.article.status = Status.DRAFT
+                count += 1
+
+        updated = queryset.update(article__status=Status.DRAFT)
+        self.message_user(request, f"{updated} articles(s) unpublished.", messages.SUCCESS)
 
     article_title.short_description = "Title"
     article_status.short_description = "Status"
     article_updated_at.short_description = "Updated At"
     article_published_at.short_description = "Published At"
     article_locale.short_description = "Locale"
+    publish.short_description = "Publish selected articles"
+    unpublish.short_description = "Unpublish selected articles"
