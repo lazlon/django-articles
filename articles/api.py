@@ -72,11 +72,11 @@ class AbstractArticleAdmin(admin.ModelAdmin):
     form = ArticleForm
 
     list_display = [
-        "article__title",
-        "article__status",
-        "article__updated_at",
-        "article__published_at",
-        "article__locale",
+        "article_title",
+        "article_status",
+        "article_updated_at",
+        "article_published_at",
+        "article_locale",
     ]
 
     search_fields = [
@@ -92,3 +92,25 @@ class AbstractArticleAdmin(admin.ModelAdmin):
         "article__locale",
         "article__tags",
     ]
+
+    def article_title(self, obj: AbstractArticle):
+        return obj.article.title
+
+    def article_status(self, obj: AbstractArticle):
+        return obj.article.status
+
+    def article_updated_at(self, obj: AbstractArticle):
+        return obj.article.updated_at.strftime('%b %d, %Y')
+
+    def article_published_at(self, obj: AbstractArticle):
+        if obj.article.published_at:
+            return obj.article.published_at.strftime('%b %d, %Y')
+
+    def article_locale(self, obj: AbstractArticle):
+        return obj.article.locale
+
+    article_title.short_description = "Title"
+    article_status.short_description = "Status"
+    article_updated_at.short_description = "Updated At"
+    article_published_at.short_description = "Published At"
+    article_locale.short_description = "Locale"
