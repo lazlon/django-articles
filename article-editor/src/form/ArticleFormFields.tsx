@@ -75,7 +75,7 @@ class ArticleFormFields extends HTMLElement {
                 <PhotoField name="twitter_image" value={twitter_image} photoapi={photoapi} />
                 <LargeTextField name="twitter_description" value={twitter_description} />
             </FieldSet>
-            <FieldSet title="Code Injection">
+            <FieldSet open={!!(code_injection_head || code_injection_foot)} title="Code Injection">
                 <LargeTextField name="code_injection_head" value={code_injection_head} />
                 <LargeTextField name="code_injection_foot" value={code_injection_foot} />
             </FieldSet>
