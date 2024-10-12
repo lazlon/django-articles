@@ -3,7 +3,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ARTICLE_LOCALES = [
-    ("en_US", "English (United States)"),
+    ("EN", "EN"),
 ]
 
 Q_CLUSTER = {
@@ -26,6 +26,7 @@ DEBUG = True
 INSTALLED_APPS = [
     "articles",
     "testapp",
+    "graphene_django",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -71,11 +72,10 @@ DATABASES = {
 
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_TZ = True
-
 STATIC_URL = "static/"
+STATIC_ROOT = "static/"
+MEDIA_URL = "/file/"
+MEDIA_ROOT = BASE_DIR / "file/"

@@ -1,7 +1,6 @@
 import "./FileCard.css"
 import { Block, Icon, Input } from "@/components"
 import { BlockPlugin } from "../plugin"
-import { toHTML } from "../parser"
 
 type Data = {
     file: string
@@ -22,12 +21,12 @@ export default BlockPlugin({
     icon: Icon("paperclip"),
     validate: data => Boolean(data.file),
     render: ({ file }, { trim }) => (
-        <file-card>{trim(file)}</file-card>
+        <file-card attributes={{ file: trim(file) }} />
     ),
     parse: node => {
         if (node.type === "file-card") {
             return {
-                file: node.content.map(toHTML).join(""),
+                file: node.attributes!.file as string,
             }
         }
     },
@@ -38,6 +37,6 @@ export default BlockPlugin({
 
 declare global {
     interface HTMLElementTagNameMap {
-        "file-card": never
+        "file-card": { attributes: Data }
     }
 }

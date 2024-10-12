@@ -1,7 +1,12 @@
 from django.contrib import admin
 
 from articles.forms import ArticleForm, AuthorForm, TagForm
-from articles.models import Article, ArticleTag, Author, Photo, Section, Tag
+from articles.models import Article, ArticleTag, Author, Document, Photo, Section, Tag
+
+
+@admin.register(Document)
+class DocumentAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Photo)

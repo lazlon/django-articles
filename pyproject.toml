@@ -13,6 +13,8 @@ django = "^5.1.0"
 django-simple-history = "^3.7.0"
 django-q2 = "^1.7.2"
 thefuzz = "^0.22.1"
+graphene-django = "^3.2.2"
+beautifulsoup4 = "^4.12.3"
 
 [tool.poetry.group.dev.dependencies]
 django-stubs = "^5.0.4"

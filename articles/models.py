@@ -41,6 +41,15 @@ class Photo(m.Model):
         return search_photo(keyword, limit)
 
 
+class Document(m.Model):
+    title = m.CharField(max_length=100)
+    file = m.FileField()
+    uploaded_at = m.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return str(self.title)
+
+
 class Author(m.Model):
     slug = m.SlugField(primary_key=True, max_length=255)
     user = m.ForeignKey(User, m.DO_NOTHING, blank=True, null=True)
@@ -79,6 +88,8 @@ class Tag(m.Model):
     code_injection_foot = m.TextField(blank=True, null=True)
     created_at = m.DateTimeField(auto_now_add=True)
     updated_at = m.DateTimeField(auto_now=True)
+
+    articles = m.ManyToManyField("Article", blank=True, through="ArticleTag")
 
     def __str__(self) -> str:
         return str(self.name)

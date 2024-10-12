@@ -1,3 +1,4 @@
+from graphene_django.fields import QuerySet
 from thefuzz import fuzz
 
 from articles.models import Article, Status
@@ -51,3 +52,35 @@ def search_article(keyword: str, locale: str, limit: int = 20) -> list[Article]:
     filtered = [i for i in data if i[1] > 0]
     matches = sorted(filtered, key=lambda i: i[1], reverse=True)
     return [m[0] for m in matches[0:limit]]
+
+
+def filter_article(  # noqa: PLR0913
+    locale: str,
+    limit: int = 20,
+    featured: bool | None = None,
+    tags: list[str] = [],  # noqa: B006
+    page: int = 1,
+    drafts: bool = False,  # noqa: FBT001, FBT002
+) -> QuerySet[Article]:
+    query = Article.objects.filter(locale=locale)
+
+    if not drafts:
+        query = (
+            query.filter(status=Status.PUBLISHED)
+            .exclude(status=Status.DRAFT)
+            .order_by("-published_at")
+        )
+
+    if featured is not None:
+        query = query.filter(featured=featured)
+
+    for tag in tags:
+        if tag.startswith("-"):
+            query = query.exclude(tags__slug=tag)
+        else:
+            query = query.filter(tags__slug=tag)
+
+    if limit < 0:
+        return query
+
+    return query[((page - 1) * limit) : (page * limit)]

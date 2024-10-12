@@ -4,7 +4,7 @@ var ko = (n) => {
 };
 var Rs = (n, t, e) => t in n ? Ps(n, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : n[t] = e;
 var I = (n, t, e) => Rs(n, typeof t != "symbol" ? t + "" : t, e), xo = (n, t, e) => t.has(n) || ko("Cannot " + e);
-var rt = (n, t, e) => (xo(n, t, "read from private field"), e ? e.call(n) : t.get(n)), pe = (n, t, e) => t.has(n) ? ko("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(n) : t.set(n, e);
+var st = (n, t, e) => (xo(n, t, "read from private field"), e ? e.call(n) : t.get(n)), pe = (n, t, e) => t.has(n) ? ko("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(n) : t.set(n, e);
 var _o = (n, t, e) => (xo(n, t, "access private method"), e);
 class xt {
   constructor(t) {
@@ -852,7 +852,7 @@ function kn(n) {
     }
   }).filter((e) => e.type === "#text" || e.type === "#comment" ? !/^\s*$/.test(e.content) : !0);
 }
-function nt(n) {
+function ct(n) {
   switch (n.type) {
     case "#text":
       return n.content;
@@ -861,7 +861,7 @@ function nt(n) {
     case "img":
       return `<img ${So(n.attributes ?? {})}>`;
     default: {
-      const t = n.type, e = n.content.map(nt).join(""), i = So(n.attributes);
+      const t = n.type, e = n.content.map(ct).join(""), i = So(n.attributes);
       return `<${t}${i}>${e}</${t}>`;
     }
   }
@@ -1146,7 +1146,7 @@ function Rr(n, t) {
   const e = Array.isArray(n) || it(n), i = Array.isArray(t) || it(t);
   return e || i ? JSON.stringify(n) === JSON.stringify(t) : n === t;
 }
-let m = class lt {
+let m = class at {
   /**
    * Check if passed tag has no closed tag
    *
@@ -1287,7 +1287,7 @@ let m = class lt {
    * @param holder - element where to find inputs
    */
   static findAllInputs(t) {
-    return En(t.querySelectorAll(lt.allInputsSelector)).reduce((e, i) => lt.isNativeInput(i) || lt.containsOnlyInlineElements(i) ? [...e, i] : [...e, ...lt.getDeepestBlockElements(i)], []);
+    return En(t.querySelectorAll(at.allInputsSelector)).reduce((e, i) => at.isNativeInput(i) || at.containsOnlyInlineElements(i) ? [...e, i] : [...e, ...at.getDeepestBlockElements(i)], []);
   }
   /**
    * Search for deepest node which is Leaf.
@@ -1304,7 +1304,7 @@ let m = class lt {
     const i = e ? "lastChild" : "firstChild", o = e ? "previousSibling" : "nextSibling";
     if (t && t.nodeType === Node.ELEMENT_NODE && t[i]) {
       let s = t[i];
-      if (lt.isSingleTag(s) && !lt.isNativeInput(s) && !lt.isLineBreakTag(s))
+      if (at.isSingleTag(s) && !at.isNativeInput(s) && !at.isLineBreakTag(s))
         if (s[o])
           s = s[o];
         else if (s.parentNode[o])
@@ -1366,7 +1366,7 @@ let m = class lt {
    */
   static canSetCaret(t) {
     let e = !0;
-    if (lt.isNativeInput(t))
+    if (at.isNativeInput(t))
       switch (t.type) {
         case "file":
         case "checkbox":
@@ -1380,7 +1380,7 @@ let m = class lt {
           break;
       }
     else
-      e = lt.isContentEditable(t);
+      e = at.isContentEditable(t);
     return e;
   }
   /**
@@ -1432,7 +1432,7 @@ let m = class lt {
    * @returns {boolean}
    */
   static isHTMLString(t) {
-    const e = lt.make("div");
+    const e = at.make("div");
     return e.innerHTML = t, e.childElementCount > 0;
   }
   /**
@@ -1442,7 +1442,7 @@ let m = class lt {
    * @returns {number}
    */
   static getContentLength(t) {
-    return lt.isNativeInput(t) ? t.value.length : t.nodeType === Node.TEXT_NODE ? t.length : t.textContent.length;
+    return at.isNativeInput(t) ? t.value.length : t.nodeType === Node.TEXT_NODE ? t.length : t.textContent.length;
   }
   /**
    * Return array of names of block html elements
@@ -1501,7 +1501,7 @@ let m = class lt {
   static containsOnlyInlineElements(t) {
     let e;
     Rt(t) ? (e = document.createElement("div"), e.innerHTML = t) : e = t;
-    const i = (o) => !lt.blockElements.includes(o.tagName.toLowerCase()) && Array.from(o.children).every(i);
+    const i = (o) => !at.blockElements.includes(o.tagName.toLowerCase()) && Array.from(o.children).every(i);
     return Array.from(e.children).every(i);
   }
   /**
@@ -1511,7 +1511,7 @@ let m = class lt {
    * @returns {HTMLElement[]}
    */
   static getDeepestBlockElements(t) {
-    return lt.containsOnlyInlineElements(t) ? [t] : Array.from(t.children).reduce((e, i) => [...e, ...lt.getDeepestBlockElements(i)], []);
+    return at.containsOnlyInlineElements(t) ? [t] : Array.from(t.children).reduce((e, i) => [...e, ...at.getDeepestBlockElements(i)], []);
   }
   /**
    * Helper for get holder from {string} or return HTMLElement
@@ -1658,7 +1658,7 @@ const Dr = {
   }
 };
 Bn.currentDictionary = Sn;
-let ct = Bn, In = class extends Error {
+let lt = Bn, In = class extends Error {
 }, Ie = class {
   constructor() {
     this.subscribers = {};
@@ -3142,7 +3142,7 @@ let Yr = class Nn extends N {
     return Object.assign(
       this.methods,
       {
-        t: (i) => ct.t(Nn.getNamespace(t, e), i)
+        t: (i) => lt.t(Nn.getNamespace(t, e), i)
       }
     );
   }
@@ -3466,16 +3466,16 @@ var Dn = { exports: {} };
             var G = document.createElement("link");
             return A.attrs.type === void 0 && (A.attrs.type = "text/css"), A.attrs.rel = "stylesheet", z(G, A.attrs), _(A, G), G;
           }(y), B = (function(A, G, Tt) {
-            var st = Tt.css, wt = Tt.sourceMap, Dt = G.convertToAbsoluteUrls === void 0 && wt;
-            (G.convertToAbsoluteUrls || Dt) && (st = v(st)), wt && (st += `
+            var nt = Tt.css, wt = Tt.sourceMap, Dt = G.convertToAbsoluteUrls === void 0 && wt;
+            (G.convertToAbsoluteUrls || Dt) && (nt = v(nt)), wt && (nt += `
 /*# sourceMappingURL=data:application/json;base64,` + btoa(unescape(encodeURIComponent(JSON.stringify(wt)))) + " */");
-            var k = new Blob([st], { type: "text/css" }), P = A.href;
+            var k = new Blob([nt], { type: "text/css" }), P = A.href;
             A.href = URL.createObjectURL(k), P && URL.revokeObjectURL(P);
           }).bind(null, C, y), D = function() {
             L(C), C.href && URL.revokeObjectURL(C.href);
           }) : (C = R(y), B = (function(A, G) {
-            var Tt = G.css, st = G.media;
-            if (st && A.setAttribute("media", st), A.styleSheet)
+            var Tt = G.css, nt = G.media;
+            if (nt && A.setAttribute("media", nt), A.styleSheet)
               A.styleSheet.cssText = Tt;
             else {
               for (; A.firstChild; )
@@ -4773,22 +4773,22 @@ let jn = class extends Wi {
   }
 };
 var Lt = /* @__PURE__ */ ((n) => (n.Closed = "closed", n.ClosedOnActivate = "closed-on-activate", n))(Lt || {});
-const at = jt("ce-popover"), Z = {
-  popover: at(),
-  popoverContainer: at("container"),
-  popoverOpenTop: at(null, "open-top"),
-  popoverOpenLeft: at(null, "open-left"),
-  popoverOpened: at(null, "opened"),
-  search: at("search"),
-  nothingFoundMessage: at("nothing-found-message"),
-  nothingFoundMessageDisplayed: at("nothing-found-message", "displayed"),
-  items: at("items"),
-  overlay: at("overlay"),
-  overlayHidden: at("overlay", "hidden"),
-  popoverNested: at(null, "nested"),
-  getPopoverNestedClass: (n) => at(null, `nested-level-${n.toString()}`),
-  popoverInline: at(null, "inline"),
-  popoverHeader: at("header")
+const rt = jt("ce-popover"), Z = {
+  popover: rt(),
+  popoverContainer: rt("container"),
+  popoverOpenTop: rt(null, "open-top"),
+  popoverOpenLeft: rt(null, "open-left"),
+  popoverOpened: rt(null, "opened"),
+  search: rt("search"),
+  nothingFoundMessage: rt("nothing-found-message"),
+  nothingFoundMessageDisplayed: rt("nothing-found-message", "displayed"),
+  items: rt("items"),
+  overlay: rt("overlay"),
+  overlayHidden: rt("overlay", "hidden"),
+  popoverNested: rt(null, "nested"),
+  getPopoverNestedClass: (n) => rt(null, `nested-level-${n.toString()}`),
+  popoverInline: rt(null, "inline"),
+  popoverHeader: rt("header")
 };
 var oe = /* @__PURE__ */ ((n) => (n.NestingLevel = "--nesting-level", n.PopoverHeight = "--popover-height", n.InlinePopoverWidth = "--inline-popover-width", n.TriggerItemLeft = "--trigger-item-left", n.TriggerItemTop = "--trigger-item-top", n))(oe || {});
 const Ro = jt("ce-popover-item-html"), Oo = {
@@ -5598,8 +5598,8 @@ class Wa extends N {
       items: await this.getTunesItems(t, o, i),
       scopeElement: this.Editor.API.methods.ui.nodes.redactor,
       messages: {
-        nothingFound: ct.ui(vt.ui.popover, "Nothing found"),
-        search: ct.ui(vt.ui.popover, "Filter")
+        nothingFound: lt.ui(vt.ui.popover, "Nothing found"),
+        search: lt.ui(vt.ui.popover, "Filter")
       }
     }), this.popover.on(Lt.Closed, this.onPopoverClose), (e = this.nodes.wrapper) == null || e.append(this.popover.getElement()), this.popover.show();
   }
@@ -5625,7 +5625,7 @@ class Wa extends N {
     const s = Array.from(this.Editor.Tools.blockTools.values()), r = (await On(t, s)).reduce((a, l) => (l.toolbox.forEach((c) => {
       a.push({
         icon: c.icon,
-        title: ct.t(vt.toolNames, c.title),
+        title: lt.t(vt.toolNames, c.title),
         name: l.name,
         closeOnActivate: !0,
         onActivate: async () => {
@@ -5637,7 +5637,7 @@ class Wa extends N {
     return r.length > 0 && (o.push({
       icon: zn,
       name: "convert-to",
-      title: ct.ui(vt.ui.popover, "Convert to"),
+      title: lt.ui(vt.ui.popover, "Convert to"),
       children: {
         searchable: !0,
         items: r
@@ -5933,7 +5933,7 @@ const Yi = class Gn extends Ie {
   get toolboxItemsToBeDisplayed() {
     const t = (e, i) => ({
       icon: e.icon,
-      title: ct.t(vt.toolNames, e.title || je(i.name)),
+      title: lt.t(vt.toolNames, e.title || je(i.name)),
       name: i.name,
       onActivate: () => {
         this.toolButtonActivated(i.name, e.data);
@@ -6199,14 +6199,14 @@ class Qa extends N {
       We(!0), this.plusButtonClicked();
     }, !1);
     const t = m.make("div");
-    t.appendChild(document.createTextNode(ct.ui(vt.ui.toolbar.toolbox, "Add"))), t.appendChild(m.make("div", this.CSS.plusButtonShortcut, {
+    t.appendChild(document.createTextNode(lt.ui(vt.ui.toolbar.toolbox, "Add"))), t.appendChild(m.make("div", this.CSS.plusButtonShortcut, {
       textContent: "/"
     })), qe(this.nodes.plusButton, t, {
       hidingDelay: 400
     }), this.nodes.settingsToggler = m.make("span", this.CSS.settingsToggler, {
       innerHTML: Ia
     }), m.append(this.nodes.actions, this.nodes.settingsToggler);
-    const e = m.make("div"), i = m.text(ct.ui(vt.ui.blockTunes.toggler, "Click to tune")), o = await Ja("Slash", "/");
+    const e = m.make("div"), i = m.text(lt.ui(vt.ui.blockTunes.toggler, "Click to tune")), o = await Ja("Slash", "/");
     e.appendChild(i), e.appendChild(m.make("div", this.CSS.plusButtonShortcut, {
       textContent: $i(`CMD + ${o}`)
     })), qe(this.nodes.settingsToggler, e, {
@@ -6221,8 +6221,8 @@ class Qa extends N {
       api: this.Editor.API.methods,
       tools: this.Editor.Tools.blockTools,
       i18nLabels: {
-        filter: ct.ui(vt.ui.popover, "Filter"),
-        nothingFound: ct.ui(vt.ui.popover, "Nothing found")
+        filter: lt.ui(vt.ui.popover, "Filter"),
+        nothingFound: lt.ui(vt.ui.popover, "Nothing found")
       }
     }), this.toolboxInstance.on(Oe.Opened, () => {
       this.Editor.UI.nodes.wrapper.classList.add(this.CSS.openedToolboxHolderModifier);
@@ -6443,8 +6443,8 @@ class tl extends N {
       items: e,
       scopeElement: this.Editor.API.methods.ui.nodes.redactor,
       messages: {
-        nothingFound: ct.ui(vt.ui.popover, "Nothing found"),
-        search: ct.ui(vt.ui.popover, "Filter")
+        nothingFound: lt.ui(vt.ui.popover, "Nothing found"),
+        search: lt.ui(vt.ui.popover, "Filter")
       }
     }), this.move(this.popover.size.width), (t = this.nodes.wrapper) == null || t.append(this.popover.getElement()), this.popover.show();
   }
@@ -6500,7 +6500,7 @@ class tl extends N {
           this.enableShortcuts(r.name, c);
         } catch {
         }
-      const d = c !== void 0 ? $i(c) : void 0, h = ct.t(
+      const d = c !== void 0 ? $i(c) : void 0, h = lt.t(
         vt.toolNames,
         r.title || je(r.name)
       );
@@ -9724,7 +9724,7 @@ class ss {
       return (h = d.toolbox) == null || h.forEach((g) => {
         c.push({
           icon: g.icon,
-          title: ct.t(vt.toolNames, g.title),
+          title: lt.t(vt.toolNames, g.title),
           name: d.name,
           closeOnActivate: !0,
           onActivate: async () => {
@@ -10840,7 +10840,7 @@ class Ml {
       a: !0
     }, this.config.hideToolbar = this.config.hideToolbar ? this.config.hideToolbar : !1, this.config.tools = this.config.tools || {}, this.config.i18n = this.config.i18n || {}, this.config.data = this.config.data || { blocks: [] }, this.config.onReady = this.config.onReady || (() => {
     }), this.config.onChange = this.config.onChange || (() => {
-    }), this.config.inlineToolbar = this.config.inlineToolbar !== void 0 ? this.config.inlineToolbar : !0, (kt(this.config.data) || !this.config.data.blocks || this.config.data.blocks.length === 0) && (this.config.data = { blocks: [o] }), this.config.readOnly = this.config.readOnly || !1, (e = this.config.i18n) != null && e.messages && ct.setDictionary(this.config.i18n.messages), this.config.i18n.direction = ((i = this.config.i18n) == null ? void 0 : i.direction) || "ltr";
+    }), this.config.inlineToolbar = this.config.inlineToolbar !== void 0 ? this.config.inlineToolbar : !0, (kt(this.config.data) || !this.config.data.blocks || this.config.data.blocks.length === 0) && (this.config.data = { blocks: [o] }), this.config.readOnly = this.config.readOnly || !1, (e = this.config.i18n) != null && e.messages && lt.setDictionary(this.config.i18n.messages), this.config.i18n.direction = ((i = this.config.i18n) == null ? void 0 : i.direction) || "ltr";
   }
   /**
    * Returns private property
@@ -11117,7 +11117,7 @@ const Ot = (n) => (t) => {
       return {
         color: ((e = n.attributes) == null ? void 0 : e.color) ?? "slate",
         emoji: i,
-        text: n.content.map(nt).join("")
+        text: n.content.map(ct).join("")
       };
     }
   },
@@ -11339,7 +11339,7 @@ const Dl = Me({
         };
       case "p":
         return {
-          text: n.content.map(nt).join("")
+          text: n.content.map(ct).join("")
         };
     }
   }
@@ -11521,7 +11521,7 @@ const Fl = Me({
     if (n.type === "embed-card")
       return {
         src: ((t = n.attributes) == null ? void 0 : t.src) ?? "",
-        caption: n.content.map(nt).join("")
+        caption: n.content.map(ct).join("")
       };
   },
   save: ({ text: n, html: t }) => ({
@@ -11537,11 +11537,11 @@ const Fl = Me({
   title: "File",
   icon: V("paperclip"),
   validate: (n) => !!n.file,
-  render: ({ file: n }, { trim: t }) => /* @__PURE__ */ p("file-card", { children: t(n) }),
+  render: ({ file: n }, { trim: t }) => /* @__PURE__ */ p("file-card", { attributes: { file: t(n) } }),
   parse: (n) => {
     if (n.type === "file-card")
       return {
-        file: n.content.map(nt).join("")
+        file: n.attributes.file
       };
   },
   save: ({ text: n }) => ({
@@ -11657,7 +11657,7 @@ const Ul = Ot({
     if (n.type === "gallery-card") {
       const e = n.content[0].content;
       return {
-        caption: (((t = n.content[1]) == null ? void 0 : t.content) ?? []).map(nt).join(""),
+        caption: (((t = n.content[1]) == null ? void 0 : t.content) ?? []).map(ct).join(""),
         // @ts-expect-error type assert later
         photos: e.map((o) => o.content.map((s) => s.attributes.id)).flat()
       };
@@ -12021,7 +12021,7 @@ const Ql = {
     if (n.type === "h2" || n.type === "h3" || n.type === "h4")
       return {
         level: Number(n.type[1]),
-        text: n.content.map(nt).join("")
+        text: n.content.map(ct).join("")
       };
   }
 }), ec = Ot({
@@ -12055,7 +12055,7 @@ const Ql = {
         id: o,
         src: i,
         // @ts-expect-error TODO: assert type
-        caption: s.map(nt).join(""),
+        caption: s.map(ct).join(""),
         wide: (e = n.attributes) == null ? void 0 : e.wide
       };
     }
@@ -12108,7 +12108,7 @@ const Ql = {
     if (n.type == "link-button")
       return {
         href: ((t = n.attributes) == null ? void 0 : t.href) ?? "",
-        label: n.content.map(nt).join("")
+        label: n.content.map(ct).join("")
       };
   },
   save: ({ text: n, html: t }) => ({
@@ -12453,7 +12453,7 @@ const rc = Me({
       return {
         style: n.type === "ul" ? "unordered" : "ordered",
         items: n.content.map(
-          (t) => typeof t.content == "string" ? nt(t) : t.content.map(nt)
+          (t) => typeof t.content == "string" ? ct(t) : t.content.map(ct)
         )
       };
   }
@@ -13473,7 +13473,7 @@ const wc = Me({
       return n.content.length > 1 && e.push(...t(t(n.content)[1].content)), {
         withHeadings: n.content.length > 1,
         content: e.map((i) => t(i.content).map(
-          (o) => t(o.content).map(nt).join("")
+          (o) => t(o.content).map(ct).join("")
         ))
       };
     }
@@ -13546,13 +13546,13 @@ const wc = Me({
         // @ts-expect-error
         img: t.attributes.id,
         // @ts-expect-error
-        title: e.content.map(nt).join(""),
+        title: e.content.map(ct).join(""),
         // @ts-expect-error
-        description: i.content.map(nt).join(""),
+        description: i.content.map(ct).join(""),
         ...o && {
           button: {
             // @ts-expect-error
-            text: o.content.map(nt).join(""),
+            text: o.content.map(ct).join(""),
             // @ts-expect-error
             href: o.attributes.href
           }
@@ -13640,7 +13640,7 @@ const wc = Me({
       return {
         type: "raw",
         data: {
-          html: nt(o)
+          html: ct(o)
         }
       };
     })), this.getContent().then((o) => this.valueInput.value = JSON.stringify(o));
@@ -15703,9 +15703,9 @@ class Ad extends Xt {
     })(), l) {
       if (this._currentValue.x !== 0 || this._currentValue.y !== 0 || this._view.scale._currentValue.x !== 1 || this._view.scale._currentValue.y !== 1) {
         if (!i) {
-          const st = this._rect.pageOffset.left - this._previousRect.pageOffset.left, wt = this._rect.pageOffset.top - this._previousRect.pageOffset.top;
+          const nt = this._rect.pageOffset.left - this._previousRect.pageOffset.left, wt = this._rect.pageOffset.top - this._previousRect.pageOffset.top;
           this._setTarget(
-            new b(this._currentValue.x - st, this._currentValue.y - wt),
+            new b(this._currentValue.x - nt, this._currentValue.y - wt),
             !1
           );
           return;
@@ -15716,11 +15716,11 @@ class Ad extends Xt {
         }, D = B.left - y.left, M = B.top - y.top;
         let Y = 0, A = 0, G = 0, Tt = 0;
         if (x) {
-          const st = x.rect.pageOffset, wt = x.getScroll(), Dt = {
+          const nt = x.rect.pageOffset, wt = x.getScroll(), Dt = {
             left: x.previousRect.viewportOffset.left + wt.x,
             top: x.previousRect.viewportOffset.top + wt.y
           };
-          Y = Dt.left - st.left, A = Dt.top - st.top;
+          Y = Dt.left - nt.left, A = Dt.top - nt.top;
           const k = B.top - Dt.top, P = B.left - Dt.left, ot = x.scale.y * k;
           G = (k - ot) / x.scale.y;
           const he = x.scale.x * P;
@@ -17169,7 +17169,7 @@ const Ht = (n) => {
       wt();
     }), U = M().continuousMode, H = M().manualSwap, r.forEach((k) => {
       G(k);
-    }), st(), h = new Map(d), requestAnimationFrame(() => {
+    }), nt(), h = new Map(d), requestAnimationFrame(() => {
       n.emit(As, { data: we(d) });
     });
   });
@@ -17192,10 +17192,10 @@ const Ht = (n) => {
       if (k.name === "item") {
         a = n.getViews("item");
         const P = k.getParent("slot");
-        G(P), st(), h = new Map(d), n.emit($e, { data: we(d) });
+        G(P), nt(), h = new Map(d), n.emit($e, { data: we(d) });
       } else k.name === "slot" && (r = n.getViews("slot"));
   });
-  function st() {
+  function nt() {
     const k = Y();
     n.getViews("root-child").forEach((P) => {
       P.position.setAnimator(k.animator, k.config), P.scale.setAnimator(k.animator, k.config), P.layoutTransition(!0);
@@ -17500,7 +17500,7 @@ class th {
   }
   notifiy() {
     const t = this.get();
-    for (const e of rt(this, se))
+    for (const e of st(this, se))
       e(t);
   }
   set(t, e) {
@@ -17513,7 +17513,7 @@ class th {
     return [...this.map.entries()];
   }
   subscribe(t) {
-    return rt(this, se).add(t), () => rt(this, se).delete(t);
+    return st(this, se).add(t), () => st(this, se).delete(t);
   }
   bind(t) {
     return new xt(this).as(t);
@@ -17624,20 +17624,20 @@ const vo = class vo extends HTMLElement {
     super();
     pe(this, qt, new et({ id: "", url: "" }));
     pe(this, Bt, document.createElement("input"));
-    I(this, "render", () => /* @__PURE__ */ p("div", { className: "PhotoButton", children: rt(this, qt).call(this, ({ id: e, url: i }) => e && i ? /* @__PURE__ */ p("img", { onclick: this.onClick.bind(this), id: e, src: i }) : /* @__PURE__ */ p(ut, { onclick: this.onClick.bind(this), children: "Select Photo" })) }));
+    I(this, "render", () => /* @__PURE__ */ p("div", { className: "PhotoButton", children: st(this, qt).call(this, ({ id: e, url: i }) => e && i ? /* @__PURE__ */ p("img", { onclick: this.onClick.bind(this), id: e, src: i }) : /* @__PURE__ */ p(ut, { onclick: this.onClick.bind(this), children: "Select Photo" })) }));
     if (e)
       for (const [i, o] of Object.entries(e))
         o && this.setAttribute(i, o);
   }
   connectedCallback() {
-    rt(this, qt).subscribe((e) => rt(this, Bt).value = e.id), rt(this, Bt).type = "hidden", rt(this, Bt).name = this.getAttribute("name") || "", rt(this, Bt).value = this.getAttribute("value") || "", bn(this)(rt(this, Bt).value).then((e) => rt(this, qt).set({
-      id: rt(this, Bt).value,
+    st(this, qt).subscribe((e) => st(this, Bt).value = e.id), st(this, Bt).type = "hidden", st(this, Bt).name = this.getAttribute("name") || "", st(this, Bt).value = this.getAttribute("value") || "", bn(this)(st(this, Bt).value).then((e) => st(this, qt).set({
+      id: st(this, Bt).value,
       url: e
-    })), this.append(rt(this, Bt)), this.append(this.render());
+    })), this.append(st(this, Bt)), this.append(this.render());
   }
   onClick() {
     wn(this)(1).then((e) => {
-      e && e.length > 0 && rt(this, qt).set(e[0]);
+      e && e.length > 0 && st(this, qt).set(e[0]);
     });
   }
 };
