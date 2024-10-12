@@ -42,9 +42,7 @@ class ArticleForm(ModelForm):
                 "article": article,
                 "tags": json.loads(serialize("json", Tag.objects.all())),
                 "authors": json.loads(serialize("json", Author.objects.all())),
-                "locales": getattr(
-                    settings, "ARTICLE_LOCALES", DEFAULT_ARTICLE_LOCALES
-                ),
+                "locales": getattr(settings, "ARTICLE_LOCALES", DEFAULT_ARTICLE_LOCALES),
             },
         )
 
@@ -72,3 +70,25 @@ class ArticleForm(ModelForm):
 class AbstractArticleAdmin(admin.ModelAdmin):
     change_form_template = "articles/change_form.html"
     form = ArticleForm
+
+    list_display = [
+        "article__title",
+        "article__status",
+        "article__updated_at",
+        "article__published_at",
+        "article__locale",
+    ]
+
+    search_fields = [
+        "article__title",
+        "article__updated_at",
+        "article__created_at",
+        "article__published_at",
+        "article__slug",
+    ]
+
+    list_filter = [
+        "article__status",
+        "article__locale",
+        "article__tags",
+    ]
