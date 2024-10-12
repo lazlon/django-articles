@@ -4,8 +4,8 @@ rm -rf ./testapp/migrations
 rm -rf ./articles//migrations
 rm -rf ./db.sqlite3
 
-./manage.py makemigrations testapp
 ./manage.py makemigrations articles
+./manage.py makemigrations testapp
 ./manage.py migrate
 
 ./manage.py shell <<END
