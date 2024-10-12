@@ -174,7 +174,7 @@ class Section(m.Model):
         null=True,
         related_name="sections",
     )
-    title = m.CharField(max_length=255, blank=True, null=True)
+    title = m.TextField(blank=True, null=True)
     content = m.TextField()
     order = m.IntegerField(default=0)
     created_at = m.DateTimeField(auto_now_add=True)

@@ -5,8 +5,8 @@ from django.urls import include, path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
+from articles.graphql import ArticlesQuery
 from articles.lib.photo import upload_photo
-from articles.schema import Query
 
 
 def photo_upload(request: HttpRequest) -> JsonResponse:
@@ -24,7 +24,7 @@ urlpatterns = [
             GraphQLView.as_view(
                 graphiql=True,
                 schema=graphene.Schema(
-                    query=Query,
+                    query=ArticlesQuery,
                     # mutation=Mutation,
                 ),
             ),
