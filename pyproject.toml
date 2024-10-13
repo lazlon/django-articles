@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-articles"
-version = "0.1.5"
+version = "0.1.6"
 description = "Article Models and Editor"
 authors = ["Kristóf <kristof@lazlon.com>"]
 readme = "README.md"
