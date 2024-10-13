@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import cast
 
 import graphene
 from bs4 import BeautifulSoup
@@ -18,7 +19,9 @@ class DocumentType(DjangoObjectType):
     size = graphene.Int()
 
     def resolve_size(self, _: graphene.ResolveInfo) -> int:
-        return Path(settings.BASE_DIR / str(self.file)).stat().st_size
+        file = str(cast(Document, self).file)
+        path = Path(settings.BASE_DIR / file)
+        return path.stat().st_size
 
 
 class TocItemType(graphene.ObjectType):
@@ -39,22 +42,22 @@ class SectionType(DjangoObjectType):
     toc = graphene.List(TocItemType)
 
     def resolve_photos(self, _):  # noqa: ANN201, ANN001
-        soup = BeautifulSoup(self.content, "html.parser")
+        soup = BeautifulSoup(cast(Section, self).content, "html.parser")
         photos = [p["id"] for p in soup.find_all("trek-photo", recursive=True)]
         return Photo.objects.filter(id__in=photos)
 
     def resolve_documents(self, _):  # noqa: ANN001, ANN201
-        soup = BeautifulSoup(self.content, "html.parser")
+        soup = BeautifulSoup(cast(Section, self).content, "html.parser")
         files = [f["file"] for f in soup.find_all("file-card", recursive=True)]
         return Document.objects.filter(file__in=files)
 
     def resolve_plain_text_title(self, _) -> str:  # noqa: ANN001
-        soup = BeautifulSoup(self.title, "html.parser")
+        soup = BeautifulSoup(cast(Section, self).title, "html.parser")
         return soup.get_text()
 
     # add ids to headers for TOC
     def resolve_content(self, _) -> str:  # noqa: ANN001
-        soup = BeautifulSoup(self.content, "html.parser")
+        soup = BeautifulSoup(cast(Section, self).content, "html.parser")
         headers = soup.find_all(["h3", "h4", "h5", "h6"])
         for h in headers:
             h["id"] = slugify(h.get_text())
@@ -80,3 +83,10 @@ class SectionType(DjangoObjectType):
         ]
 
         return [{"depth": 1, "title": title, "slug": slugify(title)}, *toc]
+
+
+class SectionQuery(graphene.ObjectType):
+    sections = graphene.List(SectionType)
+
+    def resolve_sections(self, _):  # noqa: ANN001, ANN201
+        return Section.objects.all()

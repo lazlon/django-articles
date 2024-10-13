@@ -11,7 +11,7 @@ DEFAULT_ARTICLE_LOCALES = [
 ]
 
 
-def _locale_choices() -> list:
+def _locale_choices():  # noqa: ANN202
     return getattr(
         settings,
         "ARTICLE_LOCALES",

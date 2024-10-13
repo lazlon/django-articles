@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from django.contrib.auth.models import User
@@ -7,6 +8,9 @@ from simple_history.models import HistoricalRecords
 
 import articles.fields as f
 from articles.tasks import schedule_article
+
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
 
 
 class Visibility(m.TextChoices):
@@ -128,6 +132,7 @@ class Article(m.Model):
     history = HistoricalRecords(inherit=True)
 
     tags = m.ManyToManyField(Tag, blank=True, through="ArticleTag")
+    sections: 'RelatedManager["Section"]'
 
     class Meta:
         unique_together = ("slug", "locale")
@@ -144,12 +149,6 @@ class Article(m.Model):
             schedule_article(self)
 
         super().save(*args, **kwargs)
-
-    @classmethod
-    def search(cls, keyword: str, locale: str, limit: int = 20) -> list["Article"]:
-        from articles.lib.article import search_article
-
-        return search_article(keyword, locale, limit)
 
 
 class ArticleTag(m.Model):

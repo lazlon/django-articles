@@ -20,6 +20,9 @@ class AbstractArticle(m.Model):
     class Meta:
         abstract = True
 
+    def __str__(self) -> str:
+        return self.article.title
+
 
 class ArticleForm(ModelForm):
     def __init__(self, *args, **kwargs) -> None:  # noqa: ANN002, ANN003

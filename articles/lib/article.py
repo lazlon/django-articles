@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from graphene_django.fields import QuerySet
 from thefuzz import fuzz
 
@@ -14,8 +15,13 @@ SECTION_CONTENT_WEIGHT = 0.1
 INCLUDE_CONTENT = 3
 
 
-def search_article(keyword: str, locale: str, limit: int = 20) -> list[Article]:
+def search_article(
+    keyword: str,
+    locale: str,
+    limit: int = 20,
+) -> list[Article]:
     search_term = keyword.lower()
+
     articles = (
         Article.objects.prefetch_related("sections")
         .prefetch_related("tags")
@@ -37,7 +43,8 @@ def search_article(keyword: str, locale: str, limit: int = 20) -> list[Article]:
 
         incl_content = len(search_term.split()) > INCLUDE_CONTENT
         for s in a.sections.all():
-            stitle_score = fuzz.partial_ratio(search_term, s.plain_text_title.lower())
+            title = BeautifulSoup(s.title, "html.parser").get_text()
+            stitle_score = fuzz.partial_ratio(search_term, title.lower())
             if stitle_score > MIN_SCORE:
                 scores.append(stitle_score * SECTION_TITLE_WEIGHT)
 
