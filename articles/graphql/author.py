@@ -11,7 +11,7 @@ class AuthorType(DjangoObjectType):
 
 
 class AuthorQuery(graphene.ObjectType):
-    authors = graphene.List(AuthorType)
+    authors = graphene.NonNull(graphene.List(graphene.NonNull(AuthorType)))
 
     def resolve_authors(self, _):  # noqa: ANN201, ANN001
         return Author.objects.all()

@@ -1,3 +1,5 @@
+from typing import cast
+
 import graphene
 from graphene_django import DjangoObjectType
 
@@ -9,10 +11,15 @@ class TagType(DjangoObjectType):
         model = Tag
         fields = "__all__"
 
+    article_count = graphene.NonNull(graphene.Int)
+
+    def resolve_article_count(self, _) -> int:  # noqa: ANN001
+        return cast(Tag, self).articles.count()
+
 
 class TagQuery(graphene.ObjectType):
-    tags = graphene.List(
-        TagType,
+    tags = graphene.NonNull(
+        graphene.List(graphene.NonNull(TagType)),
         locale=graphene.String(),
     )
 

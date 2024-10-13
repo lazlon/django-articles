@@ -18,12 +18,7 @@ class Article(DjangoObjectType):
     plain_excerpt = graphene.String()
 
     def resolve_primary_tag(self, _):  # noqa: ANN201, ANN001
-        return (
-            cast(models.Article, self)
-            .tags.filter(visibility=models.Visibility.PUBLIC)
-            .order_by("order")
-            .first()
-        )
+        return cast(models.Article, self).tags.filter(visibility=models.Visibility.PUBLIC).first()
 
     def resolve_plain_excerpt(self, _) -> str | None:  # noqa: ANN001
         a = cast(models.Article, self)
@@ -31,7 +26,10 @@ class Article(DjangoObjectType):
 
 
 class ArticleQuery(graphene.ObjectType):
-    article_by_id = graphene.Field(Article, id=graphene.String())
+    article_by_id = graphene.Field(
+        Article,
+        id=graphene.String(),
+    )
 
     article_by_slug = graphene.Field(
         Article,
@@ -39,15 +37,15 @@ class ArticleQuery(graphene.ObjectType):
         slug=graphene.String(),
     )
 
-    search_articles = graphene.List(
-        Article,
+    search_articles = graphene.NonNull(
+        graphene.List(graphene.NonNull(Article)),
         keyword=graphene.String(),
         locale=graphene.String(),
         limit=graphene.Int(required=False),
     )
 
-    articles = graphene.List(
-        Article,
+    articles = graphene.NonNull(
+        graphene.List(graphene.NonNull(Article)),
         locale=graphene.String(),
         limit=graphene.Int(required=False),
         featured=graphene.Boolean(required=False),

@@ -1,3 +1,5 @@
+from typing import cast
+
 import graphene
 from graphene_django import DjangoObjectType
 
@@ -10,10 +12,15 @@ class PhotoType(DjangoObjectType):
         model = Photo
         fields = "__all__"
 
+    src = graphene.NonNull(graphene.String)
+
+    def resolve_src(self, _):  # noqa: ANN001, ANN201
+        return cast(Photo, self).url
+
 
 class PhotoQuery(graphene.ObjectType):
-    photos = graphene.List(
-        PhotoType,
+    photos = graphene.NonNull(
+        graphene.List(graphene.NonNull(PhotoType)),
         limit=graphene.Int(),
         search=graphene.String(required=False),
     )

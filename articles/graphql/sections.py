@@ -16,7 +16,7 @@ class DocumentType(DjangoObjectType):
         model = Document
         fields = "__all__"
 
-    size = graphene.Int()
+    size = graphene.NonNull(graphene.Int)
 
     def resolve_size(self, _: graphene.ResolveInfo) -> int:
         file = str(cast(Document, self).file)
@@ -25,9 +25,9 @@ class DocumentType(DjangoObjectType):
 
 
 class TocItemType(graphene.ObjectType):
-    depth = graphene.Int()
-    title = graphene.String()
-    slug = graphene.String()
+    depth = graphene.NonNull(graphene.Int)
+    title = graphene.NonNull(graphene.String)
+    slug = graphene.NonNull(graphene.String)
 
 
 class SectionType(DjangoObjectType):
@@ -35,11 +35,11 @@ class SectionType(DjangoObjectType):
         model = Section
         fields = "__all__"
 
-    photos = graphene.List(PhotoType)
-    documents = graphene.List(DocumentType)
+    photos = graphene.NonNull(graphene.List(graphene.NonNull(PhotoType)))
+    documents = graphene.NonNull(graphene.List(graphene.NonNull(DocumentType)))
     plain_text_title = graphene.String()
-    slug = graphene.String()
-    toc = graphene.List(TocItemType)
+    slug = graphene.NonNull(graphene.String)
+    toc = graphene.NonNull(graphene.List(graphene.NonNull(TocItemType)))
 
     def resolve_photos(self, _):  # noqa: ANN201, ANN001
         soup = BeautifulSoup(cast(Section, self).content, "html.parser")
@@ -86,7 +86,7 @@ class SectionType(DjangoObjectType):
 
 
 class SectionQuery(graphene.ObjectType):
-    sections = graphene.List(SectionType)
+    sections = graphene.NonNull(graphene.List(graphene.NonNull(SectionType)))
 
     def resolve_sections(self, _):  # noqa: ANN001, ANN201
         return Section.objects.all()
