@@ -1,7 +1,11 @@
+from typing import cast
+
 import graphene
+from bs4 import BeautifulSoup
 from graphene_django import DjangoObjectType
 
 from articles import models
+from articles.graphql.tags import TagType
 from articles.lib.article import filter_article, search_article
 
 
@@ -9,6 +13,21 @@ class Article(DjangoObjectType):
     class Meta:
         model = models.Article
         fields = "__all__"
+
+    primary_tag = graphene.Field(TagType)
+    plain_excerpt = graphene.String()
+
+    def resolve_primary_tag(self, _):  # noqa: ANN201, ANN001
+        return (
+            cast(models.Article, self)
+            .tags.filter(visibility=models.Visibility.PUBLIC)
+            .order_by("order")
+            .first()
+        )
+
+    def resolve_plain_excerpt(self, _) -> str | None:  # noqa: ANN001
+        a = cast(models.Article, self)
+        return BeautifulSoup(a.excerpt, "html.parser").get_text() if a.excerpt is not None else None
 
 
 class ArticleQuery(graphene.ObjectType):
