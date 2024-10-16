@@ -30,18 +30,24 @@ urlpatterns = [
 ]
 ```
 
-3. Create the photo upload endpoint (optionally use provided one that uses local files)
+3. Create the photo upload endpoint (optionally use the provided one that uses local files)
 
 ```python
 # urls.py
+from django.conf import settings
+from django.conf.urls.static import static
 from articles.lib.photo import upload_photo
 
 def photo_upload(request: HttpRequest) -> JsonResponse:
-    p = upload_photo(request.FILES["photo"])
-    return JsonResponse({"id": p.id, "src": p.url})
+    try:
+        p = upload_photo(request)
+        return JsonResponse({"id": p.id, "url": p.url})
+    except Exception as e:
+        return JsonResponse({"error": str(e)})
 
 urlpatterns = [
     path("articles/photo/upload/", photo_upload)
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
 ```
 

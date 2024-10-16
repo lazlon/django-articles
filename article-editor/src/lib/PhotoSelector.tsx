@@ -48,11 +48,11 @@ export default class PhotoSelector {
             const photo = await uploadPhoto(this.source)(file)
 
             if (photo.error) {
-                return this.error.set(photo.error)
+                return this.error.set(`Server error: ${photo.error}`)
             }
 
             this.photos.set([
-                { id: photo.id, url: photo.url },
+                { id: photo.id!, url: photo.url! },
                 ...this.photos.get().slice(0, PHOTO_LIMIT - 1),
             ])
 

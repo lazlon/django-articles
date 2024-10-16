@@ -1,4 +1,6 @@
 import graphene
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.http import HttpRequest, JsonResponse
 from django.urls import include, path
@@ -10,8 +12,11 @@ from testapp.schema import Query
 
 
 def photo_upload(request: HttpRequest) -> JsonResponse:
-    p = upload_photo(request)
-    return JsonResponse({"id": p.id, "src": p.url})
+    try:
+        p = upload_photo(request)
+        return JsonResponse({"id": p.id, "url": p.url})
+    except Exception as e:
+        return JsonResponse({"error": str(e)})
 
 
 urlpatterns = [
@@ -29,4 +34,5 @@ urlpatterns = [
             ),
         ),
     ),
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

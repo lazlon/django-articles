@@ -29,7 +29,7 @@ class Photo(m.Model):
     url = m.CharField(unique=True, max_length=255)
     alt = m.CharField(max_length=255, blank=True, null=True)
     caption = m.CharField(max_length=255, blank=True, null=True)
-    user_uploaded = m.BooleanField()
+    user_uploaded = m.BooleanField(default=False)
     created_at = m.DateTimeField(auto_now_add=True)
     updated_at = m.DateTimeField(auto_now=True)
     height = m.IntegerField(default=0)
