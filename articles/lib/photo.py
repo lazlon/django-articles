@@ -51,8 +51,8 @@ def upload_photo(request: HttpRequest) -> Photo:
     img.save(f"{settings.MEDIA_ROOT}/{filename}.webp", "webp")
 
     return Photo.objects.create(
-        id=f"{date.year}/{date.month}/${filename}",
-        url=f"{settings.MEDIA_URL}{filename}.webp",
+        id=f"{date.year}/{date.month}/{filename}",
+        url=f"/{settings.MEDIA_URL}{filename}.webp",
         height=img.height,
         width=img.width,
     )
