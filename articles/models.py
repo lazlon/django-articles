@@ -4,6 +4,7 @@ from uuid import uuid4
 from django.contrib.auth.models import User
 from django.db import models as m
 from django.utils import timezone
+from django.utils.text import slugify
 from simple_history.models import HistoricalRecords
 
 import articles.fields as f
@@ -55,15 +56,21 @@ class Document(m.Model):
 
 
 class Author(m.Model):
-    slug = m.SlugField(primary_key=True, max_length=255)
-    user = m.ForeignKey(User, m.DO_NOTHING, blank=True, null=True)
     name = m.CharField(max_length=255)
+    user = m.ForeignKey(User, m.DO_NOTHING, blank=True, null=True)
+    slug = m.SlugField(primary_key=True, max_length=255, blank=True)
     active = m.BooleanField(default=False)
     profile_image = f.PhotoField(related_name="author_profile_images")
     cover_image = f.PhotoField(related_name="author_cover_images")
 
     def __str__(self) -> str:
         return str(self.name)
+
+    def save(self, *args, **kwargs) -> None:  # noqa: ANN002, ANN003
+        if not self.slug:
+            self.slug = slugify(self.name)
+
+        return super().save(*args, **kwargs)
 
 
 class Tag(m.Model):
