@@ -26,6 +26,12 @@ class Article(DjangoObjectType):
 
 
 class ArticleQuery(graphene.ObjectType):
+    article_count = graphene.NonNull(
+        graphene.Int,
+        locale=graphene.String(required=False),
+        drafts=graphene.Boolean(required=False),
+    )
+
     article_by_id = graphene.Field(
         Article,
         id=graphene.String(),
@@ -53,6 +59,14 @@ class ArticleQuery(graphene.ObjectType):
         page=graphene.Int(required=False),
         drafts=graphene.Boolean(required=False),
     )
+
+    def resolve_article_count(self, _, locale: str | None = None, drafts: bool = False):  # noqa: ANN001, ANN201, FBT001, FBT002
+        articles = models.Article.objects
+        if locale is not None:
+            articles = articles.filter(locale=locale)
+        if not drafts:
+            articles = articles.filter(status=models.Status.PUBLISHED)
+        return articles.count()
 
     def resolve_article_by_id(self, _, id: str):  # noqa: A002, ANN001, ANN201
         return models.Article.objects.get(id=id)
