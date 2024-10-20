@@ -50,9 +50,11 @@ def upload_photo(request: HttpRequest) -> Photo:
     filename = f"{".".join(cast(str, file.name).split(".")[:-1])}"
     img.save(f"{settings.MEDIA_ROOT}/{filename}.webp", "webp")
 
+    leading_slash = "/" if not str(settings.MEDIA_URL).startswith("/") else ""
+
     return Photo.objects.create(
         id=f"{date.year}/{date.month}/{filename}",
-        url=f"/{settings.MEDIA_URL}{filename}.webp",
+        url=f"{leading_slash}{settings.MEDIA_URL}{filename}.webp",
         height=img.height,
         width=img.width,
     )
