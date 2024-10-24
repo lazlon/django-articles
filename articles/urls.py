@@ -36,6 +36,15 @@ def publish(request: HttpRequest, pk: str) -> HttpResponseRedirect:
     return redirect(reverse("admin:index"))
 
 
+def unpublish(request: HttpRequest, pk: str) -> HttpResponseRedirect:
+    article = Article.objects.get(pk=pk)
+    article.status = Status.DRAFT
+    article.published_at = None
+    article.save()
+    messages.success(request, f"{article.title} has been unpublished")
+    return redirect(reverse("admin:index"))
+
+
 def photo_search(request: HttpRequest) -> JsonResponse:
     if q := request.GET.get("q"):
         photos = Photo.search(q)
@@ -53,6 +62,7 @@ urlpatterns = [
     path("preview/<str:locale>/<str:slug>/", preview),
     path("live/<str:locale>/<str:slug>/", liveview),
     path("publish/<str:pk>/", publish),
+    path("unpublish/<str:pk>/", unpublish),
     path("photo/get/", photo_get),
     path("photo/search/", photo_search),
 ]

@@ -152,9 +152,7 @@ class Article(m.Model):
             self.slug = self.id
 
         self.updated_at = timezone.now()
-        if self.status == Status.DRAFT and self.published_at is not None:
-            schedule_article(self)
-
+        schedule_article(self)
         super().save(*args, **kwargs)
 
 

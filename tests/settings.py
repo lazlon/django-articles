@@ -26,6 +26,7 @@ DEBUG = True
 INSTALLED_APPS = [
     "articles",
     "testapp",
+    "django_q",
     "graphene_django",
     "django.contrib.admin",
     "django.contrib.auth",

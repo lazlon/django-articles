@@ -42,25 +42,23 @@
     <ul class="object-tools">
         {% block object-tools-items %}
             {% if original.article.slug %}
-                <li>
-                    {% if original.article.published_at %}
-                        {% now "Y-m-d" as today_date %}
-                        {% if original.article.published_at|date:"Y-m-d" > today_date %}
-                            <a href="/articles/preview/{{ original.article.locale }}/{{ original.article.slug }}">Preview</a>
-                        {% else %}
-                            <a href="/articles/live/{{ original.article.locale }}/{{ original.article.slug }}">View Live</a>
-                        {% endif %}
+                {% if original.article.published_at %}
+                    {% now "Y-m-d" as today_date %}
+                    {% if original.article.published_at|date:"Y-m-d" > today_date %}
+                        <li><a href="/articles/preview/{{ original.article.locale }}/{{ original.article.slug }}">Preview</a></li>
+                        <li><a href="/articles/unpublish/{{ original.article.id }}">Unschedule</a></li>
                     {% else %}
-                        <a href="/articles/publish/{{ original.article.id }}">Publish</a>
+                        <li><a href="/articles/live/{{ original.article.locale }}/{{ original.article.slug }}">View Live</a></li>
+                        <li><a href="/articles/unpublish/{{ original.article.id }}">Unpublish</a></li>
                     {% endif %}
-                </li>
+                {% else %}
+                    <li><a href="/articles/publish/{{ original.article.id }}">Publish</a></li>
+                {% endif %}
             {% endif %}
             {% if change %}
                 {{ block.super }}
             {% endif %}
-            <li>
-                <a href="#" id="toggle-sidebar">☰</a>
-            </li>
+            <li><a href="#" id="toggle-sidebar">☰</a></li>
         {% endblock %}
     </ul>
 {% endif %}

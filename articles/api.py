@@ -121,19 +121,20 @@ class AbstractArticleAdmin(admin.ModelAdmin):
         for a in queryset.all():
             if a.article.status != Status.PUBLISHED:
                 a.article.status = Status.PUBLISHED
+                a.article.save()
                 count += 1
 
-        self.message_user(request, f"{count} articles(s) published.", messages.SUCCESS)
+        self.message_user(request, f"{queryset.count} articles(s) published.", messages.SUCCESS)
 
     def unpublish(self, request: HttpRequest, queryset: m.QuerySet[AbstractArticle]) -> None:
         count = 0
         for a in queryset.all():
             if a.article.status != Status.DRAFT:
                 a.article.status = Status.DRAFT
+                a.article.save()
                 count += 1
 
-        updated = queryset.update(article__status=Status.DRAFT)
-        self.message_user(request, f"{updated} articles(s) unpublished.", messages.SUCCESS)
+        self.message_user(request, f"{count} articles(s) unpublished.", messages.SUCCESS)
 
     article_title.short_description = "Title"
     article_status.short_description = "Status"
