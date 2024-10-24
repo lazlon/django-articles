@@ -27,9 +27,9 @@ export default Extend({
     },
     render: ({ level, text }: Data, { trim }) => {
         switch (level) {
-            case 2: return <h2>{trim(text)}</h2>
-            case 3: return <h3>{trim(text)}</h3>
-            case 4: return <h4>{trim(text)}</h4>
+            case 2: return <h2 innerHTML={trim(text)} />
+            case 3: return <h3 innerHTML={trim(text)} />
+            case 4: return <h4 innerHTML={trim(text)} />
         }
     },
     parse: node => {

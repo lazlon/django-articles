@@ -30,9 +30,7 @@ export default BlockPlugin({
         inlineToolbar: true,
     },
     render: ({ src, caption }: Data, { trim }) => (
-        <embed-card attributes={{ src: trim(src) }}>
-            {trim(caption)}
-        </embed-card>
+        <embed-card attributes={{ src: trim(src) }} innerHTML={trim(caption) || ""} />
     ),
     parse(node: JsonNode) {
         if (node.type === "embed-card") {
@@ -50,6 +48,6 @@ export default BlockPlugin({
 
 declare global {
     interface HTMLElementTagNameMap {
-        "embed-card": { attributes: Omit<Data, "caption"> }
+        "embed-card": { attributes: Omit<Data, "caption">, innerHTML: string }
     }
 }

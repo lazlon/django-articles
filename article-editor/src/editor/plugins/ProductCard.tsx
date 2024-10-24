@@ -53,7 +53,7 @@ export default BlockPlugin({
         <product-card>
             <article-photo attributes={{ id: img }} />
             <product-card-title>{trim(title)}</product-card-title>
-            <p>{trim(description)}</p>
+            <p innerHTML={trim(description)} />
             {button && <a href={trim(button.href)}>{trim(button.text)}</a>}
         </product-card>
     ),

@@ -34,7 +34,7 @@ export default BlockPlugin({
         inlineToolbar: true,
     },
     render: ({ label, href }: Data, { trim }) => (
-        <link-button attributes={{ href: trim(href) }}>{trim(label)}</link-button>
+        <link-button attributes={{ href: trim(href) }} innerHTML={trim(label)} />
     ),
     parse: node => {
         if (node.type == "link-button") {
@@ -53,6 +53,6 @@ export default BlockPlugin({
 
 declare global {
     interface HTMLElementTagNameMap {
-        "link-button": { attributes: Pick<Data, "href"> }
+        "link-button": { attributes: Pick<Data, "href">, innerHTML: string }
     }
 }

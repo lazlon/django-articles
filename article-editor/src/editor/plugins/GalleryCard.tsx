@@ -111,7 +111,7 @@ export default BlockPlugin({
                     </gallery-card-row>
                 ))}
             </gallery-card-container>
-            {caption && <figcaption>${trim(caption)}</figcaption>}
+            {caption && <figcaption innerHTML={trim(caption)} />}
         </gallery-card>
     ),
 

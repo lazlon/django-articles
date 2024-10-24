@@ -18,7 +18,7 @@ export default Extend({
     },
     render: ({ style, items }: Data, { trim }) => {
         const List = style == "ordered" ? "ol" : "ul"
-        return <List>{items.map(i => <li>{trim(i)}</li>)}</List>
+        return <List>{items.map(i => <li innerHTML={trim(i)} />)}</List>
     },
     parse: (node: JsonNode) => {
         if (node.type === "ol" || node.type === "ul") {

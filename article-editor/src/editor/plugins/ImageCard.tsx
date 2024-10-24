@@ -39,7 +39,7 @@ export default BlockPlugin({
     render: ({ id, caption, wide }: Data, { trim }) => (
         <image-card attributes={{ wide }}>
             <article-photo attributes={{ id }} />
-            {caption && <figcaption>{trim(caption)}</figcaption>}
+            {caption && <figcaption innerHTML={trim(caption)} />}
         </image-card>
     ),
     parse: (node: JsonNode) => {

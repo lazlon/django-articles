@@ -15,7 +15,7 @@ export default Extend({
         inlineToolbar: true,
     },
     render: ({ text }: Data, { trim }) => (
-        <p>{trim(text)}</p>
+        <p innerHTML={trim(text)} />
     ),
     toolbox: {
         title: "Text",

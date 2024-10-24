@@ -44,9 +44,7 @@ export default BlockPlugin({
     }),
     validate: data => Boolean(data.text),
     render: ({ emoji, text, color = "slate" }: Data, { trim }) => (
-        <callout-card attributes={{ emoji: trim(emoji)!, color }}>
-            {trim(text)}
-        </callout-card>
+        <callout-card attributes={{ emoji: trim(emoji)!, color }} innerHTML={trim(text)} />
     ),
     parse: (node: JsonNode) => {
         if (node.type === "callout-card") {
@@ -77,6 +75,6 @@ export default BlockPlugin({
 
 declare global {
     interface HTMLElementTagNameMap {
-        "callout-card": { attributes: Omit<Data, "text"> }
+        "callout-card": { attributes: Omit<Data, "text">, innerHTML: string }
     }
 }
