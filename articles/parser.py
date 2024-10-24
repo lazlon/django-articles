@@ -62,22 +62,25 @@ def parse(article: Article, indata: dict) -> str:
 
     article.featured = isinstance(data.get("featured"), list)
 
-    if data["feature_image"][0] != "":
-        article.feature_image = Photo.objects.get(pk=data["feature_image"][0])
+    article.feature_image = (
+        Photo.objects.get(pk=data["feature_image"][0]) if data["feature_image"][0] != "" else None
+    )
 
     article.meta_title = data["meta_title"][0]
     article.meta_description = data["meta_description"][0]
     article.og_title = data["og_title"][0]
     article.og_description = data["og_description"][0]
 
-    if data["og_image"][0] != "":
-        article.og_image = Photo.objects.get(pk=data["og_image"][0])
+    article.og_image = (
+        Photo.objects.get(pk=data["og_image"][0]) if data["og_image"][0] != "" else None
+    )
 
     article.twitter_title = data["twitter_title"][0]
     article.twitter_description = data["twitter_description"][0]
 
-    if data["twitter_image"][0] != "":
-        article.twitter_image = Photo.objects.get(pk=data["twitter_image"][0])
+    article.twitter_image = (
+        Photo.objects.get(pk=data["twitter_image"][0]) if data["twitter_image"][0] != "" else None
+    )
 
     article.code_injection_head = data["code_injection_head"][0]
     article.code_injection_foot = data["code_injection_foot"][0]

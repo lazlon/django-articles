@@ -1,5 +1,4 @@
-import "./PhotoButton.css"
-import { Button } from "@/components"
+import { Button, Icon } from "@/components"
 import { State } from "@/jsx"
 import { getPhotoUrl, selectPhoto } from "@/lib/photo"
 
@@ -19,7 +18,10 @@ export default class PhotoButton extends HTMLElement {
     #input = document.createElement("input")
 
     connectedCallback() {
-        this.#photo.subscribe(v => this.#input.value = v.id)
+        this.#photo.subscribe(v => {
+            this.#input.value = v.id
+            this.#input.dispatchEvent(new Event("input", { bubbles: true }))
+        })
 
         this.#input.type = "hidden"
         this.#input.name = this.getAttribute("name") || ""
@@ -34,17 +36,31 @@ export default class PhotoButton extends HTMLElement {
         this.append(this.render())
     }
 
-    onClick() {
+    onClick = () => {
         selectPhoto(this)(1).then(p => {
             if (p && p.length > 0) this.#photo.set(p[0])
         })
     }
 
-    private render = () => <div className="PhotoButton">
-        {this.#photo(({ id, url }) => (id && url)
-            ? <img onclick={this.onClick.bind(this)} id={id} src={url} />
-            : <Button onclick={this.onClick.bind(this)}>Select Photo</Button>)}
-    </div>
+    remove = () => {
+        this.#photo.set({ id: "", url: "" })
+    }
+
+    private render = () => (
+        <div className="PhotoButton">
+            {this.#photo(({ id, url }) => (id && url) ? (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <img style={{ maxWidth: "20em" }} onclick={this.onClick} id={id} src={url} />
+                    <Button style={{ display: "flex", marginRight: "auto" }} onclick={this.remove}>
+                        <span>Remove</span>
+                        <Icon icon="x" />
+                    </Button>
+                </div>
+            ) : (
+                <Button onclick={this.onClick}>Select Photo</Button>
+            ))}
+        </div>
+    )
 }
 
 declare global {

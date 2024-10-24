@@ -12,10 +12,11 @@ class Article(AbstractArticle):
 
     custom_photo = m.ForeignKey(Photo, m.CASCADE, blank=True, null=True)
 
-    # weather = m.ForeignKey("Weather", m.DO_NOTHING, blank=True, null=True)
     weather_location_name = m.CharField(max_length=255, blank=True, null=True)
-    # flight_data = m.ForeignKey("FlightData", m.DO_NOTHING, blank=True, null=True)
     szallas_hu_feed = m.CharField(max_length=255, blank=True, null=True)
+    foreign = m.ForeignKey(
+        "Article", m.DO_NOTHING, blank=True, null=True, related_name="test_foreign"
+    )
 
     def __str__(self) -> str:
         return str(self.article.title)

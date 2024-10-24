@@ -30,6 +30,7 @@ class ArticleAdmin(AbstractArticleAdmin):
                     "weather_location_name",
                     "szallas_hu_feed",
                     "custom_photo",
+                    "foreign",
                 ],
             },
         ),
