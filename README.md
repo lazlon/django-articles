@@ -76,8 +76,8 @@ Locales are configurable through `ARTICLE_LOCALES`
 ```python
 # settings.py
 ARTICLE_LOCALES = [
-    ("EN", "English"),
-    ("HU", "Hungarian"),
+    ("en", "English"),
+    ("hu", "Hungarian"),
 ]
 ```
 

@@ -6,8 +6,8 @@ from django.conf import settings
 from django.db import models as m
 
 DEFAULT_ARTICLE_LOCALES = [
-    ("EN", "EN"),
-    ("HU", "HU"),
+    ("en", "English"),
+    ("hu", "Hungarian"),
 ]
 
 
