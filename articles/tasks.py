@@ -55,5 +55,6 @@ def schedule_article(instance: "Article") -> None:
                 _unschedule(instance)
 
         case Status.SCHEDULED:
-            s = Schedule.objects.get(name=instance.id)
-            s.next_run = instance.published_at
+            with contextlib.suppress(Schedule.DoesNotExist):
+                s = Schedule.objects.get(name=instance.id)
+                s.next_run = instance.published_at
