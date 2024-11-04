@@ -1,4 +1,4 @@
-import { fake } from "@/jsx"
+import { fake } from "../../jsx/state"
 import "./Button.css"
 
 export default function Button({

@@ -155,6 +155,5 @@ declare global {
 // define ArticleEditor after window is loaded so that plugins
 // injected in other scripts are ready
 window.onload = function () {
-    console.log(window.ExtraPlugins)
     customElements.define("article-editor", ArticleEditor)
 }

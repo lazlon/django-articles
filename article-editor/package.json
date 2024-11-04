@@ -12,8 +12,7 @@
     "exports": {
         "./plugin": "./src/editor/plugin.ts",
         "./parser": "./src/editor/parser.ts",
-        "./components": "./src/components",
-        "./jsx": "./jsx"
+        "./jsx/*": "./jsx/*"
     },
     "dependencies": {
         "@editorjs/editorjs": "^2.30.6",

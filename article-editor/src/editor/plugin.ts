@@ -172,9 +172,9 @@ export const Extend = <
 }
 
 // meant to be used in external scripts
-export default function addPlugin(plugin: Parameters<typeof BlockPlugin>[0]) {
+export function addPlugin(plugin: Plugin) {
     window.ExtraPlugins ??= []
-    window.ExtraPlugins.push(BlockPlugin(plugin))
+    window.ExtraPlugins.push(plugin)
 }
 
 export type Plugin = ReturnType<typeof BlockPlugin> | ReturnType<typeof Extend>
