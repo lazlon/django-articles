@@ -3,6 +3,7 @@ import "./PhotoSelector.css"
 import { State } from "@/jsx"
 import { Icon, Button, SearchEntry } from "@/components"
 import { searchPhoto, selectFile, uploadPhoto } from "./photo"
+import { Loader, Upload, X } from "lucide"
 
 type Photo = { id: string, url: string }
 
@@ -92,13 +93,13 @@ export default class PhotoSelector {
             <span className="title">Photos</span>
             <SearchEntry onSearch={this.onSearch.bind(this)} />
             <div style={{ display: "flex", flex: "1" }}>
-                {this.loading(l => l && <Icon icon="loader" />)}
+                {this.loading(l => l && <Icon icon={Loader} />)}
                 {this.selected(s => s.length > 0
                     ? <Button className="primary" onclick={this.onSelect.bind(this)}>
                         Select
                     </Button>
                     : <Button className="close" onclick={this.close.bind(this)}>
-                        <Icon icon="x" />
+                        <Icon icon={X} />
                     </Button>)}
             </div>
         </nav>
@@ -107,7 +108,7 @@ export default class PhotoSelector {
             : <div className="body">
                 <Button className="upload" onclick={this.uploadImage.bind(this)}>
                     <div>
-                        <Icon icon="upload" />
+                        <Icon icon={Upload} />
                         <span>Upload Image</span>
                     </div>
                 </Button>

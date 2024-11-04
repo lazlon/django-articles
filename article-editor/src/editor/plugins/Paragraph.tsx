@@ -3,6 +3,7 @@ import ParagraphTool from "@editorjs/paragraph"
 import { Extend } from "../plugin"
 import { toHTML } from "../parser"
 import { Icon } from "@/components"
+import { Type } from "lucide"
 
 type Data = {
     text: string
@@ -19,7 +20,7 @@ export default Extend({
     ),
     toolbox: {
         title: "Text",
-        icon: Icon("type"),
+        icon: Icon(Type),
     },
     parse(node): Data | void {
         switch (node.type) {

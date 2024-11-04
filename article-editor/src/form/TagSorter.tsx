@@ -4,6 +4,7 @@ import { createSwapy } from "swapy"
 import { Button, Icon, SearchEntry } from "@/components"
 import type { Tag } from "./types"
 import { State, Binding, Subscribable } from "@/jsx"
+import { PlusCircle, X } from "lucide"
 
 export class MapState<K, T> implements Subscribable {
     #subs = new Set<(v: Array<[K, T]>) => void>()
@@ -99,7 +100,7 @@ function AddButton({ tags, onSelect }: {
         <Button
             className="add"
             onclick={() => open.set(!open.get())}>
-            Add  <Icon icon="plus" />
+            Add  <Icon icon={PlusCircle} />
         </Button>
         <div hidden={open(o => !o)} className="popup">
             <SearchEntry placeholder="Tag" onSearch={s => search.set(s.toLowerCase())} />
@@ -179,7 +180,7 @@ export default function Tags({ choices, value = [] }: {
                                 <div className="elem">
                                     <span>{name}</span>
                                     <Button onclick={() => tags.delete(id)}>
-                                        <Icon icon="x" />
+                                        <Icon icon={X} />
                                     </Button>
                                 </div>
                             </div>

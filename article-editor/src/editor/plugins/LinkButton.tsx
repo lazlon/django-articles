@@ -2,6 +2,7 @@ import "./LinkButton.css"
 import { Block, Icon, Input } from "@/components"
 import { toHTML } from "../parser"
 import { BlockPlugin } from "../plugin"
+import { ExternalLink } from "lucide"
 
 type Data = {
     label: string
@@ -12,7 +13,7 @@ export default BlockPlugin({
     Block: ({ label, href }: Data) => (
         <Block className="LinkButton">
             <div className="body cdx-button">
-                <Icon icon="external-link" />
+                <Icon icon={ExternalLink} />
                 <div className="main">
                     <div className="row">
                         <label>href: </label>
@@ -28,7 +29,7 @@ export default BlockPlugin({
     ),
     type: "link-button",
     title: "Link Button",
-    icon: Icon("external-link"),
+    icon: Icon(ExternalLink),
     validate: data => Boolean(data.href && data.label),
     config: {
         inlineToolbar: true,

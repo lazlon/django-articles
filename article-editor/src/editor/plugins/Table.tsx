@@ -2,6 +2,7 @@ import Table from "@editorjs/table"
 import { JsonNode, toHTML } from "../parser"
 import { Extend } from "../plugin"
 import { Icon } from "@/components"
+import { Table2 } from "lucide"
 
 type Data = {
     withHeadings: boolean
@@ -21,7 +22,7 @@ export default Extend({
     type: "table",
     toolbox: {
         title: "Table",
-        icon: Icon("table"),
+        icon: Icon(Table2),
     },
     render: ({ content, withHeadings }: Data, { trim }) => (
         <table>

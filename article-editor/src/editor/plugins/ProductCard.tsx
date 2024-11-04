@@ -3,6 +3,7 @@ import { BlockPlugin } from "../plugin"
 import { toHTML } from "../parser"
 import { Block, Icon, Input, Button } from "@/components"
 import { State } from "@/jsx"
+import { ExternalLink, Tag } from "lucide"
 
 type Data = {
     img: string // id
@@ -42,7 +43,7 @@ export default BlockPlugin({
     },
     type: "product-card",
     title: "Product",
-    icon: Icon("tag"),
+    icon: Icon(Tag),
     config: {
         inlineToolbar: true,
     },
@@ -92,7 +93,7 @@ export default BlockPlugin({
     }),
     settings: ({ block }) => ({
         label: "Button",
-        icon: Icon("external-link"),
+        icon: Icon(ExternalLink),
         toggle: true,
         isActive: !!block.querySelector("div.cdx-button"),
         onActivate: () => {

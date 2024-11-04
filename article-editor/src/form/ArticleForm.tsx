@@ -1,6 +1,7 @@
 import { State } from "@/jsx"
 import { Icon } from "@/components"
 import { Article } from "./types"
+import { LoaderCircle, Save, TriangleAlert } from "lucide"
 
 const DEBOUNCE = 1000
 
@@ -75,15 +76,15 @@ export class ArticleForm extends HTMLElement {
     #render(state: boolean | string) {
         switch (state) {
             case true: return <>
-                <Icon icon="loader" />
+                <Icon icon={LoaderCircle} />
                 <span>Loading</span>
             </>
             case false: return <>
-                <Icon icon="save" />
+                <Icon icon={Save} />
                 <span>Saved</span>
             </>
             default: return <>
-                <Icon icon="alert" />
+                <Icon icon={TriangleAlert} />
                 <span>Server Error: {state}</span>
             </>
         }

@@ -1,6 +1,7 @@
 import "./YourAdHere.css"
 import { Block, Icon, Input } from "@/components"
 import { BlockPlugin } from "../plugin"
+import { Megaphone } from "lucide"
 
 type Data = {
     price: string
@@ -23,7 +24,7 @@ export default BlockPlugin({
     </Block>,
     type: "your-ad-here",
     title: "Your Ad Here",
-    icon: Icon("megaphone"),
+    icon: Icon(Megaphone),
     validate: data => Boolean(data.form && data.price),
     render: ({ price, form }: Data, { trim }) => (
         <your-ad-here attributes={{ price: trim(price), form: trim(form) }} />

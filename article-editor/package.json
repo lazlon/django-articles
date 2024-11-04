@@ -10,9 +10,10 @@
         "lint": "eslint . --fix"
     },
     "exports": {
-        ".": "./src/editor/plugin.ts",
+        "./plugin": "./src/editor/plugin.ts",
+        "./parser": "./src/editor/parser.ts",
         "./components": "./src/components",
-        "./jsx": "./src/jsx"
+        "./jsx": "./jsx"
     },
     "dependencies": {
         "@editorjs/editorjs": "^2.30.6",

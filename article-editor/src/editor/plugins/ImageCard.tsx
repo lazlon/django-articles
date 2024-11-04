@@ -3,6 +3,7 @@ import { Block, Icon, Input, Button } from "@/components"
 import { JsonNode, toHTML } from "../parser"
 import { BlockPlugin } from "../plugin"
 import { State } from "@/jsx"
+import { Image } from "lucide"
 
 type Data = {
     id: string
@@ -33,7 +34,7 @@ export default BlockPlugin({
     },
     type: "image-card",
     title: "Image",
-    icon: Icon("image"),
+    icon: Icon(Image),
     config: { inlineToolbar: true },
     validate: data => Boolean(data.id),
     render: ({ id, caption, wide }: Data, { trim }) => (

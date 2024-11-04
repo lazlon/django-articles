@@ -3,6 +3,7 @@ import { Block, Input, Icon } from "@/components"
 import { BlockPlugin } from "../plugin"
 import { type JsonNode, toHTML } from "../parser"
 import { type PopoverItemType } from "@editorjs/editorjs"
+import { CircleAlert, PaintRoller } from "lucide"
 
 const colors = ["slate", "white", "green", "red"] as const
 
@@ -33,7 +34,7 @@ export default BlockPlugin({
     ),
     type: "callout-card",
     title: "Callout",
-    icon: Icon("circle-alert"),
+    icon: Icon(CircleAlert),
     config: {
         inlineToolbar: true,
     },
@@ -66,7 +67,7 @@ export default BlockPlugin({
         })),
         { type: "separator" as PopoverItemType.Separator },
         ...colors.map(color => ({
-            icon: Icon("paint-roller"),
+            icon: Icon(PaintRoller),
             label: color.charAt(0).toUpperCase() + color.slice(1),
             onActivate: () => q("#body").dataset.color = color,
         })),

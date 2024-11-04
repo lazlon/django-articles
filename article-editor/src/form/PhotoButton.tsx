@@ -1,6 +1,7 @@
 import { Button, Icon } from "@/components"
 import { State } from "@/jsx"
 import { getPhotoUrl, selectPhoto } from "@/lib/photo"
+import { X } from "lucide"
 
 export default class PhotoButton extends HTMLElement {
     static { customElements.define("photo-button", this) }
@@ -53,7 +54,7 @@ export default class PhotoButton extends HTMLElement {
                     <img style={{ maxWidth: "20em" }} onclick={this.onClick} id={id} src={url} />
                     <Button style={{ display: "flex", marginRight: "auto" }} onclick={this.remove}>
                         <span>Remove</span>
-                        <Icon icon="x" />
+                        <Icon icon={X} />
                     </Button>
                 </div>
             ) : (

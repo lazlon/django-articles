@@ -1,5 +1,6 @@
 import "./SearchEntry.css"
 import Icon from "./Icon"
+import { Search } from "lucide"
 
 type SearchEntryProps = {
     placeholder?: string
@@ -15,7 +16,7 @@ export default function SearchEntry({
     let input: HTMLInputElement
 
     return <div className="Search">
-        <Icon icon="search" />
+        <Icon icon={Search} />
         <input
             setup={self => {
                 input = self

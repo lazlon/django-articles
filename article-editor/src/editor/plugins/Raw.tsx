@@ -2,6 +2,7 @@
 import RawTool from "@editorjs/raw"
 import { Extend } from "../plugin"
 import { Icon } from "@/components"
+import { CodeXml } from "lucide"
 
 type Data = {
     html: string
@@ -12,7 +13,7 @@ export default Extend({
     type: "raw",
     toolbox: {
         title: "HTML",
-        icon: Icon("code-xml"),
+        icon: Icon(CodeXml),
     },
     render: ({ html }: Data) => html,
 

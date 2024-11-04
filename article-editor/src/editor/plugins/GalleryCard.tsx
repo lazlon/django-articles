@@ -3,6 +3,7 @@ import { State } from "@/jsx"
 import { Block, Icon, Input, Button } from "@/components"
 import { JsonNode, toHTML } from "../parser"
 import { BlockPlugin } from "../plugin"
+import { ChevronsLeft, ChevronsRight, Images, X } from "lucide"
 
 type Data = {
     caption?: string
@@ -72,15 +73,15 @@ export default BlockPlugin({
                             <div className="buttons">
                                 <Button
                                     onclick={() => moveImg(id, -1)}
-                                    innerHTML={Icon("chevron-left")}
+                                    innerHTML={Icon(ChevronsLeft)}
                                 />
                                 <Button
                                     onclick={() => moveImg(id, 1)}
-                                    innerHTML={Icon("chevron-right")}
+                                    innerHTML={Icon(ChevronsRight)}
                                 />
                                 <Button
                                     onclick={() => removeImg(id)}
-                                    innerHTML={Icon("x")}
+                                    innerHTML={Icon(X)}
                                 />
                             </div>
                         </div>
@@ -97,7 +98,7 @@ export default BlockPlugin({
 
     type: "gallery-card",
     title: "Gallery",
-    icon: Icon("images"),
+    icon: Icon(Images),
     validate: data => data.photos.length > 0,
 
     render: ({ caption, photos }, { trim }) => (

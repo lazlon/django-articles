@@ -2,6 +2,7 @@ import "./EmbedCard.css"
 import { Block, Icon, Input } from "@/components"
 import { JsonNode, toHTML } from "../parser"
 import { BlockPlugin } from "../plugin"
+import { Frame } from "lucide"
 
 type Data = {
     src: string
@@ -24,7 +25,7 @@ export default BlockPlugin({
     ),
     type: "embed-card",
     title: "Embed",
-    icon: Icon("frame"),
+    icon: Icon(Frame),
     validate: data => Boolean(data.src),
     config: {
         inlineToolbar: true,

@@ -2,6 +2,7 @@ import { Icon } from "@/components"
 import TagSorter from "./TagSorter"
 import PhotoButton from "./PhotoButton"
 import { Tag } from "./types"
+import { Calendar, Clock } from "lucide"
 
 export function FieldSet({ title, children, open = false }: {
     title?: string
@@ -111,7 +112,7 @@ export function DateField({ name, label, required, value }: {
     return <Field {...{ name, label, required }}>
         <div className="datetime" style="display: flex; flex-direction: column;">
             <div style="display: flex;">
-                <Icon icon="calendar" />
+                <Icon icon={Calendar} />
                 <input
                     type="date"
                     id={`id_${name}_0`}
@@ -121,7 +122,7 @@ export function DateField({ name, label, required, value }: {
                 />
             </div>
             <div style="display: flex;">
-                <Icon icon="clock" />
+                <Icon icon={Clock} />
                 <input
                     type="time"
                     id={`id_${name}_1`}

@@ -2,6 +2,7 @@ import Header from "@editorjs/header"
 import { toHTML } from "../parser"
 import { Extend } from "../plugin"
 import { Icon } from "@/components"
+import { Heading } from "lucide"
 
 const config = {
     levels: [2, 3, 4] as const,
@@ -18,7 +19,7 @@ export default Extend({
     type: "header",
     toolbox: {
         title: "Heading",
-        icon: Icon("heading"),
+        icon: Icon(Heading),
     },
     config: {
         shortcut: "CMD+SHIFT+H",
