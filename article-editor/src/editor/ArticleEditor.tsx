@@ -2,9 +2,8 @@ import { selectPhoto, getPhotoUrl } from "@/lib/photo"
 import { splitArray } from "./utils"
 import { toHTML, toJSON } from "./parser"
 import EditorJS, { OutputBlockData } from "@editorjs/editorjs"
+import type { Plugin, Parser, Renderer } from "./plugin"
 import CalloutCard from "./plugins/CalloutCard"
-import Paragraph from "./plugins/Paragraph"
-import Raw from "./plugins/Raw"
 import EmbedCard from "./plugins/EmbedCard"
 import FileCard from "./plugins/FileCard"
 import GalleryCard from "./plugins/GalleryCard"
@@ -13,52 +12,28 @@ import ImageCard from "./plugins/ImageCard"
 import Line from "./plugins/Line"
 import LinkButton from "./plugins/LinkButton"
 import List from "./plugins/List"
+import Paragraph from "./plugins/Paragraph"
+import ProductCard from "./plugins/ProductCard"
+import Raw from "./plugins/Raw"
 import Table from "./plugins/Table"
 import YourAdHere from "./plugins/YourAdHere"
-import ProductCard from "./plugins/ProductCard"
 
 export class ArticleEditor extends HTMLElement {
-    static { customElements.define("article-editor", this) }
-
     public get content() { return this._content }
 
     private valueInput!: HTMLInputElement
     private editor!: EditorJS
     private initial: string
     private _content!: Awaited<ReturnType<ArticleEditor["getContent"]>>
+    private plugins: Array<ReturnType<Plugin>>
+    private renderers: Record<string, Renderer>
+    private parsers: Array<Parser>
 
     private async submit() {
         this._content = await this.getContent()
         this.valueInput.value = JSON.stringify(this._content)
         this.dispatchEvent(new Event("input"))
     }
-
-    private plugins = [
-        Paragraph,
-        Header,
-        CalloutCard,
-        ImageCard,
-        GalleryCard,
-        LinkButton,
-        FileCard,
-        List,
-        Table,
-        EmbedCard,
-        ProductCard,
-        YourAdHere,
-        Line,
-        Raw,
-    ].map(p => p({
-        onChange: this.submit.bind(this),
-        selectPhoto: selectPhoto(this),
-        getPhotoUrl: getPhotoUrl(this),
-    }))
-
-    private renderers: Record<string, (data: any) => string> = this.plugins.reduce((acc, p) => ({
-        ...acc, [p.type]: p.render,
-    }), {})
-
-    private parsers = this.plugins.map(p => p.parse)
 
     setContent(html: string) {
         const doc = new DOMParser().parseFromString(html, "text/html")
@@ -109,6 +84,37 @@ export class ArticleEditor extends HTMLElement {
 
     constructor() {
         super()
+
+        const plugins = [
+            CalloutCard,
+            EmbedCard,
+            FileCard,
+            GalleryCard,
+            Header,
+            ImageCard,
+            Line,
+            LinkButton,
+            List,
+            Paragraph,
+            ProductCard,
+            Raw,
+            Table,
+            YourAdHere,
+            ...(window.ExtraPlugins || []),
+        ]
+
+        this.plugins = plugins.map(p => p({
+            onChange: this.submit.bind(this),
+            selectPhoto: selectPhoto(this),
+            getPhotoUrl: getPhotoUrl(this),
+        }))
+
+        this.renderers = this.plugins.reduce((acc, p) => ({
+            ...acc, [p.type]: p.render,
+        }), {})
+
+        this.parsers = this.plugins.map(p => p.parse)
+
         this.initial = this.innerHTML
         this.innerHTML = ""
     }
@@ -140,4 +146,15 @@ declare global {
     interface HTMLElementTagNameMap {
         "article-editor": ArticleEditor
     }
+
+    interface Window {
+        ExtraPlugins: Array<Plugin> | undefined
+    }
+}
+
+// define ArticleEditor after window is loaded so that plugins
+// injected in other scripts are ready
+window.onload = function () {
+    console.log(window.ExtraPlugins)
+    customElements.define("article-editor", ArticleEditor)
 }

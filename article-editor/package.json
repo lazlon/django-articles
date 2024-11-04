@@ -9,6 +9,11 @@
         "preview": "vite preview",
         "lint": "eslint . --fix"
     },
+    "exports": {
+        ".": "./src/editor/plugin.ts",
+        "./components": "./src/components",
+        "./jsx": "./src/jsx"
+    },
     "dependencies": {
         "@editorjs/editorjs": "^2.30.6",
         "@editorjs/header": "^2.8.7",

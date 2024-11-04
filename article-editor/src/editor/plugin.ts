@@ -32,7 +32,7 @@ export const BlockPlugin = <
 
     render(data: Data, utils: { trim: typeof trim }): HTMLElement | string
     parse(node: JsonNode): Data | void
-    save(args: Q, api: API): Data
+    save(args: Q & { api: API }): Data
     validate?(data: Data): boolean
     settings?(args: Q): MenuConfig | HTMLElement
 }) => (props: PluginProps) => class Plugin implements BlockTool {
@@ -81,7 +81,8 @@ export const BlockPlugin = <
     }
 
     save() {
-        const data = args.save(blockQ(this.block) as Q, this.api)
+        const q = blockQ(this.block) as Q
+        const data = args.save({ api: this.api, ...q })
         return data
     }
 
@@ -169,3 +170,13 @@ export const Extend = <
         props.onChange()
     }
 }
+
+// meant to be used in external scripts
+export default function addPlugin(plugin: Parameters<typeof BlockPlugin>[0]) {
+    window.ExtraPlugins ??= []
+    window.ExtraPlugins.push(BlockPlugin(plugin))
+}
+
+export type Plugin = ReturnType<typeof BlockPlugin> | ReturnType<typeof Extend>
+export type Parser = (node: JsonNode) => void | { type: string, data: any }
+export type Renderer = (data: any) => string

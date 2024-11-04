@@ -128,7 +128,6 @@ export default function Tags({ choices, value = [] }: {
 }) {
     let input: HTMLInputElement
 
-    console.log(value)
     const tags = new MapState(value.map((t, i) => [t.pk, {
         name: t.fields.name,
         order: i,
