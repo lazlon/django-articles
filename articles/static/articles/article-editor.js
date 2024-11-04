@@ -13688,7 +13688,7 @@ class kc extends HTMLElement {
   }
 }
 window.onload = function() {
-  console.log(window.ExtraPlugins), customElements.define("article-editor", kc);
+  customElements.define("article-editor", kc);
 };
 const xc = 1e3;
 var Je, fs;
