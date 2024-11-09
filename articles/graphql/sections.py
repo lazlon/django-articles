@@ -43,7 +43,7 @@ class SectionType(DjangoObjectType):
 
     def resolve_photos(self, _):  # noqa: ANN201, ANN001
         soup = BeautifulSoup(cast(Section, self).content, "html.parser")
-        photos = [p["id"] for p in soup.find_all("trek-photo", recursive=True)]
+        photos = [p["id"] for p in soup.find_all("article-photo", recursive=True)]
         return Photo.objects.filter(id__in=photos)
 
     def resolve_documents(self, _):  # noqa: ANN001, ANN201
