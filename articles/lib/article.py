@@ -62,14 +62,17 @@ def search_article(
 
 
 def filter_article(  # noqa: PLR0913
-    locale: str,
+    locale: str | None = None,
     limit: int = 20,
     featured: bool | None = None,
     tags: list[str] = [],  # noqa: B006
     page: int = 1,
     drafts: bool = False,  # noqa: FBT001, FBT002
 ) -> QuerySet[Article]:
-    query = Article.objects.filter(locale=locale)
+    query = Article.objects.all()
+
+    if locale is not None:
+        query = query.filter(locale=locale)
 
     if not drafts:
         query = (

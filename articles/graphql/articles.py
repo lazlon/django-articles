@@ -52,7 +52,7 @@ class ArticleQuery(graphene.ObjectType):
 
     articles = graphene.NonNull(
         graphene.List(graphene.NonNull(Article)),
-        locale=graphene.String(),
+        locale=graphene.String(required=False),
         limit=graphene.Int(required=False),
         featured=graphene.Boolean(required=False),
         tags=graphene.List(graphene.String, required=False),
@@ -80,7 +80,7 @@ class ArticleQuery(graphene.ObjectType):
     def resolve_articles(  # noqa: ANN201, PLR0913
         self,
         _: graphene.ResolveInfo,
-        locale: str,
+        locale: str | None = None,
         limit: int = 20,
         featured: bool | None = None,
         tags: list[str] = [],  # noqa: B006
