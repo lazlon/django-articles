@@ -9,7 +9,7 @@ div.Icon {
     }
 }
 
-div.Icon.loader {
+div.Icon.spinner {
     animation: spin 2s linear infinite;
 }
 

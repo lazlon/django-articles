@@ -76,7 +76,7 @@ export class ArticleForm extends HTMLElement {
     #render(state: boolean | string) {
         switch (state) {
             case true: return <>
-                <Icon icon={LoaderCircle} />
+                <Icon icon={LoaderCircle} className="spinner" />
                 <span>Loading</span>
             </>
             case false: return <>

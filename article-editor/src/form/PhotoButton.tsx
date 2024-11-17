@@ -19,19 +19,23 @@ export default class PhotoButton extends HTMLElement {
     #input = document.createElement("input")
 
     connectedCallback() {
-        this.#photo.subscribe(v => {
-            this.#input.value = v.id
-            this.#input.dispatchEvent(new Event("input", { bubbles: true }))
+        Object.assign(this.#input, {
+            type: "hidden",
+            name: this.getAttribute("name") || "",
+            value: this.getAttribute("value") || "",
         })
 
-        this.#input.type = "hidden"
-        this.#input.name = this.getAttribute("name") || ""
-        this.#input.value = this.getAttribute("value") || ""
+        getPhotoUrl(this)(this.#input.value).then(url => {
+            this.#photo.set({
+                id: this.#input.value,
+                url,
+            })
 
-        getPhotoUrl(this)(this.#input.value).then(url => this.#photo.set({
-            id: this.#input.value,
-            url,
-        }))
+            this.#photo.subscribe(v => {
+                this.#input.value = v.id
+                this.#input.dispatchEvent(new Event("input", { bubbles: true }))
+            })
+        })
 
         this.append(this.#input)
         this.append(this.render())

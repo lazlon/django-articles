@@ -1,7 +1,8 @@
 import "./Icon.css"
 import { type IconNode, createElement } from "lucide"
 
-type IconProps = Omit<JSX.IntrinsicElements["div"], "innerHTML"> & {
+type IconProps = Omit<JSX.IntrinsicElements["div"], "innerHTML" | "className"> & {
+    className?: string
     icon: IconNode
     stroke?: number
     color?: string
@@ -20,7 +21,7 @@ export default function Icon(arg: IconNode | IconProps) {
     if (isNode(arg))
         return element.outerHTML
 
-    const { icon, stroke = 2, color, ...props } = arg
+    const { icon, className = "", stroke = 2, color, ...props } = arg
     element.setAttribute("stroke-width", String(stroke))
 
     if (color) {
@@ -28,7 +29,7 @@ export default function Icon(arg: IconNode | IconProps) {
     }
 
     return <div
-        className={`Icon ${icon}`}
+        className={`Icon ${icon} ${className}`}
         innerHTML={element.outerHTML}
         {...props}
     />
