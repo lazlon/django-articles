@@ -16,7 +16,6 @@ import Paragraph from "./plugins/Paragraph"
 import ProductCard from "./plugins/ProductCard"
 import Raw from "./plugins/Raw"
 import Table from "./plugins/Table"
-import YourAdHere from "./plugins/YourAdHere"
 
 export class ArticleEditor extends HTMLElement {
     public get content() { return this._content }
@@ -99,7 +98,6 @@ export class ArticleEditor extends HTMLElement {
             ProductCard,
             Raw,
             Table,
-            YourAdHere,
             ...(window.ExtraPlugins || []),
         ]
 
