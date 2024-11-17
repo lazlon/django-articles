@@ -137,9 +137,19 @@ class AbstractArticleAdmin(admin.ModelAdmin):
         self.message_user(request, f"{count} articles(s) unpublished.", messages.SUCCESS)
 
     article_title.short_description = "Title"
+    article_title.admin_order_field = "article__title"
+
     article_status.short_description = "Status"
+    article_status.admin_order_field = "article__status"
+
     article_updated_at.short_description = "Updated At"
+    article_updated_at.admin_order_field = "article__updated_at"
+
     article_published_at.short_description = "Published At"
+    article_published_at.admin_order_field = "article__published_at"
+
     article_locale.short_description = "Locale"
+    article_locale.admin_order_field = "article__locale"
+
     publish.short_description = "Publish selected articles"
     unpublish.short_description = "Unpublish selected articles"
