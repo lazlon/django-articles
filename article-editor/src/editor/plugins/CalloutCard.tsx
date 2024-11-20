@@ -23,10 +23,10 @@ export default BlockPlugin({
     Block: ({ emoji, color = "slate", text }: Data) => (
         <Block className="callout-card">
             <div id="body" dataset={{ color }}>
-                <Input id="emoji">
+                <Input flat id="emoji">
                     {text ? (emoji ?? "") : emojis[0].emoji}
                 </Input>
-                <Input id="text" placeholder="Card content...">
+                <Input flat id="text" placeholder="Card content...">
                     {text}
                 </Input>
             </div>

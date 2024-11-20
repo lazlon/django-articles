@@ -13,11 +13,11 @@ export default BlockPlugin({
     Block: ({ src, caption }: Data) => (
         <Block className="embed-card">
             <iframe src={src} style={{ border: "none" }} />
-            <div className="body">
-                <Input cdx id="src" placeholder="Source">
+            <div className="main">
+                <Input flat id="src" placeholder="Source">
                     {src}
                 </Input>
-                <Input cdx id="caption" placeholder="Caption">
+                <Input flat id="caption" placeholder="Caption">
                     {caption}
                 </Input>
             </div>

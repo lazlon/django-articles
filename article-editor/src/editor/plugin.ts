@@ -10,7 +10,7 @@ import { type JsonNode } from "./parser"
 import { type BlockWithQ, blockQ, trim } from "./utils"
 import { type selectPhoto } from "@/lib/photo"
 
-type PluginProps = {
+export type PluginProps = {
     onChange: () => void
     selectPhoto: ReturnType<typeof selectPhoto>
     getPhotoUrl: (id: string) => Promise<string>

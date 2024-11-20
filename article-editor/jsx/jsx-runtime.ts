@@ -1,5 +1,4 @@
 import State, { Binding } from "./state"
-
 type Ctor =
     | keyof HTMLElementTagNameMap
     | ((args: Record<string, any>, ...children: Array<HTMLElement>) => HTMLElement)
@@ -27,6 +26,26 @@ function setChildren(elem: HTMLElement, children: Array<ChildNode>) {
     elem.append(...children)
 }
 
+export function append(
+    element: HTMLElement,
+    children: HTMLElement | Array<HTMLElement | Binding<Array<HTMLElement>>>,
+) {
+    if (!Array.isArray(children))
+        children = [children]
+
+    const ch = mergeBindings(children.flat(Infinity))
+    if (ch instanceof Binding) {
+        setChildren(element, ch.get())
+        const unsub = ch.subscribe(v => setChildren(element, v))
+        element.addEventListener("disconnect", unsub)
+    }
+    else {
+        if (ch.length > 0) {
+            setChildren(element, ch)
+        }
+    }
+}
+
 function mergeBindings(
     array: Array<HTMLElement | Binding>,
 ): Array<HTMLElement> | Binding<Array<HTMLElement>> {
@@ -49,7 +68,7 @@ function mergeBindings(
     return State.derive(bindings, getValues)()
 }
 
-function assignProps(elem: HTMLElement, props: Record<string, any>) {
+export function assignProps(elem: HTMLElement, props: Record<string, any>) {
     for (const [prop, value] of Object.entries(props) as Array<[keyof typeof elem, any]>) {
         if (elem[prop] && typeof elem[prop] === "object" && typeof value === "object") {
             Object.assign(elem[prop], value)
@@ -93,17 +112,7 @@ function magic(
         })
 
     // set children
-    const ch = mergeBindings(children.flat(Infinity))
-    if (ch instanceof Binding) {
-        setChildren(element, ch.get())
-        const unsub = ch.subscribe(v => setChildren(element, v))
-        element.addEventListener("disconnect", unsub)
-    }
-    else {
-        if (ch.length > 0) {
-            setChildren(element, ch)
-        }
-    }
+    append(element, children)
 
     // setup bindings
     for (const [prop, binding] of bindings) {

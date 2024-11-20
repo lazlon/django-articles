@@ -1,0 +1,21 @@
+article-editor .codex-editor {
+
+    h2,
+    h3,
+    h4 {
+        margin: 0;
+        padding: .6rem 0;
+    }
+
+    h2.ce-header {
+        font-size: 2em !important;
+    }
+
+    h3.ce-header {
+        font-size: 1.8em !important;
+    }
+
+    h4.ce-header {
+        font-size: 1.6em !important;
+    }
+}

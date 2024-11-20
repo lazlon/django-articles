@@ -1,7 +1,8 @@
-article-editor div.LinkButton {
-    & div.body {
-        display: flex;
-    }
+article-editor .LinkButton .body {
+    flex-direction: row;
+    box-shadow: inset 0 0 0 1pt var(--ae-selected-bg);
+    border-radius: var(--ae-radii);
+    align-items: center;
 
     & div.main {
         flex: 1;
@@ -15,15 +16,17 @@ article-editor div.LinkButton {
 
     & div.Icon {
         font-size: 2.4em;
+        margin: 1rem;
+        color: var(--ae-quiet-fg);
     }
-
 
     & div.Input {
         padding: .3rem;
         flex: 1;
     }
 
-    & label {
+    & span.label {
+        min-width: 3em;
         color: var(--ae-quiet-fg);
     }
 }

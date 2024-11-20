@@ -12,17 +12,15 @@ type Data = {
 export default BlockPlugin({
     Block: ({ label, href }: Data) => (
         <Block className="LinkButton">
-            <div className="body cdx-button">
-                <Icon icon={ExternalLink} />
-                <div className="main">
-                    <div className="row">
-                        <label>href: </label>
-                        <Input id="href" placeholder="href">{href}</Input>
-                    </div>
-                    <div className="row">
-                        <label>label: </label>
-                        <Input id="label" placeholder="Label">{label}</Input>
-                    </div>
+            <Icon icon={ExternalLink} />
+            <div className="main">
+                <div className="row">
+                    <span className="label">href: </span>
+                    <Input flat id="href" placeholder="href">{href}</Input>
+                </div>
+                <div className="row">
+                    <span className="label">label: </span>
+                    <Input flat id="label" placeholder="Label">{label}</Input>
                 </div>
             </div>
         </Block>

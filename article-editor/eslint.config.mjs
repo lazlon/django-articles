@@ -22,5 +22,6 @@ export default tseslint.config({
         "@stylistic/arrow-parens": ["error", "as-needed"],
         "@stylistic/indent-binary-ops": "off",
         "@stylistic/multiline-ternary": "off",
+        "@stylistic/brace-style": ["error", "1tbs"],
     },
 })

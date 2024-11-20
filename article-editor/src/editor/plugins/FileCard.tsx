@@ -11,9 +11,9 @@ type Data = {
 export default BlockPlugin({
     Block: ({ file }: Data) => (
         <Block className="file-card">
-            <div className="body">
+            <div className="main">
                 <Icon icon={Paperclip} />
-                <Input id="file">{file}</Input>
+                <Input flat id="file">{file}</Input>
             </div>
         </Block>
     ),

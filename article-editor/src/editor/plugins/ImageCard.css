@@ -1,4 +1,4 @@
-article-editor div.Block.ImageCard {
+article-editor .Block.ImageCard .body {
     gap: .3em;
 
     & button {
@@ -8,5 +8,9 @@ article-editor div.Block.ImageCard {
     & img {
         border-radius: var(--ae-radii);
         width: 100%;
+    }
+
+    & .Input {
+        text-align: center;
     }
 }

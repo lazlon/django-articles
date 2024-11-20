@@ -88,11 +88,12 @@ export default BlockPlugin({
                     ))}
                 </div>
             )))}
-            {state(ps => ps.length < 9 && <Button
-                onclick={() => addImg(9 - ps.length)}>
-                Add Photo
-            </Button>)}
-            <Input id="caption" cdx placeholder="Caption">{caption}</Input>
+            {state(ps => ps.length < 9 && (
+                <Button onclick={() => addImg(9 - ps.length)}>
+                    Add Photo
+                </Button>
+            ))}
+            <Input id="caption" placeholder="Caption">{caption}</Input>
         </Block>
     },
 

@@ -1,9 +1,10 @@
 import "./ProductCard.css"
-import { BlockPlugin } from "../plugin"
+import { BlockPlugin, PluginProps } from "../plugin"
 import { toHTML } from "../parser"
 import { Block, Icon, Input, Button } from "@/components"
 import { State } from "@/jsx"
 import { ExternalLink, Tag } from "lucide"
+import { append } from "jsx/jsx-runtime"
 
 type Data = {
     img: string // id
@@ -15,32 +16,63 @@ type Data = {
     }
 }
 
-export default BlockPlugin({
-    Block: ({ img, title, description, button }: Data, { selectPhoto, getPhotoUrl }) => {
-        const photo = new State({ id: img, url: "" })
+class ProductCard extends Block {
+    static {
+        customElements.define("ae-product-card", this)
+    }
 
-        getPhotoUrl(img).then(url => photo.set({ id: img, url }))
+    photo: State<{ id: string, url: string }>
 
-        function onClick() {
+    constructor(
+        { img, title, description, button }: Data,
+        { selectPhoto, getPhotoUrl }: PluginProps,
+    ) {
+        super({ className: "ProductCard" })
+        this.photo = new State({ id: img, url: "" })
+
+        getPhotoUrl(img).then(url => this.photo.set({ id: img, url }))
+
+        const onClick = () => {
             selectPhoto(1).then(p => {
-                if (p && p.length > 0) photo.set(p[0])
+                if (p && p.length > 0) this.photo.set(p[0])
             })
         }
 
-        return <Block className="ProductCard">
-            <div className="body">
-                {photo(({ id, url }) => (id && url)
-                    ? <img id={id} src={url} onclick={onClick} />
-                    : <Button onclick={onClick}>Select Photo</Button>)}
-                <Input cdx id="title" placeholder="Title">{title}</Input>
-                <Input cdx id="description" placeholder="Description">{description}</Input>
-                {button && <div className="cdx-button">
-                    <Input cdx id="text" placeholder="Text">{button.text}</Input>
-                    <Input cdx id="href" placeholder="Link">{button.href}</Input>
-                </div>}
-            </div>
-        </Block>
-    },
+        append(this.body, <>
+            {this.photo(({ id, url }) => (id && url) ? (
+                <img id={id} src={url} onclick={onClick} />
+            ) : (
+                <Button onclick={onClick}>Select Photo</Button>
+            ))}
+            <Input flat id="title" placeholder="Title">{title}</Input>
+            <Input flat id="description" placeholder="Description">{description}</Input>
+        </>)
+
+        if (button) this.addButton()
+    }
+
+    get hasButton() {
+        return !!this.querySelector("div.button")
+    }
+
+    private addButton({ text = "", href = "" } = {}) {
+        this.body.append(<div className="button">
+            <Input flat id="text" placeholder="Text">{text}</Input>
+            <Input flat id="href" placeholder="Link">{href}</Input>
+        </div>)
+    }
+
+    toggleButton() {
+        if (this.hasButton) {
+            this.querySelector("div.button")?.remove()
+        } else {
+            this.addButton()
+        }
+    }
+}
+
+export default BlockPlugin({
+    Block: (props, pluginprops) => new ProductCard(props, pluginprops),
     type: "product-card",
     title: "Product",
     icon: Icon(Tag),
@@ -81,10 +113,10 @@ export default BlockPlugin({
         }
     },
     save: ({ block, html, text }) => ({
-        img: block.querySelector("img")!.id,
+        img: block.photo.get().id,
         title: html("#title"),
         description: html("#description"),
-        ...(block.querySelector("div.cdx-button") && {
+        ...(block.hasButton && {
             button: {
                 text: html("#text"),
                 href: text("#href"),
@@ -95,19 +127,8 @@ export default BlockPlugin({
         label: "Button",
         icon: Icon(ExternalLink),
         toggle: true,
-        isActive: !!block.querySelector("div.cdx-button"),
-        onActivate: () => {
-            const btn = block.querySelector("div.cdx-button")
-            if (btn) {
-                btn.parentNode?.removeChild(btn)
-            }
-            else {
-                block.querySelector("div.body")!.append(<div className="cdx-button">
-                    <Input cdx id="text" placeholder="Text" />
-                    <Input cdx id="href" placeholder="Link" />
-                </div>)
-            }
-        },
+        isActive: block.hasButton,
+        onActivate: () => block.toggleButton(),
     }),
 })
 

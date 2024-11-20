@@ -1,4 +1,4 @@
-article-editor div.Block.gallery-card {
+article-editor .Block.gallery-card .body {
     gap: .3rem;
 
     & div.row {
@@ -53,5 +53,9 @@ article-editor div.Block.gallery-card {
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    & .Input {
+        text-align: center;
     }
 }

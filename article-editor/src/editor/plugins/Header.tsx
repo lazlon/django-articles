@@ -1,3 +1,4 @@
+import "./Header.css"
 import Header from "@editorjs/header"
 import { toHTML } from "../parser"
 import { Extend } from "../plugin"

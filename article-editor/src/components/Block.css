@@ -1,5 +1,9 @@
-article-editor div.Block {
-    display: flex;
-    flex-direction: column;
-    color: var(--ae-fg);
+article-editor .Block {
+    padding: .4rem 0;
+
+    .body {
+        display: flex;
+        flex-direction: column;
+        color: var(--ae-fg);
+    }
 }

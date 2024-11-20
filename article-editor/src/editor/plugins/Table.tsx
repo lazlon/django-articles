@@ -1,3 +1,4 @@
+import "./Table.css"
 import Table from "@editorjs/table"
 import { JsonNode, toHTML } from "../parser"
 import { Extend } from "../plugin"

@@ -29,7 +29,7 @@ export default BlockPlugin({
                     ? <img id={id} src={url} onclick={onClick} />
                     : <Button onclick={onClick}>Select Photo</Button>)}
             </div>
-            <Input cdx id="caption" placeholder="Caption">{caption}</Input>
+            <Input id="caption" placeholder="Caption">{caption}</Input>
         </Block>
     },
     type: "image-card",

@@ -1,4 +1,13 @@
-article-editor div.cdx-block.callout-card #body {
+article-editor .Block.callout-card #body {
+    --ae-slate-card: #3d384655;
+    --ae-green-card: #33d17a55;
+    --ae-red-card: #e6615155;
+
+    box-shadow: var(--ae-shadow);
+
+    &[data-color="white"] {
+        background-color: var(--ae-darkened-bg);
+    }
 
     &[data-color="slate"] {
         background-color: var(--ae-slate-card);
@@ -18,8 +27,6 @@ article-editor div.cdx-block.callout-card #body {
 
     & #text,
     & #emoji {
-        padding: .6rem !important;
-
         &:first-child {
             border-top-left-radius: var(--ae-radii);
             border-bottom-left-radius: var(--ae-radii);
