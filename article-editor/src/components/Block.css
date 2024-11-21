@@ -1,4 +1,5 @@
 article-editor .Block {
+    display: block;
     padding: .4rem 0;
 
     .body {

@@ -72,7 +72,8 @@ class ProductCard extends Block {
 }
 
 export default BlockPlugin({
-    Block: (props, pluginprops) => new ProductCard(props, pluginprops),
+    Block: (data: Data, pluginprops) => new ProductCard(data, pluginprops),
+
     type: "product-card",
     title: "Product",
     icon: Icon(Tag),

@@ -2,8 +2,9 @@ import "./GalleryCard.css"
 import { State } from "@/jsx"
 import { Block, Icon, Input, Button } from "@/components"
 import { JsonNode, toHTML } from "../parser"
-import { BlockPlugin } from "../plugin"
+import { BlockPlugin, PluginProps } from "../plugin"
 import { ChevronsLeft, ChevronsRight, Images, X } from "lucide"
+import { append } from "jsx/jsx-runtime"
 
 type Data = {
     caption?: string
@@ -41,61 +42,72 @@ function shiftItem<T>(items: T[], i: number, pos: 1 | -1) {
     return arr
 }
 
-export default BlockPlugin({
-    Block: ({ caption, photos = [] }: Data, { selectPhoto, getPhotoUrl }) => {
-        const state = new State(photos.map(id => ({ id, url: "" })))
+class GalleryCard extends Block {
+    static {
+        customElements.define("ae-gallery-card", this)
+    }
+
+    state = new State<Array<{ id: string, url: string }>>([])
+
+    moveImg(id: string, pos: 1 | -1) {
+        const x = this.state.get().findIndex(i => i.id === id)
+        this.state.set([...shiftItem(this.state.get(), x, pos)])
+    }
+
+    removeImg(id: string) {
+        this.state.set([...this.state.get().filter(i => i.id !== id)])
+    }
+
+    addImg(selectPhoto: PluginProps["selectPhoto"], limit: number) {
+        selectPhoto(limit).then(p => {
+            if (p) this.state.set([...this.state.get(), ...p])
+        })
+    }
+
+    constructor(
+        { caption, photos = [] }: Data,
+        { selectPhoto, getPhotoUrl }: PluginProps,
+    ) {
+        super({ className: "GalleryCard" })
+
+        this.state.set(photos.map(id => ({ id, url: "" })))
 
         Promise.all(photos.map(async id => ({ id, url: await getPhotoUrl(id) })))
-            .then(arr => state.set(arr))
+            .then(arr => this.state.set(arr))
 
-        function moveImg(id: string, pos: 1 | -1) {
-            const x = state.get().findIndex(i => i.id === id)
-            state.set([...shiftItem(state.get(), x, pos)])
-        }
-
-        function removeImg(id: string) {
-            state.set([...state.get().filter(i => i.id !== id)])
-        }
-
-        function addImg(limit: number) {
-            selectPhoto(limit).then(p => {
-                if (p) state.set([...state.get(), ...p])
-            })
-        }
-
-        return <Block className="gallery-card"
-            setup={self => Object.assign(self, { state })}>
-            {state(ps => toRows(ps).map(row => (
+        append(this.body, <>
+            {this.state(ps => toRows(ps).map(row => (
                 <div className="row">
                     {row.map(({ id, url }) => url && (
                         <div className="image">
                             <img src={url} />
                             <div className="buttons">
-                                <Button
-                                    onclick={() => moveImg(id, -1)}
-                                    innerHTML={Icon(ChevronsLeft)}
-                                />
-                                <Button
-                                    onclick={() => moveImg(id, 1)}
-                                    innerHTML={Icon(ChevronsRight)}
-                                />
-                                <Button
-                                    onclick={() => removeImg(id)}
-                                    innerHTML={Icon(X)}
-                                />
+                                <Button onclick={() => this.moveImg(id, -1)}>
+                                    <Icon icon={ChevronsLeft} />
+                                </Button>
+                                <Button onclick={() => this.moveImg(id, 1)}>
+                                    <Icon icon={ChevronsRight} />
+                                </Button>
+                                <Button onclick={() => this.removeImg(id)}>
+                                    <Icon icon={X} />
+                                </Button>
                             </div>
                         </div>
                     ))}
                 </div>
             )))}
-            {state(ps => ps.length < 9 && (
-                <Button onclick={() => addImg(9 - ps.length)}>
+            {this.state(ps => ps.length < 9 && (
+                <Button onclick={() => this.addImg(selectPhoto, 9 - ps.length)}>
                     Add Photo
                 </Button>
             ))}
             <Input id="caption" placeholder="Caption">{caption}</Input>
-        </Block>
-    },
+        </>)
+    }
+}
+
+export default BlockPlugin({
+    Block: (data: Data, pluginProps) => new GalleryCard(data, pluginProps),
 
     type: "gallery-card",
     title: "Gallery",
@@ -130,10 +142,9 @@ export default BlockPlugin({
     },
 
     save: ({ block, html }) => {
-        const { state } = block as unknown as { state: State<Array<{ id: string }>> }
         return {
             caption: html("#caption"),
-            photos: state.get().map(p => p.id),
+            photos: block.state.get().map(p => p.id),
         }
     },
 })

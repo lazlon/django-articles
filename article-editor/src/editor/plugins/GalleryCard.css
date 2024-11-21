@@ -1,5 +1,9 @@
-article-editor .Block.gallery-card .body {
-    gap: .3rem;
+article-editor .GalleryCard {
+    .body {
+        display: flex;
+        flex-direction: column;
+        gap: .3rem;
+    }
 
     & div.row {
         display: flex;

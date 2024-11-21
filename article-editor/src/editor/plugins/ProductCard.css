@@ -1,4 +1,4 @@
-article-editor .Block.ProductCard .body {
+article-editor .ProductCard .body {
     border-radius: var(--ae-radii);
     box-shadow: inset 0 0 0 1pt var(--ae-selected-bg);
     padding: .8em;
