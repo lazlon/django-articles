@@ -37,7 +37,8 @@ class SectionType(DjangoObjectType):
 
     photos = graphene.NonNull(graphene.List(graphene.NonNull(PhotoType)))
     documents = graphene.NonNull(graphene.List(graphene.NonNull(DocumentType)))
-    plain_text_title = graphene.String()
+    title = graphene.NonNull(graphene.String)
+    plain_text_title = graphene.NonNull(graphene.String)
     slug = graphene.NonNull(graphene.String)
     toc = graphene.NonNull(graphene.List(graphene.NonNull(TocItemType)))
 
