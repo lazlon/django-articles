@@ -3,7 +3,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 ARTICLE_LOCALES = [
-    ("EN", "EN"),
+    ("en", "English"),
+    ("hu", "Hungarian"),
+    ("de", "German"),
 ]
 
 Q_CLUSTER = {

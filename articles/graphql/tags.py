@@ -12,9 +12,13 @@ class TagType(DjangoObjectType):
         fields = "__all__"
 
     article_count = graphene.NonNull(graphene.Int)
+    locale = graphene.NonNull(graphene.String)
 
     def resolve_article_count(self, _) -> int:  # noqa: ANN001
         return cast(Tag, self).articles.count()
+
+    def resolve_locale(self, _: graphene.ResolveInfo) -> str:
+        return cast(Tag, self).locale
 
 
 class TagQuery(graphene.ObjectType):

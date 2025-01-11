@@ -16,6 +16,7 @@ class Article(DjangoObjectType):
 
     primary_tag = graphene.Field(TagType)
     plain_excerpt = graphene.String()
+    locale = graphene.NonNull(graphene.String)
 
     def resolve_primary_tag(self, _):  # noqa: ANN201, ANN001
         return cast(models.Article, self).tags.filter(visibility=models.Visibility.PUBLIC).first()
@@ -23,6 +24,9 @@ class Article(DjangoObjectType):
     def resolve_plain_excerpt(self, _) -> str | None:  # noqa: ANN001
         a = cast(models.Article, self)
         return BeautifulSoup(a.excerpt, "html.parser").get_text() if a.excerpt is not None else None
+
+    def resolve_locale(self, _: graphene.ResolveInfo) -> str:
+        return cast(models.Article, self).locale
 
 
 class ArticleQuery(graphene.ObjectType):
