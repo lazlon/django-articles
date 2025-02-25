@@ -1,6 +1,6 @@
 import tempfile
 from pathlib import Path
-from typing import cast
+from typing import Callable, cast
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -32,7 +32,7 @@ def search_photo(search: str, limit: int = 20) -> list[Photo]:
     return [m[0] for m in matches[0:limit]]
 
 
-def upload_photo(request: HttpRequest) -> Photo:
+def upload_photo(request: HttpRequest, name: Callable[[str], str] | None = None) -> Photo:
     file = request.FILES["photo"]
     date = timezone.now()
 
@@ -47,7 +47,9 @@ def upload_photo(request: HttpRequest) -> Photo:
     else:
         raise Exception("wrong file format")  # noqa: EM101, TRY002, TRY003, TRY004
 
-    filename = f"{".".join(cast(str, file.name).split(".")[:-1])}"
+    filename = f"{'.'.join(cast(str, file.name).split('.')[:-1])}"
+    if callable(name):
+        filename = name(filename)
     img.save(f"{settings.MEDIA_ROOT}/{filename}.webp", "webp")
 
     leading_slash = "/" if not str(settings.MEDIA_URL).startswith("/") else ""
