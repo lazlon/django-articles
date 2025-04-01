@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+html[data-theme="light"],
+:root {
+    --ae-fg: #111111;
+    --ae-bg: #ffffff;
+    --ae-primary: #4b9ed6;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ae-fg: #eeeeee;
+        --ae-bg: #181818;
+    }
+}
+
+html[data-theme="dark"] {
+    --ae-fg: #eeeeee;
+    --ae-bg: #181818;
+}
+
+@theme inline {
+    --color-fg: var(--ae-fg);
+    --color-bg: var(--ae-bg);
+}
+
+/* article-editor div.codex-editor { */
+/*     ::selection { */
+/*         background-color: var(--ae-activated-bg); */
+/*     } */
+/**/
+/*     .ce-block--selected .ce-block__content { */
+/*         background-color: color-mix( */
+/*             in srgb, */
+/*             var(--ae-primary), */
+/*             transparent 68% */
+/*         ); */
+/*     } */
+/**/
+/*     .ce-toolbar__plus, */
+/*     .ce-toolbar__settings-btn { */
+/*         color: var(--ae-fg); */
+/**/
+/*         &:hover { */
+/*             background-color: var(--ae-selected-bg); */
+/*         } */
+/*     } */
+/**/
+/*     .ce-popover .ce-popover__container { */
+/*         background-color: var(--ae-bg); */
+/*         border-color: color-mix(in srgb, var(--ae-fg), transparent 98%); */
+/*         box-shadow: var(--ae-shadow); */
+/**/
+/*         .ce-popover-item-separator__line { */
+/*             background-color: var(--ae-selected-bg); */
+/*         } */
+/**/
+/*         .ce-popover-item, */
+/*         .ce-popover-item-html .ce-inline-tool { */
+/*             color: var(--ae-fg); */
+/*             background-color: transparent; */
+/**/
+/*             &:hover { */
+/*                 background-color: var(--ae-darkened-bg); */
+/*             } */
+/**/
+/*             &.ce-inline-tool--focused { */
+/*                 background-color: color-mix( */
+/*                     in srgb, */
+/*                     var(--ae-primary), */
+/*                     transparent 88% */
+/*                 ); */
+/*             } */
+/**/
+/*             &.ce-inline-tool--active { */
+/*                 background-color: color-mix( */
+/*                     in srgb, */
+/*                     var(--ae-primary), */
+/*                     transparent 78% */
+/*                 ); */
+/*                 color: var(--ae-primary); */
+/*             } */
+/**/
+/*             &[data-item-name="delete"].ce-popover-item--confirmation { */
+/*                 &:hover { */
+/*                     /* comes from editorjs */ */
+/*                     background-color: var( */
+/*                         --color-background-item-confirm-hover */
+/*                     ); */
+/*                 } */
+/*             } */
+/*         } */
+/**/
+/*         .ce-popover-item--active { */
+/*             color: var(--ae-primary); */
+/*             background-color: color-mix( */
+/*                 in srgb, */
+/*                 var(--ae-primary), */
+/*                 transparent 78% */
+/*             ); */
+/*         } */
+/**/
+/*         .ce-popover-item-html .ce-inline-tool-input { */
+/*             padding: 0; */
+/*             border: none; */
+/*             background-color: transparent; */
+/*             color: var(--ae-fg); */
+/**/
+/*             &::placeholder { */
+/*                 color: var(--ae-quiet-fg); */
+/*             } */
+/*         } */
+/**/
+/*         .cdx-search-field.ce-popover__search { */
+/*             background-color: var(--ae-darkened-bg); */
+/*             border-color: color-mix(in srgb, var(--ae-fg), transparent 98%); */
+/**/
+/*             .cdx-search-field__icon svg { */
+/*                 color: var(--ae-quiet-fg); */
+/*             } */
+/**/
+/*             .cdx-search-field__input { */
+/*                 color: var(--ae-fg); */
+/**/
+/*                 &::placeholder { */
+/*                     color: var(--ae-quiet-fg); */
+/*                 } */
+/*             } */
+/*         } */
+/**/
+/*         .ce-popover__nothing-found-message { */
+/*             color: var(--ae-quiet-fg); */
+/*         } */
+/*     } */
+/* } */

@@ -1,34 +1,14 @@
 {
-    "compilerOptions": {
-        "target": "ES2022",
-        "module": "ESNext",
-        "lib": [
-            "ES2022",
-            "DOM",
-            "DOM.Iterable"
-        ],
-        "outDir": "dist",
-        "skipLibCheck": true,
-        "moduleResolution": "Bundler",
-        "moduleDetection": "force",
-        "strict": true,
-        "jsx": "react-jsx",
-        "baseUrl": ".",
-        "jsxImportSource": "jsx",
-        "paths": {
-            "@/jsx": [
-                "jsx/state.ts",
-            ],
-            "@/components": [
-                "src/components/index.ts",
-            ],
-            "@/lib/*": [
-                "src/lib/*",
-            ]
-        }
-    },
-    "include": [
-        "src",
-        "jsx"
-    ]
+  "compilerOptions": {
+    "useDefineForClassFields": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "strict": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  }
 }

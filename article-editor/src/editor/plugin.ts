@@ -1,182 +1,209 @@
-import {
-    BlockTool,
-    BlockToolData,
-    ExternalToolSettings,
-    MenuConfig,
-    MoveEvent,
-} from "@editorjs/editorjs/types/tools"
-import { API, ToolboxConfigEntry } from "@editorjs/editorjs"
-import { type JsonNode } from "./parser"
-import { type BlockWithQ, blockQ, trim } from "./utils"
-import { type selectPhoto } from "@/lib/photo"
+import type { JsonNode } from "./parser"
+import type * as Editorjs from "@editorjs/editorjs/types/tools"
+import { render } from "solid-js/web"
+import { createStore, unwrap } from "solid-js/store"
+import { JSXElement } from "solid-js"
+import { asString } from "./utils"
+import type { PhotoApi } from "./photoApi"
 
-export type PluginProps = {
-    onChange: () => void
-    selectPhoto: ReturnType<typeof selectPhoto>
-    getPhotoUrl: (id: string) => Promise<string>
-}
-
-export const BlockPlugin = <
-    BlockCtor extends { (args: any, api: PluginProps): HTMLElement },
-    Data extends Parameters<BlockCtor>[0],
-    Block extends ReturnType<BlockCtor>,
-    Q extends BlockWithQ<Block>,
-    Type extends string,
->(args: {
-    Block: BlockCtor
-
-    type: Type
+interface BlockToolMeta<Data extends object> {
+  type: string
+  parser: (node: JsonNode) => void | Data
+  renderer: (data: Data) => JSXElement
+  toolbox: {
     title: string
     icon: string
-    config?: Omit<ExternalToolSettings, "config" | "class">
+  }
+  toolSettings?: Omit<Editorjs.ExternalToolSettings, "config" | "class">
+  tool: typeof BlockTool<Data>
+}
 
-    render(data: Data, utils: { trim: typeof trim }): HTMLElement | string
-    parse(node: JsonNode): Data | void
-    save(args: Q & { api: API }): Data
-    validate?(data: Data): boolean
-    settings?(args: Q): MenuConfig | HTMLElement
-}) => (props: PluginProps) => class Plugin implements BlockTool {
-    static type = args.type
+export abstract class BlockTool<Data extends object> {
+  declare photoApi: PhotoApi
 
-    static toolbox: ToolboxConfigEntry = {
-        title: args.title,
-        icon: args.icon,
-    }
+  abstract render(): JSXElement
+  abstract defaultData: Data
 
-    static tool = {
-        [args.type]: {
-            class: Plugin,
-            ...args.config,
-        },
-    }
+  save(): Data {
+    return unwrap(this.store[0])
+  }
 
-    static render(data: Data) {
-        const res = args.render(data, { trim })
-        if (typeof res === "string")
-            return res
-        return res.outerHTML
-    }
+  validate?(data: Data): boolean
+  renderSettings?(): Editorjs.MenuConfig
 
-    static parse(node: JsonNode): { type: Type, data: Data } | void {
-        const data = args.parse(node)
+  protected api
+  protected block
+
+  protected store!: ReturnType<typeof createStore<Data>>
+  private initialData: Data
+
+  element: HTMLElement
+  destroy?: () => void
+
+  rendered(): void {
+    const data =
+      Object.keys(this.initialData).length > 0
+        ? this.initialData
+        : this.defaultData
+
+    this.destroy = render(() => {
+      this.store = createStore(data)
+      return this.render()
+    }, this.element)
+  }
+
+  constructor(config: Editorjs.BlockToolConstructorOptions<Data>) {
+    this.api = config.api
+    this.block = config.block
+    this.initialData = config.data
+    this.element = document.createElement("div")
+  }
+}
+
+export type Parser = (node: JsonNode) => void | { type: string; data: any }
+export type Renderer = (data: any) => string
+
+export type BlockToolPlugin = (
+  api: PhotoApi & { onChange: () => void },
+) => Editorjs.BlockToolConstructable & {
+  type: string
+  parser: Parser
+  renderer: Renderer
+  toolSettings: Editorjs.ExternalToolSettings
+}
+
+export function defineBlockTool<Data extends object>(
+  meta: BlockToolMeta<Data>,
+): BlockToolPlugin {
+  const plugin: BlockToolPlugin = ({ onChange, ...photoApi }) => {
+    return class ToolWrapper implements Editorjs.BlockTool {
+      static type = meta.type
+
+      static toolSettings = {
+        class: ToolWrapper,
+        ...meta.toolSettings,
+      }
+
+      static toolbox: Editorjs.ToolboxConfigEntry = {
+        title: meta.toolbox.title,
+        icon: meta.toolbox.icon,
+      }
+
+      static renderer(data: Data) {
+        return asString(() => meta.renderer(data))
+      }
+
+      static parser(node: JsonNode): { type: string; data: Data } | void {
+        const data = meta.parser(node)
         if (data) {
-            return { type: args.type, data }
+          return { type: meta.type, data }
         }
-    }
+      }
 
-    destroy = props.onChange
-    updated = props.onChange
-    moved = props.onChange
+      private instance: BlockTool<Data>
 
-    private block: Block
-    private api: API
+      constructor(config: Editorjs.BlockToolConstructorOptions<Data>) {
+        // @ts-expect-error Tool is not abstract
+        this.instance = new meta.tool(config)
+        this.instance.photoApi = photoApi
+      }
 
-    constructor({ data, api }: { data: Data, api: API }) {
-        this.block = args.Block(data, props) as Block
-        this.api = api
-    }
+      updated = onChange
+      moved = onChange
 
-    render() {
-        return this.block
-    }
+      rendered() {
+        this.instance.rendered()
+      }
 
-    save() {
-        const q = blockQ(this.block) as Q
-        const data = args.save({ api: this.api, ...q })
-        return data
-    }
+      destroy() {
+        this.instance.destroy?.()
+        onChange()
+      }
 
-    renderSettings(): HTMLElement | MenuConfig {
-        return args.settings?.(blockQ(this.block) as Q) || []
-    }
+      render() {
+        return this.instance.element
+      }
 
-    validate(data: Data): boolean {
-        if (typeof args.validate == "function")
-            return args.validate(data)
+      save() {
+        return this.instance.save()
+      }
+
+      renderSettings() {
+        return this.instance.renderSettings?.() || []
+      }
+
+      validate(data: Data): boolean {
+        if (typeof this.instance.validate == "function")
+          return this.instance.validate(data)
 
         return true
+      }
     }
+  }
+
+  window.ArticleEditorPlugins ??= []
+  window.ArticleEditorPlugins.push(plugin)
+  return plugin
 }
 
-export const Extend = <
-    Data extends BlockToolData,
-    Type extends string,
->(args: {
-    Base: {
-        toolbox?: ToolboxConfigEntry
-        new(...args: any[]): BlockTool
+export function useBlockTool<Data extends object>(
+  Tool: Editorjs.BlockToolConstructable,
+  meta: Pick<BlockToolMeta<Data>, "type" | "parser" | "renderer"> & {
+    toolbox?: {
+      title: string
+      icon: string
     }
-    type: Type
-    toolbox?: Omit<ToolboxConfigEntry, "data">
-    config?: Omit<ExternalToolSettings, "class">
-    render(data: Data, utils: { trim: typeof trim }): HTMLElement | string
-    save?(block: HTMLElement, api: API): Data
-    parse(node: JsonNode): Data | void
-}) => (props: PluginProps) => class Plugin extends (args.Base) implements BlockTool {
-    static {
-        if (args.toolbox) {
-            Object.defineProperty(this, "toolbox", {
-                value: args.toolbox,
-            })
+    toolSettings?: Omit<Editorjs.ExternalToolSettings, "class">
+  },
+): BlockToolPlugin {
+  const plugin: BlockToolPlugin = ({ onChange }) => {
+    return class ToolWrapper extends Tool {
+      static type = meta.type
+      static toolbox = meta.toolbox || Tool.toolbox
+
+      static {
+        const descriptors = Object.getOwnPropertyDescriptors(Tool)
+
+        for (const [key, descriptor] of Object.entries(descriptors)) {
+          if (["name", "length", "prototype", "toolbox"].includes(key)) continue
+          Object.defineProperty(this, key, descriptor)
         }
-    }
+      }
 
-    static tool = {
-        [args.type]: {
-            class: Plugin,
-            ...args.config,
-        },
-    }
+      static toolSettings = {
+        class: ToolWrapper,
+        ...meta.toolSettings,
+      }
 
-    static render(data: Data) {
-        const res = args.render(data, { trim })
-        if (typeof res === "string")
-            return res
-        return res.outerHTML
-    }
+      static renderer(data: Data) {
+        return asString(() => meta.renderer(data))
+      }
 
-    static parse(node: JsonNode): { type: Type, data: Data } | void {
-        const data = args.parse(node)
+      static parser(node: JsonNode): { type: string; data: Data } | void {
+        const data = meta.parser(node)
         if (data) {
-            return { type: args.type, data }
+          return { type: meta.type, data }
         }
-    }
+      }
 
-    static type = args.type
-
-    private api: API
-
-    constructor(args: { data: Data, api: API }) {
-        super(args)
-        this.api = args.api
-    }
-
-    save(block: HTMLElement) {
-        return args.save?.(block, this.api) || super.save(block)
-    }
-
-    destroy() {
-        super.destroy?.()
-        props.onChange()
-    }
-
-    updated() {
+      updated() {
         super.updated?.()
-        props.onChange()
-    }
+        onChange()
+      }
 
-    moved(event: MoveEvent): void {
+      moved(event: Editorjs.MoveEvent) {
         super.moved?.(event)
-        props.onChange()
+        onChange()
+      }
+
+      destroy() {
+        super.destroy?.()
+        onChange()
+      }
     }
-}
+  }
 
-// meant to be used in external scripts
-export function addPlugin(plugin: Plugin) {
-    window.ExtraPlugins ??= []
-    window.ExtraPlugins.push(plugin)
+  window.ArticleEditorPlugins ??= []
+  window.ArticleEditorPlugins.push(plugin)
+  return plugin
 }
-
-export type Plugin = ReturnType<typeof BlockPlugin> | ReturnType<typeof Extend>
-export type Parser = (node: JsonNode) => void | { type: string, data: any }
-export type Renderer = (data: any) => string
