@@ -1,7 +1,8 @@
 import EditorjsList from "@editorjs/list"
 import { useBlockTool } from "../plugin"
-import { trim } from "../utils"
+import { asString, trim } from "../utils"
 import { toHTML } from "../parser"
+import List from "lucide-solid/icons/list"
 
 type OrderedData = {
   style: "ordered"
@@ -40,6 +41,10 @@ type Data = OrderedData | UnorderedData | ChecklistData
 
 useBlockTool<Data>(EditorjsList as any, {
   type: "list",
+  toolbox: {
+    title: "List",
+    icon: asString(List),
+  },
   toolSettings: {
     inlineToolbar: true,
     config: {
@@ -82,7 +87,6 @@ useBlockTool<Data>(EditorjsList as any, {
   },
   parser: (node) => {
     if (node.type === "ol" || node.type === "ul") {
-      console.log(node)
       if (node.type === "ul" && "checklist" in node.dataset) {
         return {
           style: "checklist",

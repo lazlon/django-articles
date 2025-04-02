@@ -12,9 +12,10 @@ export type PhotoApi = {
 }
 
 export function getPhotoApiUrl(elem: HTMLElement) {
-  const path = elem.getAttribute("photoapi")
+  let path = elem.getAttribute("photoapi")
 
   if (!path) throw Error("missing photoapi")
+  if (!path.endsWith("/")) path += "/"
 
   return path.startsWith("/")
     ? new URL(path, window.location.origin)
@@ -48,10 +49,9 @@ export function selectFile(): Promise<File | null> {
 
 export async function getPhotoUrl(api: URL, id: string): Promise<string> {
   if (!id) return ""
-
-  api.pathname += "/get"
-  api.searchParams.set("get", id)
-  const res = await fetch(api)
+  const url = new URL(api + "get/")
+  url.searchParams.set("get", id)
+  const res = await fetch(url)
   const json = (await res.json()) as Photo
   return fullUrl(json.url)
 }
@@ -61,11 +61,6 @@ export function selectPhoto(
   limit: number,
 ): Promise<Array<Photo> | null> {
   return new Promise((resolve) => {
-    function onMount(dialog: HTMLDialogElement) {
-      console.log(dialog)
-      dialog.showModal()
-    }
-
     const div = document.createElement("div")
     document.body.append(div)
 
@@ -73,7 +68,7 @@ export function selectPhoto(
       () =>
         PhotoSelectorDialog({
           limit,
-          ref: onMount,
+          ref: (ref) => ref.showModal(),
           selectFile,
           getPhotoUrl: (id) => getPhotoUrl(api, id),
           selectPhoto: (limit) => selectPhoto(api, limit),
@@ -91,6 +86,7 @@ export function selectPhoto(
 }
 
 export async function uploadPhoto(api: URL, file: File) {
+  const url = new URL(api + "upload/")
   const token = document.querySelector<HTMLInputElement>(
     "input[type=hidden][name=csrfmiddlewaretoken]",
   )
@@ -100,10 +96,8 @@ export async function uploadPhoto(api: URL, file: File) {
 
   if (token) form.append("csrfmiddlewaretoken", token.value)
 
-  api.pathname += "upload/"
-
   try {
-    const res = await fetch(api, {
+    const res = await fetch(url, {
       method: "POST",
       body: form,
     })
@@ -123,9 +117,9 @@ export async function uploadPhoto(api: URL, file: File) {
 }
 
 export async function searchPhoto(api: URL, search: string) {
-  api.pathname += "/search"
-  api.searchParams.set("q", search)
-  const res = await fetch(api)
+  const url = new URL(api + "search/")
+  url.searchParams.set("q", search)
+  const res = await fetch(url)
   const arr = (await res.json()) as Array<Photo>
   return arr.map(({ id, url }) => ({ id, url: fullUrl(url) }))
 }

@@ -1,4 +1,4 @@
-import { Paperclip } from "lucide-solid"
+import Paperclip from "lucide-solid/icons/paperclip"
 import { Block, Input } from "../components"
 import { BlockTool, defineBlockTool } from "../plugin"
 import { asString } from "../utils"
@@ -32,8 +32,8 @@ defineBlockTool<Data>({
       const [store, set] = this.store
 
       return (
-        <Block class="flex border-[1pt] border-fg/20 rounded-lg p-1 px-2 gap-2">
-          {/* <Paperclip /> */}
+        <Block class="flex items-center border-[1pt] border-fg/20 rounded-lg p-1 px-2 gap-2">
+          <Paperclip />
           <Input
             class="grow"
             text={store.file}

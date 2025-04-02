@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-solid"
+import ExternalLink from "lucide-solid/icons/external-link"
 import { Block, Input } from "../components"
 import { toHTML } from "../parser"
 import { defineBlockTool, BlockTool } from "../plugin"
@@ -11,6 +11,9 @@ type Data = {
 
 defineBlockTool<Data>({
   type: "link-button",
+  toolSettings: {
+    inlineToolbar: true,
+  },
   renderer: ({ label, href }) => (
     <link-button attr:href={href}>{label}</link-button>
   ),
@@ -42,7 +45,7 @@ defineBlockTool<Data>({
 
       return (
         <Block class="flex p-1 rounded-lg border-[1pt] border-fg/20">
-          {/* <ExternalLink class="my-auto mx-3 text-fg" /> */}
+          <ExternalLink class="my-auto mx-3 ml-2 text-fg" />
           <div class="flex flex-col grow">
             <div class="flex gap-1">
               <span>href: </span>

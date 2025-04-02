@@ -9,6 +9,10 @@
     "moduleDetection": "force",
     "strict": true,
     "jsx": "preserve",
-    "jsxImportSource": "solid-js"
-  }
+    "jsxImportSource": "solid-js",
+    "paths": {
+      "#/*": ["./src/*"]
+    }
+  },
+  "include": ["./src"]
 }

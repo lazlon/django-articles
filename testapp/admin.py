@@ -20,13 +20,24 @@ class ArticleAdmin(AbstractArticleAdmin):
 
     fieldsets = [
         (
-            "Widgets",
+            "Show",
             {
+                "classes": ["collapse"],
+                "description": "Show options",
                 "fields": [
                     "show_ads",
                     "show_your_ad_here",
                     "show_login_widget",
                     "show_fb_widget",
+                ],
+            },
+        ),
+        (
+            "Widgets",
+            {
+                "classes": ["collapse"],
+                "description": "Widget options",
+                "fields": [
                     "weather_location_name",
                     "szallas_hu_feed",
                     "custom_photo",

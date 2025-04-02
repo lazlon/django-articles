@@ -4,7 +4,7 @@ import { render } from "solid-js/web"
 import { createStore, unwrap } from "solid-js/store"
 import { JSXElement } from "solid-js"
 import { asString } from "./utils"
-import type { PhotoApi } from "./photoApi"
+import type { PhotoApi } from "#/photoApi"
 
 interface BlockToolMeta<Data extends object> {
   type: string

@@ -3,7 +3,7 @@ import { JsonNode, toHTML } from "../parser"
 import { defineBlockTool, BlockTool } from "../plugin"
 import { asString } from "../utils"
 import { Block, Input } from "../components"
-import { CircleAlert } from "lucide-solid"
+import CircleAlert from "lucide-solid/icons/circle-alert"
 
 const emojis = [
   { emoji: "💡", label: "Note" },
@@ -82,7 +82,7 @@ defineBlockTool<Data>({
         <Block>
           <div class={`flex ${colors[store.color]} shadow rounded-lg`}>
             <Input
-              class="p-2 text-3xl rounded-lg"
+              class="p-2 text-xl rounded-lg"
               text={store.emoji ?? ""}
               onChange={(emoji) => setStore("emoji", emoji)}
             />

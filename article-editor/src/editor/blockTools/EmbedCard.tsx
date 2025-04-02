@@ -2,7 +2,7 @@ import { Block, Input } from "../components"
 import { JsonNode, toHTML } from "../parser"
 import { BlockTool, defineBlockTool } from "../plugin"
 import { asString } from "../utils"
-import { Frame } from "lucide-solid"
+import Frame from "lucide-solid/icons/frame"
 
 type Data = {
   src: string

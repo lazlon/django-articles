@@ -4,7 +4,7 @@
 
 {% block extrastyle %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "articles/style.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "articles/article-editor.css" %}" />
     <style>
         div#content-header {
             align-items: center;
@@ -45,20 +45,44 @@
                 {% if original.article.published_at %}
                     {% now "Y-m-d" as today_date %}
                     {% if original.article.published_at|date:"Y-m-d" > today_date %}
-                        <li><a href="/articles/preview/{{ original.article.locale }}/{{ original.article.slug }}">Preview</a></li>
-                        <li><a href="/articles/unpublish/{{ original.article.id }}">Unschedule</a></li>
+                        <li>
+                            <a href="/articles/preview/{{ original.article.locale }}/{{ original.article.slug }}">
+                                Preview
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/articles/unpublish/{{ original.article.id }}">
+                                Unschedule
+                            </a>
+                        </li>
                     {% else %}
-                        <li><a href="/articles/live/{{ original.article.locale }}/{{ original.article.slug }}">View Live</a></li>
-                        <li><a href="/articles/unpublish/{{ original.article.id }}">Unpublish</a></li>
+                        <li>
+                            <a href="/articles/live/{{ original.article.locale }}/{{ original.article.slug }}">
+                                View Live
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/articles/unpublish/{{ original.article.id }}">
+                                Unpublish
+                            </a>
+                        </li>
                     {% endif %}
                 {% else %}
-                    <li><a href="/articles/publish/{{ original.article.id }}">Publish</a></li>
+                    <li>
+                        <a href="/articles/publish/{{ original.article.id }}">
+                            Publish
+                        </a>
+                    </li>
                 {% endif %}
             {% endif %}
             {% if change %}
                 {{ block.super }}
             {% endif %}
-            <li><a href="#" id="toggle-sidebar">☰</a></li>
+            <li>
+                <a href="#" id="toggle-sidebar">
+                    ☰
+                </a>
+            </li>
         {% endblock %}
     </ul>
 {% endif %}

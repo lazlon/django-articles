@@ -2,7 +2,7 @@ import ParagraphTool from "@editorjs/paragraph"
 import { useBlockTool } from "../plugin"
 import { toHTML } from "../parser"
 import { asString, trim } from "../utils"
-import { Type } from "lucide-solid"
+import Type from "lucide-solid/icons/type"
 
 type Data = {
   text: string

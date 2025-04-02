@@ -1,137 +1,163 @@
-@import "tailwindcss";
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 html[data-theme="light"],
 :root {
-    --ae-fg: #111111;
-    --ae-bg: #ffffff;
-    --ae-primary: #4b9ed6;
+  --ae-fg: #111111;
+  --ae-bg: #ffffff;
+  --ae-primary: #4b9ed6;
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --ae-fg: #eeeeee;
-        --ae-bg: #181818;
-    }
+  :root {
+    --ae-fg: #eeeeee;
+    --ae-bg: #181818;
+  }
 }
 
 html[data-theme="dark"] {
-    --ae-fg: #eeeeee;
-    --ae-bg: #181818;
+  --ae-fg: #eeeeee;
+  --ae-bg: #181818;
 }
 
 @theme inline {
-    --color-fg: var(--ae-fg);
-    --color-bg: var(--ae-bg);
+  --color-fg: var(--ae-fg);
+  --color-bg: var(--ae-bg);
+  --color-primary: var(--ae-primary);
 }
 
-/* article-editor div.codex-editor { */
-/*     ::selection { */
-/*         background-color: var(--ae-activated-bg); */
-/*     } */
-/**/
-/*     .ce-block--selected .ce-block__content { */
-/*         background-color: color-mix( */
-/*             in srgb, */
-/*             var(--ae-primary), */
-/*             transparent 68% */
-/*         ); */
-/*     } */
-/**/
-/*     .ce-toolbar__plus, */
-/*     .ce-toolbar__settings-btn { */
-/*         color: var(--ae-fg); */
-/**/
-/*         &:hover { */
-/*             background-color: var(--ae-selected-bg); */
-/*         } */
-/*     } */
-/**/
-/*     .ce-popover .ce-popover__container { */
-/*         background-color: var(--ae-bg); */
-/*         border-color: color-mix(in srgb, var(--ae-fg), transparent 98%); */
-/*         box-shadow: var(--ae-shadow); */
-/**/
-/*         .ce-popover-item-separator__line { */
-/*             background-color: var(--ae-selected-bg); */
-/*         } */
-/**/
-/*         .ce-popover-item, */
-/*         .ce-popover-item-html .ce-inline-tool { */
-/*             color: var(--ae-fg); */
-/*             background-color: transparent; */
-/**/
-/*             &:hover { */
-/*                 background-color: var(--ae-darkened-bg); */
-/*             } */
-/**/
-/*             &.ce-inline-tool--focused { */
-/*                 background-color: color-mix( */
-/*                     in srgb, */
-/*                     var(--ae-primary), */
-/*                     transparent 88% */
-/*                 ); */
-/*             } */
-/**/
-/*             &.ce-inline-tool--active { */
-/*                 background-color: color-mix( */
-/*                     in srgb, */
-/*                     var(--ae-primary), */
-/*                     transparent 78% */
-/*                 ); */
-/*                 color: var(--ae-primary); */
-/*             } */
-/**/
-/*             &[data-item-name="delete"].ce-popover-item--confirmation { */
-/*                 &:hover { */
-/*                     /* comes from editorjs */ */
-/*                     background-color: var( */
-/*                         --color-background-item-confirm-hover */
-/*                     ); */
-/*                 } */
-/*             } */
-/*         } */
-/**/
-/*         .ce-popover-item--active { */
-/*             color: var(--ae-primary); */
-/*             background-color: color-mix( */
-/*                 in srgb, */
-/*                 var(--ae-primary), */
-/*                 transparent 78% */
-/*             ); */
-/*         } */
-/**/
-/*         .ce-popover-item-html .ce-inline-tool-input { */
-/*             padding: 0; */
-/*             border: none; */
-/*             background-color: transparent; */
-/*             color: var(--ae-fg); */
-/**/
-/*             &::placeholder { */
-/*                 color: var(--ae-quiet-fg); */
-/*             } */
-/*         } */
-/**/
-/*         .cdx-search-field.ce-popover__search { */
-/*             background-color: var(--ae-darkened-bg); */
-/*             border-color: color-mix(in srgb, var(--ae-fg), transparent 98%); */
-/**/
-/*             .cdx-search-field__icon svg { */
-/*                 color: var(--ae-quiet-fg); */
-/*             } */
-/**/
-/*             .cdx-search-field__input { */
-/*                 color: var(--ae-fg); */
-/**/
-/*                 &::placeholder { */
-/*                     color: var(--ae-quiet-fg); */
-/*                 } */
-/*             } */
-/*         } */
-/**/
-/*         .ce-popover__nothing-found-message { */
-/*             color: var(--ae-quiet-fg); */
-/*         } */
-/*     } */
-/* } */
+/* django uses this class name for fieldsets */
+.collapse {
+  visibility: unset;
+}
+
+/* Editorjs */
+article-editor div.codex-editor {
+  .ce-block--selected .ce-block__content {
+    @apply bg-primary/32;
+  }
+
+  .ce-toolbar__plus,
+  .ce-toolbar__settings-btn {
+    @apply transform text-fg hover:bg-fg/12;
+  }
+
+  .ce-popover .ce-popover__container {
+    @apply bg-bg border border-fg/2 shadow rounded-xl;
+
+    .ce-popover-item-separator__line {
+      @apply bg-fg/10;
+    }
+
+    .ce-popover-item,
+    .ce-popover-item-html .ce-inline-tool {
+      @apply transition text-fg/88 hover:bg-fg/10 hover:text-fg;
+
+      &.ce-inline-tool--focused {
+        @apply bg-primary/12;
+      }
+
+      &.ce-inline-tool--active {
+        @apply bg-primary/18 text-primary;
+      }
+
+      &[data-item-name="delete"].ce-popover-item--confirmation {
+        @apply text-fg bg-red-400 hover:bg-red-500;
+      }
+    }
+
+    .ce-popover-item--active {
+      @apply text-primary bg-primary/22;
+    }
+
+    .ce-popover-item-html .ce-inline-tool-input {
+      @apply p-0 border-none bg-transparent text-fg placeholder:text-fg/68;
+    }
+
+    .cdx-search-field.ce-popover__search {
+      @apply bg-fg/10 border-fg/2;
+
+      .cdx-search-field__icon {
+        @apply mr-0;
+
+        svg {
+          @apply text-fg/78;
+        }
+      }
+
+      .cdx-search-field__input {
+        @apply text-fg placeholder:text-fg/78;
+      }
+    }
+
+    .ce-popover__nothing-found-message {
+      @apply text-fg/78;
+    }
+  }
+}
+
+/* Header Tool */
+article-editor .codex-editor {
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    padding: 0.6rem 0;
+  }
+
+  h2.ce-header {
+    font-size: 2em !important;
+  }
+
+  h3.ce-header {
+    font-size: 1.8em !important;
+  }
+
+  h4.ce-header {
+    font-size: 1.6em !important;
+  }
+}
+
+/* Table Tool */
+article-editor .tc-wrap {
+  --color-border: color-mix(in srgb, var(--ae-fg), transparent 92%);
+
+  & .tc-toolbox__toggler {
+    @apply text-fg/78 hover:text-fg;
+  }
+
+  & .tc-add-row,
+  & .tc-add-column {
+    @apply text-fg/78;
+
+    &:hover {
+      @apply text-fg bg-fg/12 before:bg-fg/12;
+    }
+  }
+
+  & .tc-row--selected,
+  & .tc-cell--selected {
+    @apply bg-fg/14 after:bg-fg/14;
+  }
+
+  & .tc-popover {
+    @apply bg-bg border border-fg/2 shadow rounded-xl;
+
+    /*  */
+    & .tc-popover__item {
+      @apply transition text-fg/78 hover:bg-fg/12 hover:text-fg;
+
+      & .tc-popover__item-icon {
+        @apply border-none bg-transparent;
+      }
+
+      &.tc-popover__item--confirm {
+        @apply transition text-fg bg-red-400 hover:bg-red-500;
+      }
+    }
+  }
+}

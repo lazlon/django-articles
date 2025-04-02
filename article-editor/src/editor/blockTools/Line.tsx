@@ -1,4 +1,4 @@
-import { Minus } from "lucide-solid"
+import Minus from "lucide-solid/icons/minus"
 import { Block } from "../components"
 import { BlockTool, defineBlockTool } from "../plugin"
 import { asString } from "../utils"

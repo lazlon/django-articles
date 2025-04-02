@@ -2,7 +2,7 @@ import Header from "@editorjs/header"
 import { asString, trim } from "../utils"
 import { useBlockTool } from "../plugin"
 import { toHTML } from "../parser"
-import { Heading } from "lucide-solid"
+import Heading from "lucide-solid/icons/heading"
 
 type Data = {
   level: 2 | 3 | 4

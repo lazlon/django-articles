@@ -1,9 +1,9 @@
-import { splitArray } from "./utils"
-import type { BlockToolPlugin, Parser, Renderer } from "./plugin"
-import EditorJS, { OutputBlockData } from "@editorjs/editorjs"
-import { toHTML, toJSON } from "./parser"
 import "./blockTools"
-import * as photoApi from "./photoApi"
+import EditorJS, { type OutputBlockData } from "@editorjs/editorjs"
+import type { BlockToolPlugin, Parser, Renderer } from "./plugin"
+import { toHTML, toJSON } from "./parser"
+import { splitArray } from "./utils"
+import * as photoApi from "#/photoApi"
 
 export class ArticleEditor extends HTMLElement {
   public get content() {

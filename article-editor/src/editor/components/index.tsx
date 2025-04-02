@@ -16,8 +16,13 @@ export function Button(props: {
 }) {
   return (
     <button
+      type="button"
       onClick={props.onClick}
-      class={`px-2 py-1 transition rounded-lg bg-fg/10 hover:bg-fg/14 active:bg-fg/18 ${props.class}`}
+      class={
+        "border-none transition rounded-lg " +
+        "bg-fg/10 hover:bg-fg/14 active:bg-fg/18 " +
+        props.class
+      }
     >
       {props.children}
     </button>

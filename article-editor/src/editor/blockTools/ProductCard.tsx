@@ -4,7 +4,7 @@ import { BlockTool, defineBlockTool } from "../plugin"
 import { Block, Button, Input } from "../components"
 import { MenuConfig } from "@editorjs/editorjs/types/tools"
 import { asString } from "../utils"
-import { Tag } from "lucide-solid"
+import Tag from "lucide-solid/icons/tag"
 
 type Data = {
   img: string // id
@@ -53,8 +53,8 @@ defineBlockTool<Data>({
       description: "",
     }
 
-    validate({ img, title, description }: Data) {
-      return !!(img && title && description)
+    validate(data: Data) {
+      return !!data.img
     }
 
     renderSettings(): MenuConfig {
@@ -76,26 +76,31 @@ defineBlockTool<Data>({
     }
 
     render() {
-      const { getPhotoUrl } = this.photoApi
+      const { getPhotoUrl, selectPhoto } = this.photoApi
       const [src, setSrc] = createSignal("")
       const [store, set] = this.store
 
       getPhotoUrl(store.img).then((src) => setSrc(src))
 
       function onClick() {
-        console.log("TODO:")
-        // selectPhoto(1).then(p => {
-        //     if (p && p.length > 0) photo.set(p[0])
-        // })
+        selectPhoto(1).then((p) => {
+          if (p && p.length > 0) {
+            const { id, url } = p[0]
+            setSrc(url)
+            set("img", id)
+          }
+        })
       }
 
       return (
         <Block>
           <Block class="flex flex-col gap-1 p-2 rounded-lg border-[1pt] border-fg/20">
             {src() ? (
-              <img src={src()} onClick={onClick} />
+              <img class="rounded" src={src()} onClick={onClick} />
             ) : (
-              <Button onClick={onClick}>Select Photo</Button>
+              <Button class="p-1" onClick={onClick}>
+                Select Photo
+              </Button>
             )}
             <Input
               class="px-1.5 py-0.5 rounded"

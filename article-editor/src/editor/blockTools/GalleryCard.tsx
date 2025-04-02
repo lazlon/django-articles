@@ -1,4 +1,4 @@
-import { Images } from "lucide-solid"
+import Images from "lucide-solid/icons/images"
 import { Block } from "../components"
 import { JsonNode, toHTML } from "../parser"
 import { BlockTool, defineBlockTool } from "../plugin"
@@ -41,6 +41,9 @@ function shiftItem<T>(items: T[], i: number, pos: 1 | -1) {
 
 defineBlockTool<Data>({
   type: "gallery-card",
+  toolSettings: {
+    inlineToolbar: true,
+  },
   toolbox: {
     title: "Gallery Card",
     icon: asString(Images),

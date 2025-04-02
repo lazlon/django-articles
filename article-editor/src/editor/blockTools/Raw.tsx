@@ -2,7 +2,7 @@
 import RawTool from "@editorjs/raw"
 import { useBlockTool } from "../plugin"
 import { asString } from "../utils"
-import { CodeXml } from "lucide-solid"
+import CodeXml from "lucide-solid/icons/code-xml"
 
 type Data = {
   html: string

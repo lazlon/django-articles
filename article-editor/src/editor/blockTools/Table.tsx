@@ -2,7 +2,7 @@ import Table from "@editorjs/table"
 import { useBlockTool } from "../plugin"
 import { JsonNode, toHTML } from "../parser"
 import { asString, trim } from "../utils"
-import { Table2 } from "lucide-solid"
+import Table2 from "lucide-solid/icons/table-2"
 
 type Data = {
   withHeadings: boolean

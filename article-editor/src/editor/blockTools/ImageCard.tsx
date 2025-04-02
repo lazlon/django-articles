@@ -3,7 +3,7 @@ import { ElementNode, JsonNode, toHTML } from "../parser"
 import { BlockTool, defineBlockTool } from "../plugin"
 import { Block, Button, Input } from "../components"
 import { asString } from "../utils"
-import { Image } from "lucide-solid"
+import Image from "lucide-solid/icons/image"
 
 type Data = {
   id: string
@@ -68,9 +68,11 @@ defineBlockTool<Data>({
       return (
         <Block class="flex flex-col gap-1">
           {store.id && src() ? (
-            <img src={src()} onClick={onClick} />
+            <img class="rounded" src={src()} onClick={onClick} />
           ) : (
-            <Button onClick={onClick}>Select Photo</Button>
+            <Button class="p-1" onClick={onClick}>
+              Select Photo
+            </Button>
           )}
           <Input
             class="px-1.5 py-0.5 rounded-lg border-[1pt] border-fg/20"
