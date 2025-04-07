@@ -1,4 +1,4 @@
-import { JSXElement, onMount, createEffect } from "solid-js"
+import { JSXElement, onMount, createEffect, JSX } from "solid-js"
 import { trim } from "../utils"
 
 export function Block(props: { children: JSXElement; class?: string }) {
@@ -12,10 +12,12 @@ export function Block(props: { children: JSXElement; class?: string }) {
 export function Button(props: {
   children: JSXElement
   class?: string
-  onClick: () => void
+  ref?: (el: HTMLButtonElement) => void
+  onClick: JSX.CustomEventHandlersCamelCase<HTMLButtonElement>["onClick"]
 }) {
   return (
     <button
+      ref={props.ref}
       type="button"
       onClick={props.onClick}
       class={

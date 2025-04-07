@@ -1,8 +1,12 @@
 import Images from "lucide-solid/icons/images"
-import { Block } from "../components"
+import X from "lucide-solid/icons/x"
+import ChevronLeft from "lucide-solid/icons/chevron-left"
+import ChevronRight from "lucide-solid/icons/chevron-right"
+import { Block, Button } from "../components"
 import { JsonNode, toHTML } from "../parser"
 import { BlockTool, defineBlockTool } from "../plugin"
 import { asString } from "../utils"
+import { createSignal, For, Show } from "solid-js"
 
 type Data = {
   caption?: string
@@ -30,7 +34,6 @@ function toRows<T>(items: T[]): T[][] {
 
 function shiftItem<T>(items: T[], i: number, pos: 1 | -1) {
   if (i === items.length - 1 && pos === 1) return items
-
   if (i === 0 && pos === -1) return items
 
   const arr = [...items]
@@ -81,9 +84,89 @@ defineBlockTool<Data>({
     }
 
     render() {
+      const { getPhotoUrl, selectPhoto } = this.photoApi
       const [store, set] = this.store
 
-      return <Block class="flex flex-col gap-2">GalleryCard</Block>
+      const [photos, setPhotos] = createSignal(
+        store.photos.map((id) => ({ id, url: "" })),
+      )
+
+      Promise.all(
+        store.photos.map(async (id) => ({
+          id,
+          url: await getPhotoUrl(id),
+        })),
+      ).then((arr) => setPhotos(arr))
+
+      function moveImg(photoId: string, pos: 1 | -1) {
+        const i = store.photos.findIndex((id) => id === photoId)
+
+        set("photos", shiftItem(store.photos, i, pos))
+        setPhotos(shiftItem(photos(), i, pos))
+      }
+
+      function removeImg(id: string) {
+        setPhotos(photos().filter((i) => i.id !== id))
+        set(
+          "photos",
+          store.photos.filter((i) => i !== id),
+        )
+      }
+
+      function addImg() {
+        const limit = 9 - photos().length
+        console.log(limit)
+        selectPhoto(limit).then((p) => {
+          if (p) {
+            const newPhotos = p.filter((p) => !store.photos.includes(p.id))
+            setPhotos([...photos(), ...newPhotos])
+            set("photos", [...store.photos, ...newPhotos.map((p) => p.id)])
+          }
+        })
+      }
+
+      return (
+        <Block class="flex flex-col gap-2">
+          <For each={toRows(photos())}>
+            {(row) => (
+              <div class="flex gap-2">
+                <For each={row}>
+                  {(item) => (
+                    <div class="flex relative">
+                      <img class="rounded w-full" src={item.url} />
+                      <div class="flex items-start absolute size-full transition-opacity opacity-0 hover:opacity-100">
+                        <Button
+                          class="w-full"
+                          onClick={() => moveImg(item.id, -1)}
+                        >
+                          <ChevronLeft class="text-white drop-shadow-2xl" />
+                        </Button>
+                        <Button
+                          class="w-full"
+                          onClick={() => removeImg(item.id)}
+                        >
+                          <X class="text-white drop-shadow-2xl" />
+                        </Button>
+                        <Button
+                          class="w-full"
+                          onClick={() => moveImg(item.id, +1)}
+                        >
+                          <ChevronRight class="text-white drop-shadow-2xl" />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </For>
+              </div>
+            )}
+          </For>
+          <Show when={photos().length <= 9}>
+            <Button class="p-1" onClick={addImg}>
+              Add Image
+            </Button>
+          </Show>
+        </Block>
+      )
     }
   },
 })

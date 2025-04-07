@@ -89,20 +89,20 @@ export default function PhotoSelectorDialog({
   function toggleSelection(photo: Photo) {
     const i = photos.findIndex(({ id }) => id === photo.id)
     const nSelected = photos.reduce(
-      (count, photo) => (photo.selected ? count : count + 1),
+      (count, photo) => count + (photo.selected ? 1 : 0),
       0,
     )
+
+    if (i < 0) throw Error("selection out of range")
 
     if (limit === 1) {
       setPhotos([0, photos.length - 1], "selected", false)
       setPhotos(i, "selected", true)
-      return
+    } else if (photos[i].selected) {
+      setPhotos(i, "selected", false)
+    } else if (nSelected < limit) {
+      setPhotos(i, "selected", true)
     }
-
-    // trying to select more than limit is prohibited
-    if (!photos[i].selected && nSelected <= limit) return
-
-    if (i >= 0) setPhotos(i, "selected", !photos[i].selected)
   }
 
   return (
@@ -131,7 +131,7 @@ export default function PhotoSelectorDialog({
             />
           </div>
           <div class="ml-auto self-start">
-            {photos.length > 0 ? (
+            {photos.filter((p) => p.selected).length > 0 ? (
               <Button
                 class="flex bg-primary/50 hover:bg-primary/64"
                 onClick={select}

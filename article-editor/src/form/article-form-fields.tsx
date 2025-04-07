@@ -10,7 +10,7 @@ import {
   PhotoField,
   TagsField,
   LargeTextField,
-} from "./field"
+} from "./fields"
 
 class ArticleFormFields extends HTMLElement {
   static {
@@ -94,7 +94,11 @@ class ArticleFormFields extends HTMLElement {
             value={feature_image}
             photoapi={photoapi}
           />
-          <TagsField name="tags" tags={data.tags} value={data.article.tags} />
+          <TagsField
+            name="tags"
+            choices={data.tags}
+            value={data.article.tags}
+          />
         </FieldSet>
         <FieldSet title="Meta Information">
           <TextField name="meta_title" value={meta_title} />
