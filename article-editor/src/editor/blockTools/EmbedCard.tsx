@@ -36,27 +36,27 @@ defineBlockTool<Data>({
     }
 
     render() {
-      const [store, setStore] = this.store
+      const [data, setData] = this.data
 
       return (
         <Block class="p-2 border-[1pt] border-fg/20 rounded-lg flex flex-col gap-2">
           <iframe
             class="rounded mb-0"
-            src={store.src}
+            src={data.src}
             style={{ border: "none" }}
           />
           <div>
             <Input
               placeholder="Source"
               class="p-0.5 rounded"
-              text={store.src}
-              onChange={(text) => setStore("src", text)}
+              text={data.src}
+              onChange={(text) => setData("src", text)}
             />
             <Input
               placeholder="Caption"
               class="p-0.5 rounded"
-              text={store.caption ?? ""}
-              onChange={(text) => setStore("caption", text)}
+              text={data.caption ?? ""}
+              onChange={(text) => setData("caption", text)}
             />
           </div>
         </Block>

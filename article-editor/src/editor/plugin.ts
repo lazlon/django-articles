@@ -25,7 +25,7 @@ export abstract class BlockTool<Data extends object> {
   abstract defaultData: Data
 
   save(): Data {
-    return unwrap(this.store[0])
+    return unwrap(this.data[0])
   }
 
   validate?(data: Data): boolean
@@ -34,7 +34,7 @@ export abstract class BlockTool<Data extends object> {
   protected api
   protected block
 
-  protected store!: ReturnType<typeof createStore<Data>>
+  protected data!: ReturnType<typeof createStore<Data>>
   private initialData: Data
 
   element: HTMLElement
@@ -47,7 +47,7 @@ export abstract class BlockTool<Data extends object> {
         : this.defaultData
 
     this.destroy = render(() => {
-      this.store = createStore(data)
+      this.data = createStore(data)
       return this.render()
     }, this.element)
   }
@@ -141,8 +141,7 @@ export function defineBlockTool<Data extends object>(
     }
   }
 
-  window.ArticleEditorPlugins ??= []
-  window.ArticleEditorPlugins.push(plugin)
+  ;(window.ArticleEditorPlugins ??= []).push(plugin)
   return plugin
 }
 
@@ -203,7 +202,6 @@ export function useBlockTool<Data extends object>(
     }
   }
 
-  window.ArticleEditorPlugins ??= []
-  window.ArticleEditorPlugins.push(plugin)
+  ;(window.ArticleEditorPlugins ??= []).push(plugin)
   return plugin
 }

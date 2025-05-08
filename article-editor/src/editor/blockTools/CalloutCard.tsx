@@ -57,39 +57,39 @@ defineBlockTool<Data>({
     }
 
     renderSettings() {
-      const [, setStore] = this.store
+      const [, setData] = this.data
 
       return [
         ...emojis.map((emoji) => ({
           icon: emoji.emoji,
           label: emoji.label,
-          onActivate: () => setStore("emoji", emoji.emoji),
+          onActivate: () => setData("emoji", emoji.emoji),
         })),
         { type: "separator" as PopoverItemType.Separator },
         ...Object.keys(colors).map((color) => ({
           icon: "",
           // icon: asString(PaintRoller),
           label: color.charAt(0).toUpperCase() + color.slice(1),
-          onActivate: () => setStore("color", color as keyof typeof colors),
+          onActivate: () => setData("color", color as keyof typeof colors),
         })),
       ]
     }
 
     render() {
-      const [store, setStore] = this.store
+      const [data, setData] = this.data
 
       return (
         <Block>
-          <div class={`flex ${colors[store.color]} shadow rounded-lg`}>
+          <div class={`flex ${colors[data.color]} shadow rounded-lg`}>
             <Input
               class="p-2 text-xl rounded-lg"
-              text={store.emoji ?? ""}
-              onChange={(emoji) => setStore("emoji", emoji)}
+              text={data.emoji ?? ""}
+              onChange={(emoji) => setData("emoji", emoji)}
             />
             <Input
               class="grow p-2 text-wrap rounded-lg"
-              text={store.text}
-              onChange={(text) => setStore("text", text)}
+              text={data.text}
+              onChange={(text) => setData("text", text)}
             />
           </div>
         </Block>

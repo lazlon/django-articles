@@ -58,15 +58,15 @@ defineBlockTool<Data>({
     }
 
     renderSettings(): MenuConfig {
-      const [store, set] = this.store
+      const [data, set] = this.data
 
       return {
         label: "Button",
         // icon: Icon(ExternalLink),
         toggle: true,
-        isActive: !!store.button,
+        isActive: !!data.button,
         onActivate: () => {
-          if (store.button) {
+          if (data.button) {
             set("button", void 0)
           } else {
             set("button", { text: "", href: "" })
@@ -78,9 +78,9 @@ defineBlockTool<Data>({
     render() {
       const { getPhotoUrl, selectPhoto } = this.photoApi
       const [src, setSrc] = createSignal("")
-      const [store, set] = this.store
+      const [data, set] = this.data
 
-      getPhotoUrl(store.img).then((src) => setSrc(src))
+      getPhotoUrl(data.img).then((src) => setSrc(src))
 
       function onClick() {
         selectPhoto(1).then((p) => {
@@ -104,26 +104,26 @@ defineBlockTool<Data>({
             )}
             <Input
               class="px-1.5 py-0.5 rounded"
-              text={store.title ?? ""}
+              text={data.title ?? ""}
               onChange={(text) => set("title", text)}
               placeholder="Title"
             />
             <Input
               class="px-1.5 py-0.5 rounded"
-              text={store.description ?? ""}
+              text={data.description ?? ""}
               onChange={(text) => set("description", text)}
               placeholder="Caption"
             />
-            {store.button && (
+            {data.button && (
               <div class="flex flex-col m-2 p-2 rounded border-[1pt] border-fg/20">
                 <Input
                   placeholder="Text"
-                  text={store.button.text}
+                  text={data.button.text}
                   onChange={(text) => set("button", "text", text)}
                 />
                 <Input
                   placeholder="Link"
-                  text={store.button.href}
+                  text={data.button.href}
                   onChange={(text) => set("button", "href", text)}
                 />
               </div>

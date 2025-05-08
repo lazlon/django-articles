@@ -80,28 +80,28 @@ defineBlockTool<Data>({
   },
   tool: class GalleryCard extends BlockTool<Data> {
     defaultData = {
-      photos: [],
+      photos: new Array<string>(),
     }
 
     render() {
       const { getPhotoUrl, selectPhoto } = this.photoApi
-      const [store, set] = this.store
+      const [data, set] = this.data
 
       const [photos, setPhotos] = createSignal(
-        store.photos.map((id) => ({ id, url: "" })),
+        data.photos.map((id) => ({ id, url: "" })),
       )
 
       Promise.all(
-        store.photos.map(async (id) => ({
+        data.photos.map(async (id) => ({
           id,
           url: await getPhotoUrl(id),
         })),
       ).then((arr) => setPhotos(arr))
 
       function moveImg(photoId: string, pos: 1 | -1) {
-        const i = store.photos.findIndex((id) => id === photoId)
+        const i = data.photos.findIndex((id) => id === photoId)
 
-        set("photos", shiftItem(store.photos, i, pos))
+        set("photos", shiftItem(data.photos, i, pos))
         setPhotos(shiftItem(photos(), i, pos))
       }
 
@@ -109,7 +109,7 @@ defineBlockTool<Data>({
         setPhotos(photos().filter((i) => i.id !== id))
         set(
           "photos",
-          store.photos.filter((i) => i !== id),
+          data.photos.filter((i) => i !== id),
         )
       }
 
@@ -118,9 +118,9 @@ defineBlockTool<Data>({
         console.log(limit)
         selectPhoto(limit).then((p) => {
           if (p) {
-            const newPhotos = p.filter((p) => !store.photos.includes(p.id))
+            const newPhotos = p.filter((p) => !data.photos.includes(p.id))
             setPhotos([...photos(), ...newPhotos])
-            set("photos", [...store.photos, ...newPhotos.map((p) => p.id)])
+            set("photos", [...data.photos, ...newPhotos.map((p) => p.id)])
           }
         })
       }

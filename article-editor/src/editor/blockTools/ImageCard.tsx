@@ -51,9 +51,9 @@ defineBlockTool<Data>({
     render() {
       const { getPhotoUrl, selectPhoto } = this.photoApi
       const [src, setSrc] = createSignal("")
-      const [store, set] = this.store
+      const [data, set] = this.data
 
-      getPhotoUrl(store.id).then((src) => setSrc(src))
+      getPhotoUrl(data.id).then((src) => setSrc(src))
 
       function onClick() {
         selectPhoto(1).then((p) => {
@@ -67,7 +67,7 @@ defineBlockTool<Data>({
 
       return (
         <Block class="flex flex-col gap-1">
-          {store.id && src() ? (
+          {data.id && src() ? (
             <img class="rounded" src={src()} onClick={onClick} />
           ) : (
             <Button class="p-1" onClick={onClick}>
@@ -76,7 +76,7 @@ defineBlockTool<Data>({
           )}
           <Input
             class="px-1.5 py-0.5 rounded-lg border-[1pt] border-fg/20"
-            text={store.caption ?? ""}
+            text={data.caption ?? ""}
             onChange={(text) => set("caption", text)}
             placeholder="Caption"
           />

@@ -4,25 +4,20 @@ import X from "lucide-solid/icons/x"
 import {
   createEffect,
   createSignal,
-  createComputed,
   For,
   onCleanup,
   onMount,
   Show,
   type JSXElement,
-  createMemo,
-  Accessor,
   Setter,
 } from "solid-js"
-import { createSwapy, type Swapy, utils } from "swapy"
+import { createSwapy, type Swapy } from "swapy"
 import Calendar from "lucide-solid/icons/calendar"
 import Clock from "lucide-solid/icons/clock"
 import PhotoButton from "./PhotoButton"
-import { createStore } from "solid-js/store"
-import { unwrap } from "solid-js/store/types/server.js"
 import { Button } from "#/editor/components"
 import { computePosition, offset } from "@floating-ui/dom"
-import { Portal, untrack } from "solid-js/web"
+import { Portal } from "solid-js/web"
 
 // NOTE: class is not tailwind but django styles
 
@@ -344,8 +339,11 @@ export function TagsField({
   })
 
   createEffect(() => {
-    input.value = JSON.stringify(tags().map((t) => t.pk))
-    input.dispatchEvent(new Event("input", { bubbles: true }))
+    const value = JSON.stringify(tags().map((t) => t.pk))
+    if (input.value !== value) {
+      input.value = value
+      input.dispatchEvent(new Event("input", { bubbles: true }))
+    }
   })
 
   createEffect(async () => {
@@ -370,7 +368,7 @@ export function TagsField({
 
   return (
     <Field {...{ name, label, required }}>
-      <input ref={(el) => (input = el)} name={name} type="hidden" />
+      <input ref={(el) => (input = el)} name={name} type="hidden" value="[]" />
       <div class="flex flex-col" ref={(el) => (container = el)}>
         <TagSorter value={tags()} onChange={setTags} />
         <Button

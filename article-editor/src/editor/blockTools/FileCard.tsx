@@ -29,14 +29,14 @@ defineBlockTool<Data>({
     }
 
     render() {
-      const [store, set] = this.store
+      const [data, set] = this.data
 
       return (
         <Block class="flex items-center border-[1pt] border-fg/20 rounded-lg p-1 px-2 gap-2">
           <Paperclip />
           <Input
             class="grow"
-            text={store.file}
+            text={data.file}
             onChange={(text) => set("file", text)}
           />
         </Block>

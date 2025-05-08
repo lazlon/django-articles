@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@editorjs/editorjs": "latest",
@@ -15,17 +16,24 @@
     "@editorjs/raw": "latest",
     "@editorjs/table": "latest",
     "@floating-ui/dom": "latest",
-    "@tailwindcss/vite": "latest",
-    "lucide-solid": "^0.485.0",
+    "lucide-solid": "latest",
     "solid-js": "latest",
     "swapy": "latest",
     "tailwindcss": "latest"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "latest",
     "typescript": "latest",
     "vite": "latest",
     "vite-plugin-solid": "latest",
     "vite-tsconfig-paths": "latest"
+  },
+  "exports": {
+    "./plugin": "./src/editor/plugin.ts",
+    "./pareser": "./src/editor/parser.ts",
+    "./utils": "./src/editor/utils.ts",
+    "./components": "./src/editor/components/index.tsx",
+    "./style.css": "./src/index.css"
   },
   "prettier": {
     "semi": false,

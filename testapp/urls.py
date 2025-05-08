@@ -15,7 +15,7 @@ def photo_upload(request: HttpRequest) -> JsonResponse:
     try:
         p = upload_photo(request)
         return JsonResponse({"id": p.id, "url": p.url})
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return JsonResponse({"error": str(e)})
 
 

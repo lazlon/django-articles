@@ -41,7 +41,7 @@ defineBlockTool<Data>({
     }
 
     render() {
-      const [store, set] = this.store
+      const [data, set] = this.data
 
       return (
         <Block class="flex p-1 rounded-lg border-[1pt] border-fg/20">
@@ -52,7 +52,7 @@ defineBlockTool<Data>({
               <Input
                 class="grow rounded"
                 placeholder="href"
-                text={store.href}
+                text={data.href}
                 onChange={(text) => set("href", text)}
               />
             </div>
@@ -61,7 +61,7 @@ defineBlockTool<Data>({
               <Input
                 class="grow rounded"
                 placeholder="Label"
-                text={store.label}
+                text={data.label}
                 onChange={(text) => set("label", text)}
               />
             </div>
