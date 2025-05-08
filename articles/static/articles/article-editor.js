@@ -1951,7 +1951,7 @@ vo(zd, {
       };
   }
 });
-var Kd = /* @__PURE__ */ B('<div class="text-fg py-1 flex flex-col"><div>'), Gd = /* @__PURE__ */ B("<button type=button>"), Zd = /* @__PURE__ */ B("<div contenteditable=true>");
+var Kd = /* @__PURE__ */ B('<div class="text-fg py-5 flex flex-col"><div>'), Gd = /* @__PURE__ */ B("<button type=button>"), Zd = /* @__PURE__ */ B("<div contenteditable=true>");
 function Ke(o) {
   return (() => {
     var e = Kd(), t = e.firstChild;

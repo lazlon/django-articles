@@ -3,7 +3,7 @@ import { trim } from "../utils"
 
 export function Block(props: { children: JSXElement; class?: string }) {
   return (
-    <div class="text-fg py-1 flex flex-col">
+    <div class="text-fg py-5 flex flex-col">
       <div class={props.class}>{props.children}</div>
     </div>
   )
