@@ -1,75 +1,88 @@
-import { Button, Icon } from "@/components"
-import { State } from "@/jsx"
-import { getPhotoUrl, selectPhoto } from "@/lib/photo"
-import { X } from "lucide"
+import * as photoApi from "#/photoApi"
+import X from "lucide-solid/icons/x"
+import { render } from "solid-js/web"
+import { createSignal } from "solid-js"
+import { Button } from "#/editor/components"
 
-export default class PhotoButton extends HTMLElement {
-    static { customElements.define("photo-button", this) }
+export default function PhotoButton({
+  value,
+  name,
+  api,
+}: {
+  value: string
+  name: string
+  api: URL
+}) {
+  let input: HTMLInputElement
+  const [id, setId] = createSignal(value)
+  const [src, setSrc] = createSignal("")
 
-    constructor({ attributes }: { attributes?: Record<string, string> } = {}) {
-        super()
-        if (attributes) {
-            for (const [attr, value] of Object.entries(attributes)) {
-                if (value) this.setAttribute(attr, value)
-            }
-        }
-    }
+  photoApi.getPhotoUrl(api, value).then((url) => {
+    if (url) setSrc(url)
+  })
 
-    #photo = new State({ id: "", url: "" })
-    #input = document.createElement("input")
+  function onClick() {
+    photoApi.selectPhoto(api, 1).then((photos) => {
+      if (photos && photos.length > 0) {
+        const { id, url } = photos[0]
+        setId(id)
+        setSrc(url)
+        input.value = id
+        input.dispatchEvent(new Event("input", { bubbles: true }))
+      }
+    })
+  }
 
-    connectedCallback() {
-        Object.assign(this.#input, {
-            type: "hidden",
-            name: this.getAttribute("name") || "",
-            value: this.getAttribute("value") || "",
-        })
+  function remove() {
+    setId("")
+    setSrc("")
+  }
 
-        getPhotoUrl(this)(this.#input.value).then(url => {
-            this.#photo.set({
-                id: this.#input.value,
-                url,
-            })
-
-            this.#photo.subscribe(v => {
-                this.#input.value = v.id
-                this.#input.dispatchEvent(new Event("input", { bubbles: true }))
-            })
-        })
-
-        this.append(this.#input)
-        this.append(this.render())
-    }
-
-    onClick = () => {
-        selectPhoto(this)(1).then(p => {
-            if (p && p.length > 0) this.#photo.set(p[0])
-        })
-    }
-
-    remove = () => {
-        this.#photo.set({ id: "", url: "" })
-    }
-
-    private render = () => (
-        <div className="PhotoButton">
-            {this.#photo(({ id, url }) => (id && url) ? (
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <img style={{ maxWidth: "20em" }} onclick={this.onClick} id={id} src={url} />
-                    <Button style={{ display: "flex", marginRight: "auto" }} onclick={this.remove}>
-                        <span>Remove</span>
-                        <Icon icon={X} />
-                    </Button>
-                </div>
-            ) : (
-                <Button onclick={this.onClick}>Select Photo</Button>
-            ))}
+  return (
+    <div>
+      <input
+        ref={(el) => (input = el)}
+        type="hidden"
+        name={name}
+        value={value}
+      />
+      {id() && src() ? (
+        <div class="flex flex-col gap-2">
+          <img
+            class="max-w-32 rounded"
+            onClick={onClick}
+            id={id()}
+            src={src()}
+          />
+          <Button class="flex items-center mr-auto px-2 py-1" onClick={remove}>
+            <span>Remove</span>
+            <X />
+          </Button>
         </div>
-    )
+      ) : (
+        <Button class="flex mr-auto px-2 py-1" onClick={onClick}>
+          Select Photo
+        </Button>
+      )}
+    </div>
+  )
+}
+
+class PhotoButtonElement extends HTMLElement {
+  static {
+    customElements.define("photo-button", this)
+  }
+
+  connectedCallback() {
+    const api = photoApi.getPhotoApiUrl(this)
+    const value = this.getAttribute("value") || ""
+    const name = this.getAttribute("name") || ""
+    render(() => <PhotoButton {...{ value, name, api }} />, this)
+  }
 }
 
 declare global {
-    interface HTMLElementTagNameMap {
-        "photo-button": PhotoButton
-    }
+  interface HTMLElementTagNameMap {
+    "photo-button": PhotoButtonElement
+  }
 }

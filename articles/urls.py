@@ -46,11 +46,8 @@ def unpublish(request: HttpRequest, pk: str) -> HttpResponseRedirect:
 
 
 def photo_search(request: HttpRequest) -> JsonResponse:
-    if q := request.GET.get("q"):
-        photos = Photo.search(q)
-        return JsonResponse([{"id": p.id, "url": p.url} for p in photos], safe=False)
-
-    return JsonResponse([], safe=False)
+    photos = Photo.search(request.GET.get("q", ""))
+    return JsonResponse([{"id": p.id, "url": p.url} for p in photos], safe=False)
 
 
 def photo_get(request: HttpRequest) -> JsonResponse:

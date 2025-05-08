@@ -39,7 +39,9 @@ class ArticleForm(ModelForm):
         )
 
         article = json.loads(serialize("json", [article_instance]))[0]
-        article["tags"] = json.loads(serialize("json", article_instance.tags.all()))
+        article["tags"] = json.loads(
+            serialize("json", article_instance.tags.all().order_by("articletag__order")),
+        )
 
         self.attributes = json.dumps(
             {
