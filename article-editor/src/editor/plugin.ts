@@ -141,7 +141,7 @@ export function defineBlockTool<Data extends object>(
     }
   }
 
-  ;(window.ArticleEditorPlugins ??= []).push(plugin)
+  ;(window.ArticleEditorPlugins ??= []).unshift(plugin)
   return plugin
 }
 
@@ -202,6 +202,6 @@ export function useBlockTool<Data extends object>(
     }
   }
 
-  ;(window.ArticleEditorPlugins ??= []).push(plugin)
+  ;(window.ArticleEditorPlugins ??= []).unshift(plugin)
   return plugin
 }

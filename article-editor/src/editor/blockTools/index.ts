@@ -1,16 +1,16 @@
 // NOTE: order of imports will determine
-// the order they appear in the editor toolbox
+// the order they appear in the editor toolbox in reverse
 // with the exception of the paragraph tool
 import "./Paragraph"
-import "./Header"
-import "./ImageCard"
-import "./GalleryCard"
-import "./List"
-import "./CalloutCard"
+import "./Raw"
+import "./EmbedCard"
+import "./FileCard"
+import "./LinkButton"
+import "./Line"
 import "./ProductCard"
 import "./Table"
-import "./Line"
-import "./LinkButton"
-import "./EmbedCard"
-import "./Raw"
-import "./FileCard"
+import "./List"
+import "./CalloutCard"
+import "./GalleryCard"
+import "./ImageCard"
+import "./Header"

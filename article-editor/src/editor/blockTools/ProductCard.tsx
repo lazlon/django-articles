@@ -93,42 +93,40 @@ defineBlockTool<Data>({
       }
 
       return (
-        <Block>
-          <Block class="flex flex-col gap-1 p-2 rounded-lg border-[1pt] border-fg/20">
-            {src() ? (
-              <img class="rounded" src={src()} onClick={onClick} />
-            ) : (
-              <Button class="p-1" onClick={onClick}>
-                Select Photo
-              </Button>
-            )}
-            <Input
-              class="px-1.5 py-0.5 rounded"
-              text={data.title ?? ""}
-              onChange={(text) => set("title", text)}
-              placeholder="Title"
-            />
-            <Input
-              class="px-1.5 py-0.5 rounded"
-              text={data.description ?? ""}
-              onChange={(text) => set("description", text)}
-              placeholder="Caption"
-            />
-            {data.button && (
-              <div class="flex flex-col m-2 p-2 rounded border-[1pt] border-fg/20">
-                <Input
-                  placeholder="Text"
-                  text={data.button.text}
-                  onChange={(text) => set("button", "text", text)}
-                />
-                <Input
-                  placeholder="Link"
-                  text={data.button.href}
-                  onChange={(text) => set("button", "href", text)}
-                />
-              </div>
-            )}
-          </Block>
+        <Block class="flex flex-col gap-1 p-2 rounded-lg border-[1pt] border-fg/20">
+          {src() ? (
+            <img class="rounded" src={src()} onClick={onClick} />
+          ) : (
+            <Button class="p-1" onClick={onClick}>
+              Select Photo
+            </Button>
+          )}
+          <Input
+            class="px-1.5 py-0.5 rounded"
+            text={data.title ?? ""}
+            onChange={(text) => set("title", text)}
+            placeholder="Title"
+          />
+          <Input
+            class="px-1.5 py-0.5 rounded"
+            text={data.description ?? ""}
+            onChange={(text) => set("description", text)}
+            placeholder="Caption"
+          />
+          {data.button && (
+            <div class="flex flex-col m-2 p-2 rounded border-[1pt] border-fg/20">
+              <Input
+                placeholder="Text"
+                text={data.button.text}
+                onChange={(text) => set("button", "text", text)}
+              />
+              <Input
+                placeholder="Link"
+                text={data.button.href}
+                onChange={(text) => set("button", "href", text)}
+              />
+            </div>
+          )}
         </Block>
       )
     }
