@@ -4,7 +4,7 @@ import PhotoSelectorDialog from "./PhotoSelectorDialog"
 type Photo = { id: string; url: string }
 
 export type PhotoApi = {
-  selectFile: () => ReturnType<typeof selectFile>
+  selectFiles: () => ReturnType<typeof selectFiles>
   getPhotoUrl: (id: string) => ReturnType<typeof getPhotoUrl>
   selectPhoto: (limit: number) => ReturnType<typeof selectPhoto>
   uploadPhoto: (file: File) => ReturnType<typeof uploadPhoto>
@@ -26,17 +26,18 @@ function fullUrl(url: string) {
   return url.startsWith("/") ? window.origin + url : url
 }
 
-export function selectFile(): Promise<File | null> {
+export function selectFiles(): Promise<File[]> {
   return new Promise((resolve) => {
     const input = Object.assign(document.createElement("input"), {
       type: "file",
       accept: "image/*",
+      multiple: true,
       onchange: () => {
-        resolve(input.files?.[0] || null)
+        resolve([...(input.files ?? [])])
         document.body.removeChild(input)
       },
       oncancel: () => {
-        resolve(null)
+        resolve([])
         document.body.removeChild(input)
       },
     })
@@ -69,7 +70,7 @@ export function selectPhoto(
         PhotoSelectorDialog({
           limit,
           ref: (ref) => ref.showModal(),
-          selectFile,
+          selectFiles,
           getPhotoUrl: (id) => getPhotoUrl(api, id),
           selectPhoto: (limit) => selectPhoto(api, limit),
           uploadPhoto: (file) => uploadPhoto(api, file),

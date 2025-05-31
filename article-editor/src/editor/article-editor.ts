@@ -78,7 +78,7 @@ export class ArticleEditor extends HTMLElement {
     this.plugins = window.ArticleEditorPlugins.map((p) =>
       p({
         onChange: this.submit.bind(this),
-        selectFile: photoApi.selectFile,
+        selectFiles: photoApi.selectFiles,
         getPhotoUrl: (id) => photoApi.getPhotoUrl(url, id),
         selectPhoto: (limit) => photoApi.selectPhoto(url, limit),
         uploadPhoto: (file) => photoApi.uploadPhoto(url, file),

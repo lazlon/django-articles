@@ -1,4 +1,4 @@
-import { createSignal, For, onMount } from "solid-js"
+import { createSignal, For, onMount, Show } from "solid-js"
 import LoaderCircle from "lucide-solid/icons/loader-circle"
 import Search from "lucide-solid/icons/search"
 import Upload from "lucide-solid/icons/upload"
@@ -23,7 +23,7 @@ export default function PhotoSelectorDialog({
   limit,
   onSelected,
   searchPhoto,
-  selectFile,
+  selectFiles,
   uploadPhoto,
   ref,
 }: PhotoSelectorDialogProps) {
@@ -32,7 +32,7 @@ export default function PhotoSelectorDialog({
   let debounceTimeout: number
   const [photos, setPhotos] = createStore<Array<PhotoItem>>([])
   const [loading, setLoading] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [errors, setErrors] = createSignal(new Array<string>())
 
   onMount(() => {
     onSearch("")
@@ -61,7 +61,7 @@ export default function PhotoSelectorDialog({
         )
       } catch (error) {
         setPhotos([])
-        if (error instanceof Error) setError(error.message)
+        if (error instanceof Error) setErrors([error.message])
       }
       setLoading(false)
     }, DEBOUNCE)
@@ -69,18 +69,32 @@ export default function PhotoSelectorDialog({
 
   async function upload() {
     setLoading(true)
+    setErrors([])
     try {
-      const file = await selectFile()
-      if (!file) return
+      const files = await selectFiles()
 
-      const photo = await uploadPhoto(file)
-      if (photo.error) {
-        return setError(photo.error)
-      }
+      const uploads = files.map(async (file) => {
+        try {
+          const photo = await uploadPhoto(file)
+          if (photo.error) {
+            setErrors((prev) => [photo.error, ...prev])
+          } else {
+            const { url, id } = photo as Photo
+            setPhotos((prev) =>
+              [{ id, url, selected: false }, ...prev].slice(0, PHOTO_LIMIT),
+            )
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            setErrors((prev) => [error.message, ...prev])
+          }
+        }
+      })
 
-      setPhotos(photos.length, { ...photo, selected: true })
+      await Promise.allSettled(uploads)
+      setLoading(false)
     } catch (error) {
-      if (error instanceof Error) setError(error.message)
+      if (error instanceof Error) setErrors([error.message])
     } finally {
       setLoading(false)
     }
@@ -145,9 +159,17 @@ export default function PhotoSelectorDialog({
             )}
           </div>
         </div>
-        {error() && (
-          <span class="mx-auto text-red-500 dark:text-red-300">{error()}</span>
-        )}
+
+        <Show when={errors().length > 0}>
+          <div class="flex flex-col">
+            <For each={errors()}>
+              {(error) => (
+                <span class="text-red-500 dark:text-red-300">{error}</span>
+              )}
+            </For>
+          </div>
+        </Show>
+
         <div class="grid grid-cols-5 mt-4 gap-2">
           <Button class="size-32 flex" onClick={upload}>
             <div class="size-28 m-auto border border-dashed border-fg/48 flex flex-col justify-center items-center">

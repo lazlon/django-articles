@@ -13,9 +13,9 @@ type Data = {
   photos: Array<string>
 }
 
+// I know... but at least you can tell the layout by just looking at this
 function toRows<T>(items: T[]): T[][] {
   const [a, b, c, d, e, f, g, h, i] = items
-  // TODO: logic instead of brute force
   // prettier-ignore
   switch (items.length) {
     case 0: return []
