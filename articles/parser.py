@@ -29,6 +29,7 @@ class Data(TypedDict):
     locale: list[str]
     author: list[str]
     subtitle: list[str]
+    visibility: list[str]
     published_at_0: list[str]
     published_at_1: list[str]
     featured: list[str]
@@ -55,6 +56,7 @@ def parse(article: Article, indata: dict) -> str:
     article.locale = data["locale"][0]
     article.author = Author.objects.get(pk=data["author"][0])
     article.subtitle = data["subtitle"][0]
+    article.visibility = data["visibility"][0]
 
     if data["published_at_0"][0] != "" and data["published_at_1"][0] != "":
         date = f"{data["published_at_0"][0]} {data["published_at_1"][0]}"

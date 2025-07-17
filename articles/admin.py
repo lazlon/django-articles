@@ -62,6 +62,7 @@ class ArticleAdmin(admin.ModelAdmin):
                     "slug",
                     "locale",
                     "author",
+                    "visibility",
                     "subtitle",
                     "published_at",
                     "featured",

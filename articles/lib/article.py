@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from graphene_django.fields import QuerySet
 from thefuzz import fuzz
 
-from articles.models import Article, Status
+from articles.models import Article, Status, Visibility
 
 MIN_SCORE = 70
 
@@ -25,8 +25,7 @@ def search_article(
     articles = (
         Article.objects.prefetch_related("sections")
         .prefetch_related("tags")
-        .filter(locale=locale)
-        .filter(status=Status.PUBLISHED)
+        .filter(locale=locale, status=Status.PUBLISHED, visibility=Visibility.PUBLIC)
     )
 
     def score(a: Article) -> float:
@@ -65,11 +64,11 @@ def filter_article(  # noqa: PLR0913
     locale: str | None = None,
     limit: int = 20,
     featured: bool | None = None,
-    tags: list[str] = [],  # noqa: B006
+    tags: list[str] | None = None,
     page: int = 1,
     drafts: bool = False,  # noqa: FBT001, FBT002
 ) -> QuerySet[Article]:
-    query = Article.objects.all()
+    query = Article.objects.filter(visibility=Visibility.PUBLIC)
 
     if locale is not None:
         query = query.filter(locale=locale)
@@ -84,11 +83,12 @@ def filter_article(  # noqa: PLR0913
     if featured is not None:
         query = query.filter(featured=featured)
 
-    for tag in tags:
-        if tag.startswith("-"):
-            query = query.exclude(tags__slug=tag)
-        else:
-            query = query.filter(tags__slug=tag)
+    if tags is not None:
+        for tag in tags:
+            if tag.startswith("-"):
+                query = query.exclude(tags__slug=tag)
+            else:
+                query = query.filter(tags__slug=tag)
 
     if limit < 0:
         return query

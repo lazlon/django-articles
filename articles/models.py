@@ -116,6 +116,7 @@ class Article(m.Model):
     created_at = m.DateTimeField(auto_now_add=True)
     updated_at = m.DateTimeField(auto_now=True)
     published_at = m.DateTimeField(blank=True, null=True)
+    visibility = m.CharField(default=Visibility.PUBLIC, choices=Visibility.choices, max_length=255)
 
     author = m.ForeignKey(Author, m.DO_NOTHING)
     excerpt = m.TextField(blank=True, null=True)

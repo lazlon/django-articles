@@ -45,6 +45,7 @@ class ArticleFormFields extends HTMLElement {
       locale,
       author,
       featured,
+      visibility,
       published_at,
       feature_image,
       meta_title,
@@ -81,6 +82,15 @@ class ArticleFormFields extends HTMLElement {
             required
             value={author}
             options={authors}
+          />
+          <SelectField
+            name="visibility"
+            required
+            value={visibility}
+            options={[
+              ["INTERNAL", "Internal"],
+              ["PUBLIC", "Public"],
+            ]}
           />
           <TextField name="subtitle" value={subtitle} />
           <DateField

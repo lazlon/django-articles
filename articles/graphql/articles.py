@@ -18,10 +18,10 @@ class Article(DjangoObjectType):
     plain_excerpt = graphene.String()
     locale = graphene.NonNull(graphene.String)
 
-    def resolve_primary_tag(self, _):  # noqa: ANN201, ANN001
+    def resolve_primary_tag(self, _: graphene.ResolveInfo) -> models.Tag | None:
         return cast(models.Article, self).tags.filter(visibility=models.Visibility.PUBLIC).first()
 
-    def resolve_plain_excerpt(self, _) -> str | None:  # noqa: ANN001
+    def resolve_plain_excerpt(self, _: graphene.ResolveInfo) -> str | None:
         a = cast(models.Article, self)
         return BeautifulSoup(a.excerpt, "html.parser").get_text() if a.excerpt is not None else None
 
@@ -64,21 +64,37 @@ class ArticleQuery(graphene.ObjectType):
         drafts=graphene.Boolean(required=False),
     )
 
-    def resolve_article_count(self, _, locale: str | None = None, drafts: bool = False):  # noqa: ANN001, ANN201, FBT001, FBT002
-        articles = models.Article.objects
+    def resolve_article_count(
+        self,
+        _: graphene.ResolveInfo,
+        locale: str | None = None,
+        drafts: bool = False,  # noqa: FBT001, FBT002
+    ) -> int:
+        articles = models.Article.objects.filter(visibility=models.Visibility.PUBLIC)
         if locale is not None:
             articles = articles.filter(locale=locale)
         if not drafts:
             articles = articles.filter(status=models.Status.PUBLISHED)
         return articles.count()
 
-    def resolve_article_by_id(self, _, id: str):  # noqa: A002, ANN001, ANN201
+    def resolve_article_by_id(self, _: graphene.ResolveInfo, id: str) -> models.Article | None:  # noqa: A002
         return models.Article.objects.get(id=id)
 
-    def resolve_article_by_slug(self, _, locale: str, slug: str):  # noqa: ANN001, ANN201
+    def resolve_article_by_slug(
+        self,
+        _: graphene.ResolveInfo,
+        locale: str,
+        slug: str,
+    ) -> models.Article | None:
         return models.Article.objects.get(slug=slug, locale=locale)
 
-    def resolve_search_articles(self, _, keyword: str, locale: str, limit: int = 20):  # noqa: ANN001, ANN201
+    def resolve_search_articles(
+        self,
+        _: graphene.ResolveInfo,
+        keyword: str,
+        locale: str,
+        limit: int = 20,
+    ) -> list[models.Article]:
         return search_article(keyword, locale, limit)
 
     def resolve_articles(  # noqa: ANN201, PLR0913
@@ -87,7 +103,7 @@ class ArticleQuery(graphene.ObjectType):
         locale: str | None = None,
         limit: int = 20,
         featured: bool | None = None,
-        tags: list[str] = [],  # noqa: B006
+        tags: list[str] | None = None,
         page: int = 1,
         drafts: bool = False,  # noqa: FBT001, FBT002
     ):
