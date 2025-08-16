@@ -21,8 +21,8 @@ defineBlockTool<Data>({
   renderer: ({ img, title, description, button }) => (
     <product-card>
       <article-photo attr:id={img} />
-      <product-card-title>{title}</product-card-title>
-      <p>{description}</p>
+      <product-card-title innerHTML={title} />
+      <p innerHTML={description} />
       {button && <a href={button.href}>{button.text}</a>}
     </product-card>
   ),
@@ -146,7 +146,7 @@ declare module "solid-js/jsx-runtime" {
         children: JSXElement
       }
       "product-card-title": {
-        children: JSXElement
+        innerHTML: string
       }
     }
   }

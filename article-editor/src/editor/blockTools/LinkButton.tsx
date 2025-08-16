@@ -2,7 +2,7 @@ import ExternalLink from "lucide-solid/icons/external-link"
 import { Block, Input } from "../components"
 import { toHTML } from "../parser"
 import { defineBlockTool, BlockTool } from "../plugin"
-import { asString } from "../utils"
+import { asString, trim } from "../utils"
 
 type Data = {
   label: string
@@ -15,7 +15,7 @@ defineBlockTool<Data>({
     inlineToolbar: true,
   },
   renderer: ({ label, href }) => (
-    <link-button attr:href={href}>{label}</link-button>
+    <link-button attr:href={href} innerHTML={trim(label)} />
   ),
   parser: (node) => {
     if (node.type == "link-button") {
@@ -83,7 +83,7 @@ declare module "solid-js/jsx-runtime" {
     interface IntrinsicElements {
       "link-button": {
         "attr:href": string
-        children: string
+        "innerHTML": string
       }
     }
   }

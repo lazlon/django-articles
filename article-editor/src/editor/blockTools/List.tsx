@@ -58,7 +58,7 @@ useBlockTool<Data>(EditorjsList as any, {
         return (
           <ul>
             {data.items.map((i) => (
-              <li>{trim(i.content)}</li>
+              <li innerHTML={trim(i.content)} />
             ))}
           </ul>
         )
@@ -69,7 +69,7 @@ useBlockTool<Data>(EditorjsList as any, {
             data-counter-type={data.meta.counterType}
           >
             {data.items.map((i) => (
-              <li>{trim(i.content)}</li>
+              <li innerHTML={trim(i.content)} />
             ))}
           </ol>
         )
@@ -77,9 +77,10 @@ useBlockTool<Data>(EditorjsList as any, {
         return (
           <ul data-checklist>
             {data.items.map((i) => (
-              <li {...(i.meta.checked && { "data-checked": "" })}>
-                {trim(i.content)}
-              </li>
+              <li
+                {...(i.meta.checked && { "data-checked": "" })}
+                innerHTML={trim(i.content)}
+              />
             ))}
           </ul>
         )

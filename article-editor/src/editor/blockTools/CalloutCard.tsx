@@ -45,9 +45,7 @@ defineBlockTool<Data>({
     }
   },
   renderer: ({ text, color, emoji }) => (
-    <callout-card attr:color={color} attr:emoji={emoji}>
-      {text}
-    </callout-card>
+    <callout-card attr:color={color} attr:emoji={emoji} innerHTML={text} />
   ),
   tool: class CalloutCard extends BlockTool<Data> {
     defaultData = {
@@ -110,7 +108,7 @@ declare module "solid-js/jsx-runtime" {
       "callout-card": {
         "attr:color": string
         "attr:emoji"?: string
-        children: string
+        "innerHTML": string
       }
     }
   }

@@ -19,8 +19,8 @@ defineBlockTool<Data>({
       }
     }
   },
-  renderer: ({ src, caption }) => (
-    <embed-card attr:src={src}>{caption ?? ""}</embed-card>
+  renderer: ({ src, caption = "" }) => (
+    <embed-card attr:src={src} innerHTML={caption} />
   ),
   toolbox: {
     title: "Embed Card",
@@ -76,7 +76,7 @@ declare module "solid-js/jsx-runtime" {
     interface IntrinsicElements {
       "embed-card": {
         "attr:src": string
-        children: string
+        "innerHTML": string
       }
     }
   }

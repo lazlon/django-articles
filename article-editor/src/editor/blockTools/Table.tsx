@@ -29,7 +29,7 @@ useBlockTool<Data>(Table as any, {
         <thead>
           <tr>
             {content[0].map((text) => (
-              <td>{trim(text)}</td>
+              <td innerHTML={trim(text)} />
             ))}
           </tr>
         </thead>
@@ -38,7 +38,7 @@ useBlockTool<Data>(Table as any, {
         {content.slice(withHeadings ? 1 : 0).map((row) => (
           <tr>
             {row.map((text) => (
-              <td>{trim(text)}</td>
+              <td innerHTML={trim(text)} />
             ))}
           </tr>
         ))}

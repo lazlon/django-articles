@@ -1,8 +1,6 @@
 import { JSXElement } from "solid-js"
 import { render } from "solid-js/web"
 
-export function trim(text: string): string
-export function trim(text?: string): void
 export function trim(text?: string) {
   if (!text) return ""
 
