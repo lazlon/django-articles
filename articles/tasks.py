@@ -23,7 +23,7 @@ def _schedule(instance: "Article") -> None:
 
     instance.status = Status.SCHEDULED
     schedule(
-        "trekhunt.tasks.publish_article",
+        "articles.tasks.publish_article",
         instance.id,
         name=instance.id,
         next_run=instance.published_at,
